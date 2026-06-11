@@ -69,8 +69,12 @@ nav:
   - Software:
       - Tutorials:
           - Getting Started: software/tutorials/getting-started.md
-      - How-to Guides: software/how-to/index.md
-      - Reference: software/reference/index.md
+      - How-to Guides:
+          - Overview: software/how-to/index.md
+          - Add a device to dbuild: software/how-to/add-device-to-dbuild.md
+      - Reference:
+        - Overview: software/reference/index.md
+        - DBuild System: software/reference/dbuild.md
       - Explanation: software/explanation/index.md
   - Payload: payload/index.md
   - Electronics: electronics/index.md
