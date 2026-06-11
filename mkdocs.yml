@@ -19,3 +19,12 @@ theme:
 
 nav:
   - Home: index.md
+  - Documentation:
+    - Software:
+      - Tutorials:
+        - Getting Started: documentation/software/tutorials/getting-started.md
+      - How-to Guides: documentation/software/how-to/index.md
+      - Reference: documentation/software/reference/index.md
+      - Explanation: documentation/software/explanation/index.md
+    - Payload: documentation/payload/index.md
+    - Electronics: documentation/electronics/index.md

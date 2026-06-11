@@ -1,17 +1,31 @@
-# Welcome to MkDocs
+# PEROVSAT
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+**Perovskite Solar Cell CubeSat Mission**
 
-## Commands
+!!! warning "Site under construction"
+    This website is actively being built. Mission details, outreach content, and technical documentation will be added over time. Check back soon.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+## About the mission
 
-## Project layout
+PEROVSAT is a CubeSat mission to study **perovskite solar cells** in the space environment. Perovskites are an emerging photovoltaic technology with high specific power, low mass, and promising radiation tolerance—properties that make them attractive for small spacecraft and future exploration missions.
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+The mission aims to characterize cell performance and degradation in orbit, contributing to the growing body of in-space perovskite research alongside other university-led demonstrators.
+
+## Mission at a glance
+
+| | |
+|---|---|
+| **Spacecraft** | CubeSat |
+| **Primary objective** | In-orbit characterization of perovskite solar cells |
+| **Focus areas** | I–V curves, degradation, temperature, irradiance |
+| **Documentation** | Software, payload, and electronics teams |
+
+## Explore the site
+
+- **[Software documentation](documentation/software/tutorials/getting-started.md)** — tutorials, how-to guides, reference, and explanations for the flight software team
+- **[Payload documentation](documentation/payload/index.md)** — science payload design and operations
+- **[Electronics documentation](documentation/electronics/index.md)** — power, communications, and avionics
+
+## Outreach
+
+Outreach and public-facing mission content will live here as the site grows—mission updates, team information, and educational materials for the broader community.
