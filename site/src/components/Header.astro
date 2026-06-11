@@ -1,0 +1,71 @@
+---
+import { withBase } from '../utils/url';
+
+const navLinks = [
+  { href: withBase(), label: 'Home' },
+  { href: withBase('about'), label: 'About' },
+  { href: withBase('team'), label: 'Meet the Team' },
+  { href: withBase('documentation/'), label: 'Documentation' },
+];
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="site-header__brand" href={withBase()}>
+      <img src={withBase('MissionPatchV1.png')} alt="PEROVSAT mission patch" width="40" height="40" />
+      <span>PEROVSAT</span>
+    </a>
+    <nav class="site-header__nav" aria-label="Main navigation">
+      {
+        navLinks.map((link) => (
+          <a href={link.href}>{link.label}</a>
+        ))
+      }
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--rhodes-border);
+    background: var(--rhodes-surface);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    width: min(960px, 100%);
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+  }
+
+  .site-header__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .site-header__brand img {
+    border-radius: 50%;
+  }
+
+  .site-header__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    font-size: 0.95rem;
+  }
+
+  .site-header__nav a {
+    color: var(--rhodes-text-muted);
+  }
+
+  .site-header__nav a:hover {
+    color: var(--rhodes-red);
+  }
+</style>

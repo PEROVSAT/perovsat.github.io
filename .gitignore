@@ -164,8 +164,13 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
-# mkdocs documentation
-/site
+# MkDocs build output
+docs/site/
+
+# Astro build output
+site/dist/
+site/node_modules/
+site/.astro/
 
 # mypy
 .mypy_cache/

@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { withBase } from '../utils/url';
+---
+
+<Layout title="PEROVSAT — Under Construction">
+  <section class="hero">
+    <p class="hero__badge">CubeSat Mission</p>
+    <h1>Under Construction</h1>
+    <p class="hero__lead">
+      The PEROVSAT mission website is being built. Check back soon for mission updates,
+      team information, and outreach content.
+    </p>
+    <p class="hero__note">
+      Technical documentation is available in the
+      <a href={withBase('documentation/')}>Documentation</a> section.
+    </p>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: 4rem 0;
+  }
+
+  .hero__badge {
+    display: inline-block;
+    margin: 0 0 1rem;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--rhodes-border);
+    border-radius: 999px;
+    color: var(--rhodes-text-muted);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0 0 1rem;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--rhodes-red);
+  }
+
+  .hero__lead {
+    max-width: 36rem;
+    margin: 0 auto 1.5rem;
+    color: var(--rhodes-text-muted);
+    font-size: 1.125rem;
+  }
+
+  .hero__note {
+    margin: 0;
+    color: var(--rhodes-text-muted);
+  }
+
+  .hero__note a {
+    color: var(--rhodes-red);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>
