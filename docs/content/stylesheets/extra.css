@@ -1,0 +1,399 @@
+/* ==========================================================================
+   PEROVSAT — Rhodes College brand theme
+   Primary: #C4022B (Rhodes red)  |  Base: #000000 (black)
+   ========================================================================== */
+
+:root {
+  --rhodes-red: #c4022b;
+  --rhodes-red-light: #d4334f;
+  --rhodes-red-dark: #8f011f;
+  --rhodes-red-glow: rgba(196, 2, 43, 0.12);
+  --rhodes-black: #000000;
+  --rhodes-surface: #0f0f0f;
+  --rhodes-surface-elevated: #1a1a1a;
+  --rhodes-border: #2e2e2e;
+  --rhodes-text: #e4e4e4;
+  --rhodes-text-muted: #a3a3a3;
+}
+
+/* --------------------------------------------------------------------------
+   Dark scheme (opt-in via toggle — muted, not high-contrast)
+   -------------------------------------------------------------------------- */
+
+[data-md-color-scheme="perovsat"] {
+  color-scheme: dark;
+
+  --md-primary-fg-color: #b83a4f;
+  --md-primary-fg-color--light: #c45263;
+  --md-primary-fg-color--dark: var(--rhodes-red-dark);
+  --md-primary-bg-color: #141414;
+
+  --md-accent-fg-color: #c45263;
+  --md-accent-fg-color--transparent: rgba(196, 2, 43, 0.06);
+  --md-accent-bg-color: var(--rhodes-red);
+
+  --md-default-bg-color: #141414;
+  --md-default-bg-color--light: var(--rhodes-surface);
+  --md-default-bg-color--lighter: var(--rhodes-surface-elevated);
+  --md-default-bg-color--lightest: #242424;
+  --md-default-fg-color: var(--rhodes-text);
+  --md-default-fg-color--light: var(--rhodes-text-muted);
+  --md-default-fg-color--lighter: #787878;
+  --md-default-fg-color--lightest: #5a5a5a;
+
+  --md-code-fg-color: #d8d8d8;
+  --md-code-bg-color: var(--rhodes-surface-elevated);
+
+  --md-typeset-a-color: #c9a0a8;
+
+  --md-typeset-kbd-color: var(--rhodes-text);
+  --md-typeset-kbd-accent-color: var(--rhodes-surface-elevated);
+  --md-typeset-kbd-border-color: var(--rhodes-border);
+
+  --md-typeset-table-color: var(--rhodes-border);
+
+  --md-admonition-bg-color: var(--rhodes-surface-elevated);
+  --md-admonition-fg-color: var(--rhodes-text);
+
+  --md-footer-bg-color: #0f0f0f;
+  --md-footer-bg-color--dark: #0a0a0a;
+  --md-footer-fg-color: var(--rhodes-text-muted);
+  --md-footer-fg-color--light: var(--rhodes-text);
+  --md-footer-fg-color--lighter: #ffffff;
+
+  --md-header-bg-color: rgba(20, 20, 20, 0.95);
+  --md-header-bg-color--dark: rgba(15, 15, 15, 0.98);
+
+  --md-shadow-z1: 0 0.125rem 0.4rem rgba(0, 0, 0, 0.4);
+  --md-shadow-z2: 0 0.25rem 0.8rem rgba(0, 0, 0, 0.5);
+  --md-shadow-z3: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.6);
+
+  --md-hue: 352;
+}
+
+/* --------------------------------------------------------------------------
+   Light scheme (optional toggle)
+   -------------------------------------------------------------------------- */
+
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: var(--rhodes-red);
+  --md-primary-fg-color--light: var(--rhodes-red-light);
+  --md-primary-fg-color--dark: var(--rhodes-red-dark);
+  --md-primary-bg-color: #ffffff;
+
+  --md-accent-fg-color: var(--rhodes-red);
+  --md-accent-fg-color--transparent: rgba(196, 2, 43, 0.08);
+
+  --md-typeset-a-color: var(--rhodes-red-dark);
+
+  --md-footer-bg-color: #1a1a1a;
+  --md-footer-bg-color--dark: var(--rhodes-black);
+}
+
+/* --------------------------------------------------------------------------
+   Header & navigation
+   -------------------------------------------------------------------------- */
+
+[data-md-color-scheme="perovsat"] .md-header {
+  border-bottom: 1px solid var(--rhodes-border);
+  backdrop-filter: blur(12px);
+}
+
+[data-md-color-scheme="perovsat"] .md-tabs {
+  background-color: var(--rhodes-surface);
+  border-bottom: 1px solid var(--rhodes-border);
+}
+
+[data-md-color-scheme="perovsat"] .md-tabs__link--active,
+[data-md-color-scheme="perovsat"] .md-tabs__link:hover {
+  color: #d4d4d4;
+}
+
+[data-md-color-scheme="perovsat"] .md-nav__link--active,
+[data-md-color-scheme="perovsat"] .md-nav__link:hover {
+  color: #d4d4d4;
+}
+
+[data-md-color-scheme="perovsat"] .md-nav__item .md-nav__link--active {
+  border-left-color: #b83a4f;
+}
+
+/* --------------------------------------------------------------------------
+   Admonitions
+   -------------------------------------------------------------------------- */
+
+[data-md-color-scheme="perovsat"] .md-typeset .admonition,
+[data-md-color-scheme="perovsat"] .md-typeset details {
+  border-color: var(--rhodes-border);
+  box-shadow: none;
+}
+
+[data-md-color-scheme="perovsat"] .md-typeset .warning > .admonition-title,
+[data-md-color-scheme="perovsat"] .md-typeset .warning > summary {
+  background-color: rgba(196, 2, 43, 0.08);
+  border-color: var(--rhodes-border);
+}
+
+/* --------------------------------------------------------------------------
+   Landing pages (no sidebars)
+   -------------------------------------------------------------------------- */
+
+.md-content__inner:has(.perovsat-landing) {
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+.perovsat-landing {
+  max-width: 52rem;
+  margin: 0 auto;
+}
+
+.perovsat-landing .perovsat-hero {
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  width: 100vw;
+  max-width: 100vw;
+}
+
+/* --------------------------------------------------------------------------
+   Home page — hero
+   -------------------------------------------------------------------------- */
+
+.perovsat-hero {
+  position: relative;
+  margin: 0 0 2.5rem;
+  padding: 3.5rem 2rem 3rem;
+  text-align: center;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, var(--rhodes-red-glow), transparent 70%),
+    linear-gradient(180deg, var(--rhodes-surface) 0%, var(--rhodes-black) 100%);
+  border-bottom: 1px solid var(--rhodes-border);
+  overflow: hidden;
+}
+
+.perovsat-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(196, 2, 43, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(196, 2, 43, 0.04) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.perovsat-hero__inner {
+  position: relative;
+  max-width: 52rem;
+  margin: 0 auto;
+}
+
+.perovsat-hero__badge {
+  display: inline-block;
+  margin-bottom: 1.25rem;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rhodes-red);
+  background: rgba(196, 2, 43, 0.08);
+  border: 1px solid rgba(196, 2, 43, 0.2);
+  border-radius: 2rem;
+}
+
+.perovsat-hero__title {
+  margin: 0 0 0.5rem;
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+  color: #ffffff;
+}
+
+.perovsat-hero__subtitle {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  font-weight: 400;
+  color: var(--rhodes-text-muted);
+  line-height: 1.5;
+}
+
+.perovsat-hero__affiliation {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #6e6e6e;
+  letter-spacing: 0.02em;
+}
+
+.perovsat-hero__affiliation strong {
+  color: var(--rhodes-red);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Home page — stat strip
+   -------------------------------------------------------------------------- */
+
+.perovsat-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 1rem;
+  margin: 0 0 2.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.perovsat-stats__item {
+  padding: 1.25rem 1rem;
+  text-align: center;
+  background: var(--rhodes-surface-elevated);
+  border: 1px solid var(--rhodes-border);
+  border-radius: 0.5rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+[data-md-color-scheme="perovsat"] .perovsat-stats__item:hover {
+  border-color: #3a3a3a;
+  box-shadow: none;
+}
+
+.perovsat-stats__label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rhodes-red);
+}
+
+.perovsat-stats__value {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--rhodes-text);
+  line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   Home page — navigation cards
+   -------------------------------------------------------------------------- */
+
+.perovsat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0 2.5rem;
+}
+
+.perovsat-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  text-decoration: none !important;
+  background: var(--rhodes-surface-elevated);
+  border: 1px solid var(--rhodes-border);
+  border-radius: 0.5rem;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+[data-md-color-scheme="perovsat"] .perovsat-card:hover {
+  border-color: #3a3a3a;
+  transform: translateY(-1px);
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.3);
+}
+
+.perovsat-card__icon {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.perovsat-card__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ffffff !important;
+}
+
+.perovsat-card__desc {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--rhodes-text-muted) !important;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.perovsat-card__arrow {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--rhodes-red) !important;
+  letter-spacing: 0.04em;
+}
+
+/* --------------------------------------------------------------------------
+   Home page — section headings
+   -------------------------------------------------------------------------- */
+
+.perovsat-section-title {
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--rhodes-text-muted);
+  border-bottom: 1px solid var(--rhodes-border);
+}
+
+/* Dark mode hero — subtle, not pure black */
+[data-md-color-scheme="perovsat"] .perovsat-hero {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(196, 2, 43, 0.06), transparent 70%),
+    linear-gradient(180deg, #1a1a1a 0%, #141414 100%);
+  border-bottom-color: var(--rhodes-border);
+}
+
+[data-md-color-scheme="perovsat"] .perovsat-hero__title {
+  color: #f0f0f0;
+}
+
+[data-md-color-scheme="perovsat"] .perovsat-hero__affiliation strong {
+  color: #c45263;
+}
+
+[data-md-color-scheme="perovsat"] .perovsat-stats__label {
+  color: #b83a4f;
+}
+
+[data-md-color-scheme="perovsat"] .perovsat-card__title {
+  color: #f0f0f0 !important;
+}
+
+/* Light mode card adjustments */
+[data-md-color-scheme="default"] .perovsat-hero {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(196, 2, 43, 0.08), transparent 70%),
+    linear-gradient(180deg, #f8f8f8 0%, #ffffff 100%);
+  border-bottom-color: #e0e0e0;
+}
+
+[data-md-color-scheme="default"] .perovsat-hero__title {
+  color: var(--rhodes-black);
+}
+
+[data-md-color-scheme="default"] .perovsat-stats__item,
+[data-md-color-scheme="default"] .perovsat-card {
+  background: #fafafa;
+  border-color: #e8e8e8;
+}
+
+[data-md-color-scheme="default"] .perovsat-card__title {
+  color: var(--rhodes-black) !important;
+}
+
+[data-md-color-scheme="default"] .perovsat-stats__value {
+  color: #333333;
+}
