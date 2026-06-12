@@ -75,7 +75,35 @@ nav:
       - Reference:
         - Overview: software/reference/index.md
         - DBuild System: software/reference/dbuild.md
-      - Explanation: software/explanation/index.md
+      - Explanation:
+          - Overview: software/explanation/index.md
+          - Fundamentals: software/explanation/fundamentals.md
+          - Zephyr:
+              - Overview: software/explanation/zephyr/index.md
+              - DeviceTree: software/explanation/zephyr/devicetree.md
+              - Kconfig: software/explanation/zephyr/kconfig.md
+              - Modules: software/explanation/zephyr/modules.md
+              - Native simulation: software/explanation/zephyr/native-sim.md
+          - Architecture:
+              - Overview: software/explanation/architecture/index.md
+              - Threads: software/explanation/architecture/threads.md
+              - Operational status: software/explanation/architecture/op-status.md
+              - Data flow: software/explanation/architecture/data-flow.md
+              - Global flags: software/explanation/architecture/global-flags.md
+          - Hardware:
+              - Overview: software/explanation/hardware/index.md
+              - Electrical Power System: software/explanation/hardware/eps.md
+              - Payload: software/explanation/hardware/payload.md
+              - Sensors: software/explanation/hardware/sensors.md
+              - Communications: software/explanation/hardware/comms.md
+          - Reliability:
+              - Overview: software/explanation/reliability/index.md
+              - Space environment: software/explanation/reliability/space-environment.md
+              - FDIR: software/explanation/reliability/fdir.md
+              - Safe mode: software/explanation/reliability/safe-mode.md
+          - Testing:
+              - Overview: software/explanation/testing/index.md
+              - Hardware-in-the-loop: software/explanation/testing/hil.md
   - Payload: payload/index.md
   - Electronics: electronics/index.md
 
