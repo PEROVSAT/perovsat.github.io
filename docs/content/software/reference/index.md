@@ -2,10 +2,11 @@
 
 Technical descriptions of PEROVSAT software components, APIs, and configuration.
 
-!!! note "Coming soon"
-    Reference material will be added as interfaces stabilize.
+## Available reference
 
-**Examples of topics to cover:**
+- [The DBuild Command](dbuild.md) — per-device mock/hardware build configuration via `west dbuild`
+
+## Planned topics
 
 - Command and telemetry packet formats
 - Configuration parameters and defaults
