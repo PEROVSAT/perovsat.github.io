@@ -1,5 +1,8 @@
 # The DBuild Command
 
+!!! warning "Under Construction"
+    This page is still under construction. Core behavior is documented but details may change.
+
 DBuild (Device Build) is a custom [west](https://docs.zephyrproject.org/latest/develop/west/index.html) command for PerovSat flight software. It reads a per-developer device configuration, resolves each device to a Zephyr snippet, validates that the build is possible on the chosen board, and runs `west build` with the correct `-S` flags.
 
 Application source code does not change between mock and hardware modes. Only devicetree aliases and Kconfig selections differ, and those live in snippets.

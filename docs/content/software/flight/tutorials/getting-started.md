@@ -1,5 +1,8 @@
 # Getting Started with PEROVSAT Flight Software
 
+!!! warning "Under Construction"
+    This page is still under construction. Steps are accurate for the current workspace but may change.
+
 This tutorial will guide you through setting up the PEROVSAT Zephyr workspace
 
 ## Prerequisites
