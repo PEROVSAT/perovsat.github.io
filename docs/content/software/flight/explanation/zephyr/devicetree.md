@@ -1,14 +1,26 @@
-# DeviceTree
+# Devicetree
 
 !!! warning "Under Construction"
-    This article is not written yet.
+    This page is a stub and still under construction. Details may be incomplete or change.
 
-Topics to cover when this page is written:
+The devicetree describes hardware topology. PEROVSAT uses board `.dts` files from Zephyr plus **application overlays** and **dbuild snippets** to wire mission devices without hardcoding pins in C.
 
-- What DeviceTree is and why Zephyr (and Linux) use it
-- Board `.dts` vs application **overlay** (`.overlay`)
-- **Bindings** — how node types and properties are defined
-- **Aliases** and `chosen` — naming devices for application code (e.g. `get_device(IMU)`)
-- How overlays link board hardware to PEROVSAT-specific names and purposes
-- Relationship to drivers (compatible strings, `status = "okay"`)
-- Pointers to official Zephyr DeviceTree docs for schema and binding reference
+## Layers
+
+| Layer | Source | Purpose |
+|-------|--------|---------|
+| SoC / board `.dtsi` / `.dts` | Zephyr tree | CPU, memory, on-board peripherals |
+| Board overlay | `boards/<board>.overlay` in app or snippet | Pin/bus wiring for a specific board |
+| Snippet overlay | `snippets/*/*.overlay` | Swap mock vs hardware device nodes |
+
+## Key concepts for PEROVSAT
+
+- **`compatible`** — binds a node to a driver (`invensense,mpu6050-mock`, etc.)
+- **`reg`** — bus address (I2C) or memory range
+- **`status = "okay"`** — enables a node
+- **Aliases** — stable names (`imu`, `sun-z`) so application code uses `DT_ALIAS(imu)` regardless of mode
+- **Phandles** — `&i2c1 { ... }` modifies an existing node from a lower layer
+
+Mock snippets typically define a standalone node under `/`. Hardware snippets attach child nodes under a bus (`&i2c1 { sensor@addr { ... }; };`).
+
+Official reference: [Zephyr Devicetree](https://docs.zephyrproject.org/latest/build/dts/index.html).

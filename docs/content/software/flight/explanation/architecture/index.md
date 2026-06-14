@@ -1,30 +1,23 @@
-# Flight software architecture
+# Flight Software Architecture
 
-PEROVSAT flight software is organized around a small set of **threads**, each responsible for a slice of onboard behavior. Threads communicate through message queues and shared state (global flags), and the whole system is gated by **operational status** (`OP_STATUS`) so power and risk can be managed as the mission progresses.
+!!! warning "Under Construction"
+    This page is a stub and still under construction. Details may be incomplete or change.
 
-This is project-specific design documentation. It explains *our* structure and naming — the vocabulary you will see in thread design docs and in code reviews.
+PEROVSAT flight software runs on [Zephyr RTOS](https://docs.zephyrproject.org/) as a multi-threaded application. Application logic is split into cooperating threads; hardware access goes through custom and stock Zephyr drivers.
 
-## Why it is structured this way
+## High-level layout
 
-- **Separation of concerns** — sensing, filtering, communications, and health monitoring evolve on different schedules and failure domains.
-- **Deterministic scheduling** — interval-driven and event-driven **wake models** keep behavior predictable on a resource-constrained RTOS.
-- **Mission phases** — deploy, safe mode, and nominal operations change what the satellite is allowed to do; `OP_STATUS` encodes that centrally.
+```text
+Application threads  →  middleware (Sensor API, LittleFS, watchdogs)
+                      →  custom drivers (EPS, Eyestar, AMU, …)
+                      →  Zephyr bus drivers (UART, I2C, SPI/QSPI)
+```
 
-## Threads at a glance
+An **epoch** is the basic timing unit between thread wakeups (likely one second). **System Health** reads power and deployment state from the EPS, sets global operating flags, and starts or stops other threads accordingly.
 
-| Thread | Role |
-|--------|------|
-| **System Health** | Monitors EPS, watchdogs, and overall system viability |
-| **Payload** | Interfaces with the perovskite payload (AMU) and related acquisition |
-| **Data Filtering and Analysis (DFA)** | Processes and stores sensor and payload data |
-| **Communications** | Downlink (beacon, SBD) and uplink handling |
-| **Commands** | Parses and dispatches ground commands |
+## Sections
 
-Other cross-cutting concepts: **epoch** (time base), **beacon** (periodic telemetry), **`DEPLOY_COMPLETE`** and **global flags** (shared mission state).
+- [Threads](threads/index.md) — roles, wake conditions, and dependencies for each application thread
+- [Drivers](drivers/index.md) — custom device drivers and how they sit on Zephyr buses
 
-## Deeper reading
-
-- [Threads](threads.md) — responsibilities, ownership, and interactions between threads
-- [Operational status](op-status.md) — SAFE, LOW, NOMINAL, HIGH and what each permits
-- [Data flow](data-flow.md) — from sensor read to onboard storage to downlink
-- [Global flags](global-flags.md) — shared state, deploy semantics, and coordination without heavy IPC
+Build-time device selection (mock vs hardware vs emulation) is handled separately by [dbuild](../../reference/dbuild.md); application source does not change between modes.

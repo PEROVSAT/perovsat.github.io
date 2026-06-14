@@ -1,10 +1,20 @@
-# How-to guides
+# How-to Guides
 
-Goal-oriented recipes for common software tasks on the PEROVSAT project.
+Goal-oriented recipes for common PEROVSAT flight software tasks.
+
+!!! warning "Under Construction"
+    This section is still under construction. Pages may be incomplete or change.
 
 ## Available guides
 
-- [Add a device to dbuild](add-device-to-dbuild.md) — register a new device, create snippets, and wire it into the build system
+### DBuild
+
+- [DBuild guides](dbuild/index.md) — build, flash, and register devices
+- [Add a device to dbuild](add-device-to-dbuild.md) — end-to-end device registration (legacy single-page guide)
+
+### Drivers
+
+- [Driver guides](drivers/index.md) — create, test, and integrate out-of-tree drivers
 
 ## Planned topics
 

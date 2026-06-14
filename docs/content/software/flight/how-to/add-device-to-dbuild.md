@@ -1,5 +1,8 @@
 # Add a Device to DBuild
 
+!!! warning "Under Construction"
+    This page is still under construction. Steps reflect the current IMU reference but may change.
+
 This guide walks through adding a new logical device (for example a sun sensor or radio) to the dbuild system so developers can switch it between mock and hardware modes with a single line in `dbuild_devices.conf`.
 
 For background on how the pieces fit together, see [The DBuild Command](../reference/dbuild.md).

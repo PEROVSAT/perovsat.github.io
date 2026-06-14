@@ -1,12 +1,22 @@
-# Hardware-in-the-loop
+# Hardware-in-the-Loop (HIL)
 
 !!! warning "Under Construction"
-    This article is not written yet.
+    This page is a stub and still under construction. Details may be incomplete or change.
 
-Topics to cover when this page is written:
+HIL connects running flight software to a simulation plant so sensor inputs and actuator outputs are exercised under realistic dynamics — not just canned emulator responses.
 
-- Definition of **HIL** in the PEROVSAT context
-- What hardware is in the loop vs what is simulated or replayed
-- How HIL differs from SITL and from full integrated test on the bench
-- Typical test goals (driver validation, comms path, EPS heartbeat)
-- Pointers to future how-tos for running HIL locally or in CI
+## PEROVSAT approach
+
+The planned stack pairs:
+
+- Firmware built with **SITL emulator backends** (socket I/O instead of physical I2C/UART)
+- **[Basilisk](https://basilisk-arizona.readthedocs.io/)** or similar simulation in the separate `simulation` repository
+
+This sits above integration tests (canned emulator) but below full flat-sat hardware tests.
+
+## Open questions
+
+- Exact HIL topology (which devices are simulated vs real), launch scripts, and pass/fail criteria.
+- Relationship between HIL and the `simulation` repo vs lab flat-sat setups.
+
+See [Simulation Software](../../../simulation/index.md) and [SITL Testing](sitl.md).

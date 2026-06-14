@@ -1,17 +1,19 @@
-# Testing flight software
+# Testing
 
-Embedded flight software is hard to test in a browser tab. PEROVSAT uses a spectrum from **pure simulation** on a laptop to **real hardware** exercised with scripted or injected inputs. The goal is the same at every level: catch regressions before orbit, where fixes are expensive.
+!!! warning "Under Construction"
+    This page is a stub and still under construction. Details may be incomplete or change.
 
-## The spectrum
+PEROVSAT tests flight software at several levels, from isolated driver logic to full hardware-in-the-loop runs with Basilisk.
 
-| Approach | What runs | Typical use |
-|----------|-----------|-------------|
-| **SITL** | Flight stack on a host (e.g. Zephyr `native_sim`) with mock or simulated I/O | Fast iteration, logic and thread interaction |
-| **HIL** | Real OBC and peripherals with simulated or replayed environment data | Driver integration, timing, hardware quirks |
+## Test layers
 
-SITL is not a substitute for everything HIL covers — timing, electrical behavior, and driver edge cases still need hardware. Explanation docs describe *what* each mode is; how-tos will cover *how to run* them.
+| Layer | Doc | Typical platform |
+|-------|-----|------------------|
+| Overview | [PEROVSAT Testing](perovsat-testing.md) | — |
+| Unit | [Unit Tests](unit.md) | `native_sim` |
+| Integration | [Integration Tests](integration.md) | `qemu_cortex_m3` |
+| SITL | [SITL](sitl.md) | QEMU + Basilisk socket |
+| Hardware | [Hardware Testing](hardware.md) | Dev boards, flight hardware |
+| HIL | [Hardware-in-the-Loop](hil.md) | OBC + Basilisk / sim plant |
 
-## Deeper reading
-
-- [Native simulation](../zephyr/native-sim.md) — `native_sim` and mock drivers (Zephyr-focused)
-- [Hardware-in-the-loop](hil.md) — HIL setup and role in the project
+Driver repos scaffold unit, integration, and (for hardware drivers) SITL tests via `driver-template`. Application-level testing strategy is still evolving.
