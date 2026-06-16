@@ -1,21 +1,15 @@
 # Sun Sensor Driver Reference
 ## Design
-Sun Sensors work well in integrating with Zephyr's Sensor API, which is just a standardized set of driver API functions. The only aspect that really needs to be custom is that there is not a Sensor Channel for sun angles, so we need to have a custom one.
+IMUs work perfectly with Zephyr's Sensor API, and there are existing channels for the values. It is worth noting that there are likely existing drivers for the IMUs we want to purchase, but that would prevent us from using them in simulations. Thus, we are still likely making a custom driver.
 
 ## Internals
-### Custom Sensor Channels
-```c
-enum my_sensor_channel {
-    SENSOR_CHAN_SUN_ANGLE_XY = SENSOR_CHAN_PRIV_START,
-};
-```
-Though not custom, we may also be using SENSOR_CHAN_LUX if supported on our sun sensor
-
+### Sensor Channels
+We will be using the `SENSOR_CHAN_ACCEL_XYZ` and `SENSOR_CHAN_GYRO_XYZ`
 
 ## API
 `const struct device *dev` is an implied parameter for all but the initialization function
 
-### int init_sun_sensor()
+### int init_imu()
 #### Description
 Any required hardware or communication bus initialization goes here
 #### Parameters
@@ -32,7 +26,7 @@ An integer status code
 
 ### int sample_fetch(enum sensor_channel channel)
 #### Description
-Pulls sun sensor data from hardware into driver's SRAM
+Pulls accel and/or gyro data from hardware into driver's SRAM
 #### Parameters
 `enum sensor_channel channel` - Which of the custom sensor channels to read
 #### Return
