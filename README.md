@@ -9,11 +9,13 @@ This repository is split into two projects:
 
 ## Local development
 
-Install dependencies once:
+Install dependencies once (creates a Python virtualenv in `.venv/` and installs Node packages):
 
 ```bash
 make install
 ```
+
+MkDocs dependencies are listed in `docs/requirements.txt` (Material theme, which includes MkDocs itself). A root `requirements.txt` re-exports that file for convenience.
 
 Run the main site only (http://localhost:4321/):
 

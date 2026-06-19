@@ -1,9 +1,31 @@
----
-const year = new Date().getFullYear();
----
-
 <footer class="site-footer">
-  <p>Copyright &copy; {year} PEROVSAT — Rhodes College</p>
+  <div class="footer-grid">
+
+    <!-- Left: A project by Rhodes College -->
+    <div class="footer-col footer-col--left">
+      <span class="footer-label">A project by</span>
+      <a href="https://www.rhodes.edu" target="_blank" rel="noopener noreferrer">
+        <img src="/assets/RhodesLogo.png" alt="Rhodes College" class="footer-logo footer-logo--rhodes" />
+      </a>
+    </div>
+
+    <!-- Center: Contact -->
+    <div class="footer-col footer-col--center">
+      <span class="footer-label">Contact Us</span>
+      <a href="mailto:perovsat@gmail.com" class="footer-contact-link">perovsat@gmail.com</a>
+      <span class="footer-contact-detail">Rhodes Tower 401</span>
+      <span class="footer-contact-detail footer-join">Interested in joining? Reach out to us at the email above.</span>
+    </div>
+
+    <!-- Right: In collaboration with NRL -->
+    <div class="footer-col footer-col--right">
+      <span class="footer-label">In collaboration with</span>
+      <a href="https://www.nrel.gov" target="_blank" rel="noopener noreferrer">
+        <img src="/assets/NRLLogo.jpeg" alt="National Laboratory of the Rockies" class="footer-logo footer-logo--nrl" />
+      </a>
+    </div>
+
+  </div>
 </footer>
 
 <style>
@@ -12,11 +34,78 @@ const year = new Date().getFullYear();
     background: var(--rhodes-surface);
     color: var(--rhodes-text-muted);
     font-size: 0.875rem;
-    text-align: center;
-    padding: 1.5rem;
+    padding: 2rem 1.5rem 1.25rem;
   }
 
-  .site-footer p {
-    margin: 0;
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .footer-col--left  { align-items: center; }
+  .footer-col--right { align-items: center; }
+
+  .footer-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--rhodes-text-muted);
+  }
+
+  /* Rhodes logo — white-on-black, so give it a dark pill background */
+  .footer-logo--rhodes {
+    height: 90px;
+    width: auto;
+    background: #111;
+    border-radius: 6px;
+    padding: 8px 14px;
+    object-fit: contain;
+  }
+
+  .footer-logo--nrl {
+    height: 90px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .footer-contact-link {
+    color: var(--rhodes-accent, #b00);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .footer-contact-link:hover {
+    text-decoration: underline;
+  }
+
+  .footer-contact-detail {
+    font-size: 0.82rem;
+    color: var(--rhodes-text-muted);
+  }
+
+  .footer-join {
+    font-style: italic;
+    max-width: 18rem;
+  }
+
+  /* Responsive: stack vertically on small screens */
+  @media (max-width: 640px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
   }
 </style>
