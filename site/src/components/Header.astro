@@ -1,12 +1,5 @@
 ---
 import { withBase } from '../utils/url';
-
-const navLinks = [
-  { href: withBase(), label: 'Home' },
-  { href: withBase('about'), label: 'About' },
-  { href: withBase('team'), label: 'Meet the Team' },
-  { href: withBase('documentation/'), label: 'Documentation' },
-];
 ---
 
 <header class="site-header">
@@ -15,20 +8,85 @@ const navLinks = [
       <img src={withBase('MissionPatchV1.png')} alt="PEROVSAT mission patch" width="40" height="40" />
       <span>PEROVSAT</span>
     </a>
+
     <nav class="site-header__nav" aria-label="Main navigation">
-      {
-        navLinks.map((link) => (
-          <a href={link.href}>{link.label}</a>
-        ))
-      }
+      <a href={withBase()}>Home</a>
+      <a href={withBase('about')}>About</a>
+
+      <!-- Media dropdown -->
+      <div class="nav-dropdown">
+        <button class="nav-dropdown__trigger" aria-haspopup="true" aria-expanded="false">
+          Media
+          <svg class="nav-dropdown__chevron" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+            <path d="M2 3.5 L5 6.5 L8 3.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="nav-dropdown__menu" role="menu">
+          <a href={withBase('publications')} role="menuitem">Publications</a>
+          <a href={withBase('news')} role="menuitem">News</a>
+        </div>
+      </div>
+
+      <a href={withBase('mission-status')}>Mission Status</a>
+      <a href={withBase('team')}>Meet the Team</a>
+      <a href={withBase('partners')}>Partners</a>
+
+      <!-- Documentation — external site indicator -->
+      <a href={withBase('documentation/')} class="nav-external" target="_blank" rel="noopener noreferrer">
+        Documentation
+        <svg class="nav-external__icon" width="12" height="12" viewBox="0 0 12 12" aria-label="Opens in documentation site" role="img">
+          <path d="M2 10 L10 2 M5.5 2 H10 V6.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="1" y="5" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </a>
     </nav>
   </div>
 </header>
+
+<script>
+  // Toggle dropdown on click (keyboard + touch friendly)
+  document.querySelectorAll<HTMLButtonElement>('.nav-dropdown__trigger').forEach((btn) => {
+    const dropdown = btn.closest('.nav-dropdown')!;
+    const menu = dropdown.querySelector<HTMLElement>('.nav-dropdown__menu')!;
+
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+    });
+
+    // Close when focus leaves the dropdown
+    dropdown.addEventListener('focusout', (e) => {
+      if (!dropdown.contains((e as FocusEvent).relatedTarget as Node)) {
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Close on Escape
+    dropdown.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Escape') {
+        btn.setAttribute('aria-expanded', 'false');
+        btn.focus();
+      }
+    });
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll<HTMLButtonElement>('.nav-dropdown__trigger').forEach((btn) => {
+      const dropdown = btn.closest('.nav-dropdown')!;
+      if (!dropdown.contains(e.target as Node)) {
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+</script>
 
 <style>
   .site-header {
     border-bottom: 1px solid var(--rhodes-border);
     background: var(--rhodes-surface);
+    position: relative;
+    z-index: 100;
   }
 
   .site-header__inner {
@@ -36,7 +94,7 @@ const navLinks = [
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    width: min(960px, 100%);
+    width: min(1100px, 100%);
     margin: 0 auto;
     padding: 1rem 1.5rem;
   }
@@ -48,6 +106,7 @@ const navLinks = [
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
+    flex-shrink: 0;
   }
 
   .site-header__brand img {
@@ -56,16 +115,110 @@ const navLinks = [
 
   .site-header__nav {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
     gap: 1.25rem;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
-  .site-header__nav a {
+  .site-header__nav > a {
     color: var(--rhodes-text-muted);
+    white-space: nowrap;
   }
 
-  .site-header__nav a:hover {
+  .site-header__nav > a:hover {
     color: var(--rhodes-red);
+  }
+
+  /* ── Dropdown ── */
+  .nav-dropdown {
+    position: relative;
+  }
+
+  .nav-dropdown__trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--rhodes-text-muted);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .nav-dropdown__trigger:hover,
+  .nav-dropdown__trigger[aria-expanded="true"] {
+    color: var(--rhodes-red);
+  }
+
+  .nav-dropdown__chevron {
+    transition: transform 0.2s ease;
+  }
+
+  .nav-dropdown__trigger[aria-expanded="true"] .nav-dropdown__chevron {
+    transform: rotate(180deg);
+  }
+
+  .nav-dropdown__menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 10rem;
+    /* padding-top bridges the visual gap so hover stays continuous */
+    padding: 0.5rem 0 0.35rem;
+    z-index: 200;
+  }
+
+  .nav-dropdown__menu::before {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: 0.5rem 0 0;
+    background: var(--rhodes-surface);
+    border: 1px solid var(--rhodes-border);
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    z-index: -1;
+  }
+
+  .nav-dropdown__trigger[aria-expanded="true"] + .nav-dropdown__menu,
+  .nav-dropdown:hover .nav-dropdown__menu {
+    display: block;
+  }
+
+  .nav-dropdown__menu a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: var(--rhodes-text-muted);
+    white-space: nowrap;
+    font-size: 0.9rem;
+  }
+
+  .nav-dropdown__menu a:hover {
+    color: var(--rhodes-red);
+    background: rgba(196, 2, 43, 0.06);
+  }
+
+  /* ── External link (Documentation) ── */
+  .nav-external {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--rhodes-text-muted);
+    white-space: nowrap;
+  }
+
+  .nav-external:hover {
+    color: var(--rhodes-red);
+  }
+
+  .nav-external__icon {
+    opacity: 0.7;
+    flex-shrink: 0;
   }
 </style>
