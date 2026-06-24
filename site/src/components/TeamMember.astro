@@ -1,0 +1,89 @@
+---
+import { withBase } from '../utils/url';
+
+interface Props {
+  name: string;
+  /** e.g. "Computer Science, Class of 2026" */
+  subtext: string;
+  /** Optional role, e.g. "Software Lead" */
+  role?: string;
+  /** Filename in assets/team-members, e.g. "RemyBozung.jpg" */
+  image?: string;
+}
+
+const TEAM_MEMBERS_DIR = 'assets/team-members';
+const DEFAULT_IMAGE = `${TEAM_MEMBERS_DIR}/profile-icon.jpg`;
+
+const { name, subtext, role, image } = Astro.props;
+const src = withBase(
+  image
+    ? image.includes('/') ? image : `${TEAM_MEMBERS_DIR}/${image}`
+    : DEFAULT_IMAGE
+);
+---
+
+<article class="team-member">
+  <div class="team-member__photo-wrap">
+    <img class="team-member__photo" src={src} alt={`Photo of ${name}`} width="120" height="120" />
+  </div>
+  <div class="team-member__info">
+    <p class="team-member__name">{name}</p>
+    {role && <p class="team-member__role">{role}</p>}
+    <p class="team-member__subtext">{subtext}</p>
+  </div>
+</article>
+
+<style>
+  .team-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.94rem;
+  }
+
+  .team-member__photo-wrap {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--rhodes-border);
+    flex-shrink: 0;
+  }
+
+  .team-member__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(20%);
+  }
+
+  .team-member__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .team-member__name {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--rhodes-text);
+  }
+
+  .team-member__role {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--rhodes-red);
+  }
+
+  .team-member__subtext {
+    margin: 0;
+    font-size: 1.0625rem;
+    color: var(--rhodes-text-muted);
+  }
+</style>
