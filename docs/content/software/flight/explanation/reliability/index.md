@@ -9,6 +9,7 @@ PEROVSAT flight software must tolerate radiation-induced faults in low Earth orb
 
 - [Radiation Events](radiation-events.md) — TID, displacement damage, and single-event effects relevant to LEO
 - [PEROVSAT Strategy](perovsat-strategy.md) — watchdog layers, safe-mode boot, and software mitigations
+- [Thread Watchdog](watchdog.md) — per-thread heartbeat monitoring run by System Health
 - [Power Management](power-management.md) — how EPS-driven `OP_STATUS` throttles mission behavior
 
 Design notes also live in the public `design-and-planning` repository under `exploration/fdir.md`.
