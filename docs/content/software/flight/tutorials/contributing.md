@@ -1,39 +1,30 @@
 # Contributing to Flight Software
 
-!!! warning "Under Construction"
-    This page is a stub and still under construction. Details may be incomplete or change.
-
-PEROVSAT flight software lives across several GitHub repositories. Most day-to-day work happens in `perovsat-app` and individual driver repos; the workspace repo ties them together.
+The PEROVSAT flight software lives across many GitHub repositories, shown below, but the process of making contributions to them is largely the same.
 
 ## Repositories
 
 | Repository | Purpose |
 |------------|---------|
-| `perovsat-workspace` | West manifest, `setup.sh`, and onboarding scripts |
-| `perovsat-app` | Application threads, dbuild config, snippets, and board overlays |
+| `perovsat-app` | Application threads, dbuild system, and setup scripting |
 | `driver-template` | Bootstrap new out-of-tree Zephyr drivers |
-| `*-driver` / `*-mock-driver` | Individual device drivers (some are private under NDA) |
-| `design-and-planning` | Architecture notes and design docs (public) |
+| `*-driver` | Individual device drivers |
+| `*-lib` | Libraries for use in certain device drivers for NDA hardware |
+| `perovsat.github.io` | The website you're on, for both documentation and publicity |
 
-## Access and teams
-
-Some drivers are private. GitHub teams gate access:
-
-- **Flight Software** — write access to the workspace and application repos
-- **NSL NDA** — EPS and Eyestar driver repos
-- **Aerospace NDA** — AMU driver repo
-
-If you need access to a private repo, contact a PEROVSAT GitHub org admin after signing the relevant NDA.
 
 ## Basic workflow
 
 1. Clone `perovsat-app` and run `./setup.sh` (see [Getting Started](getting-started.md)).
-2. Create a feature branch from `main`.
-3. Make changes, build with `west dbuild`, and run relevant tests.
-4. Open a pull request against the target repository.
+2. Use `git switch main` to get to the main branch of a repository
+3. Use `git switch -c new-branch-name` to create a branch for a feature you are working on
+4. Use `git add` and `git commit -m "short description of changes"` to make changes
+5. Once all changes are done, double check that everything still can be run without errors
+6. Use `git push -u origin your-branch-name` to publish your branch to GitHub
+7. On GitHub, make a Pull Request (PR) for your branch, and add a description of what you did
+8. Other team members can review your code. Once they merge it, do `git switch main` and `git pull` to see your code on the main branch, where you can now work on another feature
 
-Code style hooks (`clang-format`, trailing whitespace) are installed by `setup.sh` via pre-commit. See [Code Style Automation](../reference/code-style/automation.md).
+If you want to learn more about git, [MIT's Missing Semester](https://missing.csail.mit.edu/2026/version-control/) is a great resource. AI can also be very useful if you get stuck.
 
-## Open questions
-
-- Exact PR review requirements and CI expectations are not documented here yet.
+!!! note "Git Commit Errors"
+    Due to the use of clang-format in a pre-commit script (see [Code Style Automation](../reference/code-style/automation.md) for details), your commits may "fail" to go through. This is expected, and just a result of git seeing that clang-format changed some files that were going to be committed. You can readd any files that were changed, and try to commit again.

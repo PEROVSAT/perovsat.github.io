@@ -1,9 +1,6 @@
 # Getting Started with PEROVSAT Flight Software
 
-!!! warning "Under Construction"
-    This page is still under construction. Steps are accurate for the current workspace but may change.
-
-This tutorial will guide you through setting up the PEROVSAT Zephyr workspace
+This tutorial will guide you through setting up the PEROVSAT Zephyr workspace, and running the flight software
 
 ## Prerequisites
 
@@ -11,6 +8,8 @@ This tutorial will guide you through setting up the PEROVSAT Zephyr workspace
 - A Unix-like shell (macOS, Linux, or WSL on Windows)
 
 ## Setup
+!!! note
+    All commands shown here are for Unix shell systems. This will not work in Windows powershell/command line
 
 ### 1. Clone the application repository
 
@@ -30,31 +29,32 @@ cd perovsat-app
 
 If you encounter any errors outside of GitHub permissions, or encounter later errors that say you're missing some package, please let somebody know so we can add them to the setup script or fix issues with it.
 
-Additionally, this will wrap the application repository in a workspace directory so that we can clone the other repositories without interfering with wherever you installed it.
-
-### 3. Configure run settings
-
-In the perovsat-app repository, you should see a file named `dbuild_devices.conf`. This is used in a custom `dbuild` command extension to the `west` build manager, and enables us to rapidly switch devices between hardware and mock data.
-
-For a first run, it is recommended to set all the values in `dbuild_devices.conf` to `=mock`, instead of requiring a hardware setup
-
-### 4. Build and run
-#### Linux (or Windows Subsystem for Linux)
-Zephyr supports a `native_sim` build option that can run the whole flight software on your machine. To build, you can run the following:
+After running this script, the directory that perovsat-app was in will have been renamed to perovsat-workspace, and will contain perovsat-app. Move back into the application code:
 ```bash
-west dbuild -b native_sim -t run
+cd perovsat-app
 ```
 
-#### MacOS
-While we may add emulation support with QEMU in the future, MacOS currently does not support `native_sim`.
+### 3. Configuration
 
-You'll need to run the code on an actual supported board. This example uses the Nucleo-U575ZI-Q, but you should change this to whatever you have available. The command will notify you if we lack support for it. (TODO: link to currently supported boards)
+Run configuration is done by modifying the `dbuild.yml` file. To begin, set all the available devices in the `selections` section to be `public-mock`
+
+!!! warning "Do not use simulation or hardware mode"
+    The `simulation` and `hardware` modes require additional configuration to get running, and will have other tutorials made for setup
+
+### 4. Build and Run
+We use the custom `dbuild` command to compile our code. Usually, building and running are separate steps, but since this tutorial uses a virtual QEMU device, they are done both at once using the `-t run` flag
+
 ```bash
-west dbuild -b nucleo_u575zi_q
-west flash
+west dbuild -b qemu_cortex_m3 -t run
 ```
+
+Use control+c to stop the program
+
+!!! note "Troubleshooting: west command not found"
+    If your shell was not able to find west, you likely are not in the Python virtual environment that the setup script made. It is in the `perovsat-workspace` directory, so if you're in the `perovsat-app` you can reactivate it with `source ../.venv/bin/activate`
 
 ## Next steps
+- Try running the software on [hardware](./running-hardware.md)
 - Learn how the `dbuild` system works in [The DBuild Command](../reference/dbuild.md)
 - Browse the [how-to guides](../how-to/index.md) for common development tasks
 - Consult the [reference](../reference/index.md) for API and configuration details
