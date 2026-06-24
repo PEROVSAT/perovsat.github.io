@@ -66,6 +66,11 @@ import TeamMember from '../components/TeamMember.astro';
       />
     </TeamSection>
 
+    <p class="team-join">
+      If you would like to join PEROVSAT, send us an email at
+      <a href="mailto:perovsat@gmail.com">perovsat@gmail.com</a>
+    </p>
+
   </section>
 </Layout>
 
@@ -74,5 +79,21 @@ import TeamMember from '../components/TeamMember.astro';
     margin: 0 0 2.5rem;
     font-size: clamp(1.75rem, 4vw, 2.5rem);
     color: var(--rhodes-red);
+  }
+
+  .team-join {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--rhodes-text-muted);
+  }
+
+  .team-join a {
+    color: var(--rhodes-accent, #b00);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .team-join a:hover {
+    text-decoration: underline;
   }
 </style>
