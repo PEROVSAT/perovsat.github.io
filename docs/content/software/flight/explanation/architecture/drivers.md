@@ -1,7 +1,38 @@
 # PEROVSAT Device Drivers
 For information on what drivers are, see [Zephyr Drivers](../zephyr/drivers.md)
 
-## Custom Drivers
+## PEROVSAT Driver Model
+### Driver-Library Separation
+PEROVSAT drivers have all the Zephyr-specific driver setup completely separated from the hardware specifics, which instead go in a library. This allows the flight software to do a few unique things:
+- Expose a working driver while making a library private for NDA compliance
+- Hardware code can be entirely stateless
+- Hardware code is highly testable
+
+### Backend Swapping
+PEROVSAT Implements a unique quad-backend model for drivers.
+
+At the top level, drivers choose to use static data (public-mock) or the use the library. If it is using the library, then it can pass it a variety of transfer functions.
+
+For example, an IMU driver's library may have the logic to know that its gyro_x value is at register 0x3B. It tells the transfer function that it was given that it wants to access register 0x3B, and depending on what mode it is in that transfer function can access either a static value, or actually give that to Zephyr's `i2c_read` function to interact with hardware.
+
+Most importantly, from the library's perspective, it makes no difference what backend is actually in use, it simply calls the transfer function it was given.
+
+### Backend Modes
+- Public Mock
+    - Returns static data straight from the Zephyr Driver API functions, no use of the library
+    - Enables rapid development; application code can interact with driver before we even know how the device hardware works
+- Library Mock
+    - Transfer function: Get from static register map
+    - Easiest way to test a library without needing hardware
+- Simulation
+    - Transfer function: Send to a socket, which can communicate with other software to produce simulated data
+- Hardware
+    - Transfer function: Zephyr's communication API calls, like `i2c_read`
+    - Actual deployment of the flight software uses this mode
+
+Users can switch between these modes using the [DBuild configuration](../../reference/dbuild/index.md)
+
+## Driver List
 ### Aerospace Measurement Unit
 [API Reference](../../reference/drivers/amu.md)
 [Repository](https://github.com/PEROVSAT/amu-driver)
