@@ -1,0 +1,121 @@
+---
+import { withBase } from '../utils/url';
+
+interface Props {
+  name: string;
+  description: string;
+  /** Filename or path under assets/, e.g. "aerospace-corp.webp" */
+  logo: string;
+  /** Which half of the row the logo occupies. */
+  orientation?: 'image-left' | 'image-right';
+}
+
+const { name, description, logo, orientation = 'image-left' } = Astro.props;
+const src = withBase(
+  logo.includes('/') ? logo : `assets/${logo}`
+);
+---
+
+<article
+  class:list={[
+    'partner',
+    orientation === 'image-right' && 'partner--image-right',
+  ]}
+>
+  <div class="partner__logo-wrap">
+    <img class="partner__logo" src={src} alt={`${name} logo`} loading="lazy" />
+  </div>
+  <div class="partner__content">
+    <h2 class="partner__name">{name}</h2>
+    <p class="partner__description">{description}</p>
+  </div>
+</article>
+
+<style>
+  .partner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--rhodes-border);
+  }
+
+  .partner:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .partner:first-child {
+    padding-top: 0;
+  }
+
+  .partner--image-right .partner__logo-wrap {
+    order: 2;
+  }
+
+  .partner--image-right .partner__content {
+    order: 1;
+  }
+
+  .partner__logo-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 12rem;
+    padding: 1.5rem;
+    background: var(--rhodes-surface);
+    border: 1px solid var(--rhodes-border);
+    border-radius: 0.5rem;
+  }
+
+  .partner__logo {
+    max-width: 100%;
+    max-height: 10rem;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    border-radius: 0.375rem;
+  }
+
+  .partner__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .partner__name {
+    margin: 0;
+    font-size: clamp(1.375rem, 3vw, 1.75rem);
+    font-weight: 700;
+    color: var(--rhodes-red);
+  }
+
+  .partner__description {
+    margin: 0;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--rhodes-text-muted);
+  }
+
+  @media (max-width: 640px) {
+    .partner {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .partner--image-right .partner__logo-wrap,
+    .partner--image-right .partner__content {
+      order: unset;
+    }
+
+    .partner__logo-wrap {
+      min-height: 9rem;
+    }
+
+    .partner__logo {
+      max-height: 7rem;
+    }
+  }
+</style>

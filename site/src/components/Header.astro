@@ -5,7 +5,7 @@ import { withBase } from '../utils/url';
 <header class="site-header">
   <div class="site-header__inner">
     <a class="site-header__brand" href={withBase()}>
-      <img src={withBase('MissionPatchV1.png')} alt="PEROVSAT mission patch" width="40" height="40" />
+      <img src={withBase('PerovskiteIsometricV2.png')} alt="PEROVSAT Logo" width="50" height="50" />
       <span>PEROVSAT</span>
     </a>
 
@@ -110,7 +110,10 @@ import { withBase } from '../utils/url';
   }
 
   .site-header__brand img {
-    border-radius: 50%;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
   }
 
   .site-header__nav {

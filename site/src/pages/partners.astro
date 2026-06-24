@@ -1,11 +1,33 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Partner from '../components/Partner.astro';
 ---
 
 <Layout title="Partners — PEROVSAT">
   <section class="page">
     <h1>Partners</h1>
-    <p>Content coming soon.</p>
+    <p class="page__intro">
+      The organizations that have helped make the PEROVSAT project possible
+    </p>
+
+    <div class="partners-list">
+      <Partner
+        name="The Aerospace Corporation"
+        logo="AerospaceLogo.png"
+        description="Graciously provided their Aerospace Measurement Units to read IV curves from the Perovskite Cells"
+      />
+      <Partner
+        name="Nearspace Launch"
+        logo="NSLaunchLogo.png"
+        orientation="image-right"
+        description="Provided our 1U satellite bus and lent their expertise in the design process"
+      />
+      <Partner
+        name="National Lab of the Rockies"
+        logo="NLRockiesLogo.png"
+        description="Worked with PEROVSAT to define the scientific mission and supplied the experimental Perovskite cells"
+      />
+    </div>
   </section>
 </Layout>
 
@@ -16,9 +38,16 @@ import Layout from '../layouts/Layout.astro';
     color: var(--rhodes-red);
   }
 
-  .page p {
-    margin: 0;
+  .page__intro {
+    margin: 0 0 2.5rem;
+    max-width: 42rem;
     color: var(--rhodes-text-muted);
     font-size: 1.125rem;
+    line-height: 1.65;
+  }
+
+  .partners-list {
+    display: flex;
+    flex-direction: column;
   }
 </style>
