@@ -14,7 +14,15 @@
       <span class="footer-label">Contact Us</span>
       <a href="mailto:perovsat@gmail.com" class="footer-contact-link">perovsat@gmail.com</a>
       <span class="footer-contact-detail">Rhodes Tower 401</span>
-      <span class="footer-contact-detail footer-join">Interested in joining? Reach out to us at the email above.</span>
+      <a
+        href="https://github.com/PEROVSAT"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="footer-github-link"
+      >
+        <img src="/assets/GitHubWhiteIcon.webp" alt="" class="footer-github-icon" />
+        PEROVSAT GitHub
+      </a>
     </div>
 
     <!-- Right: In collaboration with NRL -->
@@ -99,6 +107,27 @@
   .footer-join {
     font-style: italic;
     max-width: 18rem;
+  }
+
+  .footer-github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 0.25rem;
+    color: var(--rhodes-text-muted);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .footer-github-link:hover {
+    color: var(--rhodes-accent, #b00);
+    text-decoration: underline;
+  }
+
+  .footer-github-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    object-fit: contain;
   }
 
   /* Responsive: stack vertically on small screens */

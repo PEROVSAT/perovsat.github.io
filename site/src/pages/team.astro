@@ -1,24 +1,99 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import TeamSection from '../components/TeamSection.astro';
+import TeamMember from '../components/TeamMember.astro';
 ---
 
 <Layout title="Meet the Team — PEROVSAT">
   <section class="page">
     <h1>Meet the Team</h1>
-    <p>Content coming soon.</p>
+
+    <TeamSection title="Payload Hardware">
+      <TeamMember
+        name="Damian Nguyen"
+        subtext="Physics '24"
+        role="Project Lead"
+      />
+      <TeamMember
+        name="Aubyn Sallee"
+        subtext="Physics '28"
+      />
+      <TeamMember
+        name="Theo Shin"
+        subtext="Physics '28"
+      />
+      <TeamMember
+        name="Samaha Kahn"
+        subtext="Physics '28"
+      />
+    </TeamSection>
+
+    <TeamSection title="Software">
+      <TeamMember
+        name="Remy Bozung"
+        subtext="Computer Science '28"
+        role="Software Lead"
+        image="RemyBozung.jpg"
+      />
+      <TeamMember
+        name="Abdullah Ashiq"
+        subtext="Computer Science '29"
+      />
+      <TeamMember
+        name="Srijon Mondal"
+        subtext="Computer Science '29"
+      />
+    </TeamSection>
+
+    <TeamSection title="Faculty">
+      <TeamMember
+        name="Dr. Brent Hoffmeister"
+        subtext="Department of Physics"
+        image="BrentHoffmeister.jpg"
+      />
+      <TeamMember
+        name="Dr. Phil Kirlin"
+        subtext="Department of Computer Science"
+        image="PhilKirlin.jpg"
+      />
+    </TeamSection>
+
+    <TeamSection title="Alumni">
+      <TeamMember
+        name="Jose Pastrana"
+        subtext="Computer Science '20"
+        role="Advisor"
+      />
+    </TeamSection>
+
+    <p class="team-join">
+      If you would like to join PEROVSAT, send us an email at
+      <a href="mailto:perovsat@gmail.com">perovsat@gmail.com</a>
+    </p>
+
   </section>
 </Layout>
 
 <style>
   .page h1 {
-    margin: 0 0 1rem;
+    margin: 0 0 2.5rem;
     font-size: clamp(1.75rem, 4vw, 2.5rem);
     color: var(--rhodes-red);
   }
 
-  .page p {
+  .team-join {
     margin: 0;
+    font-size: 1rem;
     color: var(--rhodes-text-muted);
-    font-size: 1.125rem;
+  }
+
+  .team-join a {
+    color: var(--rhodes-accent, #b00);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .team-join a:hover {
+    text-decoration: underline;
   }
 </style>

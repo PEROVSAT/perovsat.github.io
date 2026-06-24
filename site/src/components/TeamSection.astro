@@ -1,0 +1,37 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<section class="team-section">
+  <h2 class="team-section__title">{title}</h2>
+  <div class="team-section__grid">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .team-section {
+    margin-bottom: 3rem;
+  }
+
+  .team-section__title {
+    margin: 0 0 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--rhodes-text-muted);
+    border-bottom: 1px solid var(--rhodes-border);
+    padding-bottom: 0.5rem;
+  }
+
+  .team-section__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(163px, 1fr));
+    gap: 2.25rem 1.875rem;
+  }
+</style>
