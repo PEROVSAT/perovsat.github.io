@@ -14,65 +14,12 @@
   --rhodes-border: #2e2e2e;
   --rhodes-text: #e4e4e4;
   --rhodes-text-muted: #a3a3a3;
+  /* Material .md-grid / .md-main__inner default — keeps header aligned with docs nav */
+  --perovsat-docs-layout-max-width: 61rem;
 }
 
 /* --------------------------------------------------------------------------
-   Dark scheme (opt-in via toggle — muted, not high-contrast)
-   -------------------------------------------------------------------------- */
-
-[data-md-color-scheme="perovsat"] {
-  color-scheme: dark;
-
-  --md-primary-fg-color: #b83a4f;
-  --md-primary-fg-color--light: #c45263;
-  --md-primary-fg-color--dark: var(--rhodes-red-dark);
-  --md-primary-bg-color: #141414;
-
-  --md-accent-fg-color: #c45263;
-  --md-accent-fg-color--transparent: rgba(196, 2, 43, 0.06);
-  --md-accent-bg-color: var(--rhodes-red);
-
-  --md-default-bg-color: #141414;
-  --md-default-bg-color--light: var(--rhodes-surface);
-  --md-default-bg-color--lighter: var(--rhodes-surface-elevated);
-  --md-default-bg-color--lightest: #242424;
-  --md-default-fg-color: var(--rhodes-text);
-  --md-default-fg-color--light: var(--rhodes-text-muted);
-  --md-default-fg-color--lighter: #787878;
-  --md-default-fg-color--lightest: #5a5a5a;
-
-  --md-code-fg-color: #d8d8d8;
-  --md-code-bg-color: var(--rhodes-surface-elevated);
-
-  --md-typeset-a-color: #c9a0a8;
-
-  --md-typeset-kbd-color: var(--rhodes-text);
-  --md-typeset-kbd-accent-color: var(--rhodes-surface-elevated);
-  --md-typeset-kbd-border-color: var(--rhodes-border);
-
-  --md-typeset-table-color: var(--rhodes-border);
-
-  --md-admonition-bg-color: var(--rhodes-surface-elevated);
-  --md-admonition-fg-color: var(--rhodes-text);
-
-  --md-footer-bg-color: #0f0f0f;
-  --md-footer-bg-color--dark: #0a0a0a;
-  --md-footer-fg-color: var(--rhodes-text-muted);
-  --md-footer-fg-color--light: var(--rhodes-text);
-  --md-footer-fg-color--lighter: #ffffff;
-
-  --md-header-bg-color: rgba(20, 20, 20, 0.95);
-  --md-header-bg-color--dark: rgba(15, 15, 15, 0.98);
-
-  --md-shadow-z1: 0 0.125rem 0.4rem rgba(0, 0, 0, 0.4);
-  --md-shadow-z2: 0 0.25rem 0.8rem rgba(0, 0, 0, 0.5);
-  --md-shadow-z3: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.6);
-
-  --md-hue: 352;
-}
-
-/* --------------------------------------------------------------------------
-   Light scheme (optional toggle)
+   Light scheme
    -------------------------------------------------------------------------- */
 
 [data-md-color-scheme="default"] {
@@ -91,47 +38,162 @@
 }
 
 /* --------------------------------------------------------------------------
+   Header brand — logo + title
+   -------------------------------------------------------------------------- */
+
+.perovsat-header__start {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.perovsat-header-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  color: #ffffff;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.perovsat-header-brand:hover {
+  color: #ffffff;
+  opacity: 0.92;
+}
+
+.perovsat-header-brand__logo {
+  display: block;
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.perovsat-header-brand__text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.perovsat-header-brand__name,
+.perovsat-header-brand__section {
+  line-height: 1;
+}
+
+.perovsat-header__end {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 0.25rem;
+}
+
+.perovsat-header__end .md-header__source {
+  display: block;
+  margin-left: 0.75rem;
+  max-width: none;
+  width: auto;
+}
+
+/* Main site link — external-link icon (matches Astro site) */
+.perovsat-main-site-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.perovsat-main-site-link__icon {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+/* --------------------------------------------------------------------------
+   Footer — GitHub link (matches Astro site)
+   -------------------------------------------------------------------------- */
+
+.perovsat-footer-github {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--rhodes-text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.perovsat-footer-github:hover {
+  color: var(--rhodes-red);
+  text-decoration: underline;
+}
+
+.perovsat-footer-github__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  object-fit: contain;
+}
+
+.md-copyright {
+  width: 100%;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
    Header & navigation
    -------------------------------------------------------------------------- */
 
-[data-md-color-scheme="perovsat"] .md-header {
-  border-bottom: 1px solid var(--rhodes-border);
-  backdrop-filter: blur(12px);
+[data-md-color-scheme="default"] .md-header {
+  border-bottom: 1px solid #e0e0e0;
 }
 
-[data-md-color-scheme="perovsat"] .md-tabs {
-  background-color: var(--rhodes-surface);
-  border-bottom: 1px solid var(--rhodes-border);
+[data-md-color-scheme="default"] .md-header__inner {
+  width: 100%;
+  max-width: var(--perovsat-docs-layout-max-width);
+  margin: 0 auto;
+  padding: 0 0.2rem;
+  justify-content: flex-start;
+  box-sizing: border-box;
 }
 
-[data-md-color-scheme="perovsat"] .md-tabs__link--active,
-[data-md-color-scheme="perovsat"] .md-tabs__link:hover {
-  color: #d4d4d4;
+[data-md-color-scheme="default"] .md-tabs {
+  border-bottom: 1px solid #e0e0e0;
 }
 
-[data-md-color-scheme="perovsat"] .md-nav__link--active,
-[data-md-color-scheme="perovsat"] .md-nav__link:hover {
-  color: #d4d4d4;
+[data-md-color-scheme="default"] .md-tabs__link--active,
+[data-md-color-scheme="default"] .md-tabs__link:hover {
+  color: var(--rhodes-red);
 }
 
-[data-md-color-scheme="perovsat"] .md-nav__item .md-nav__link--active {
-  border-left-color: #b83a4f;
+[data-md-color-scheme="default"] .md-nav__link--active,
+[data-md-color-scheme="default"] .md-nav__link:hover {
+  color: var(--rhodes-red);
+}
+
+[data-md-color-scheme="default"] .md-nav__item .md-nav__link--active {
+  border-left-color: var(--rhodes-red);
 }
 
 /* --------------------------------------------------------------------------
    Admonitions
    -------------------------------------------------------------------------- */
 
-[data-md-color-scheme="perovsat"] .md-typeset .admonition,
-[data-md-color-scheme="perovsat"] .md-typeset details {
-  border-color: var(--rhodes-border);
+[data-md-color-scheme="default"] .md-typeset .admonition,
+[data-md-color-scheme="default"] .md-typeset details {
+  border-color: #e0e0e0;
   box-shadow: none;
 }
 
-[data-md-color-scheme="perovsat"] .md-typeset .warning > .admonition-title,
-[data-md-color-scheme="perovsat"] .md-typeset .warning > summary {
+[data-md-color-scheme="default"] .md-typeset .warning > .admonition-title,
+[data-md-color-scheme="default"] .md-typeset .warning > summary {
   background-color: rgba(196, 2, 43, 0.08);
-  border-color: var(--rhodes-border);
+  border-color: #e0e0e0;
 }
 
 /* --------------------------------------------------------------------------
@@ -165,9 +227,9 @@
   padding: 3.5rem 2rem 3rem;
   text-align: center;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, var(--rhodes-red-glow), transparent 70%),
-    linear-gradient(180deg, var(--rhodes-surface) 0%, var(--rhodes-black) 100%);
-  border-bottom: 1px solid var(--rhodes-border);
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(196, 2, 43, 0.08), transparent 70%),
+    linear-gradient(180deg, #f8f8f8 0%, #ffffff 100%);
+  border-bottom: 1px solid #e0e0e0;
   overflow: hidden;
 }
 
@@ -207,7 +269,7 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   line-height: 1.1;
-  color: #ffffff;
+  color: var(--rhodes-black);
 }
 
 .perovsat-hero__subtitle {
@@ -246,15 +308,15 @@
 .perovsat-stats__item {
   padding: 1.25rem 1rem;
   text-align: center;
-  background: var(--rhodes-surface-elevated);
-  border: 1px solid var(--rhodes-border);
+  background: #fafafa;
+  border: 1px solid #e8e8e8;
   border-radius: 0.5rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-[data-md-color-scheme="perovsat"] .perovsat-stats__item:hover {
-  border-color: #3a3a3a;
-  box-shadow: none;
+[data-md-color-scheme="default"] .perovsat-stats__item:hover {
+  border-color: #d0d0d0;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.06);
 }
 
 .perovsat-stats__label {
@@ -271,7 +333,7 @@
   display: block;
   font-size: 0.95rem;
   font-weight: 500;
-  color: var(--rhodes-text);
+  color: #333333;
   line-height: 1.4;
 }
 
@@ -291,16 +353,16 @@
   flex-direction: column;
   padding: 1.5rem;
   text-decoration: none !important;
-  background: var(--rhodes-surface-elevated);
-  border: 1px solid var(--rhodes-border);
+  background: #fafafa;
+  border: 1px solid #e8e8e8;
   border-radius: 0.5rem;
   transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-[data-md-color-scheme="perovsat"] .perovsat-card:hover {
-  border-color: #3a3a3a;
+[data-md-color-scheme="default"] .perovsat-card:hover {
+  border-color: #d0d0d0;
   transform: translateY(-1px);
-  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
 }
 
 .perovsat-card__icon {
@@ -314,13 +376,13 @@
   margin: 0 0 0.5rem;
   font-size: 1.05rem;
   font-weight: 600;
-  color: #ffffff !important;
+  color: var(--rhodes-black) !important;
 }
 
 .perovsat-card__desc {
   margin: 0;
   font-size: 0.85rem;
-  color: var(--rhodes-text-muted) !important;
+  color: #666666 !important;
   line-height: 1.5;
   flex-grow: 1;
 }
@@ -344,56 +406,6 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--rhodes-text-muted);
-  border-bottom: 1px solid var(--rhodes-border);
-}
-
-/* Dark mode hero — subtle, not pure black */
-[data-md-color-scheme="perovsat"] .perovsat-hero {
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(196, 2, 43, 0.06), transparent 70%),
-    linear-gradient(180deg, #1a1a1a 0%, #141414 100%);
-  border-bottom-color: var(--rhodes-border);
-}
-
-[data-md-color-scheme="perovsat"] .perovsat-hero__title {
-  color: #f0f0f0;
-}
-
-[data-md-color-scheme="perovsat"] .perovsat-hero__affiliation strong {
-  color: #c45263;
-}
-
-[data-md-color-scheme="perovsat"] .perovsat-stats__label {
-  color: #b83a4f;
-}
-
-[data-md-color-scheme="perovsat"] .perovsat-card__title {
-  color: #f0f0f0 !important;
-}
-
-/* Light mode card adjustments */
-[data-md-color-scheme="default"] .perovsat-hero {
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(196, 2, 43, 0.08), transparent 70%),
-    linear-gradient(180deg, #f8f8f8 0%, #ffffff 100%);
-  border-bottom-color: #e0e0e0;
-}
-
-[data-md-color-scheme="default"] .perovsat-hero__title {
-  color: var(--rhodes-black);
-}
-
-[data-md-color-scheme="default"] .perovsat-stats__item,
-[data-md-color-scheme="default"] .perovsat-card {
-  background: #fafafa;
-  border-color: #e8e8e8;
-}
-
-[data-md-color-scheme="default"] .perovsat-card__title {
-  color: var(--rhodes-black) !important;
-}
-
-[data-md-color-scheme="default"] .perovsat-stats__value {
-  color: #333333;
+  color: #666666;
+  border-bottom: 1px solid #e0e0e0;
 }

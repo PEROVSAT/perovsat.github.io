@@ -1,13 +1,36 @@
 {% if config.extra.main_site_url %}
   <a
-    href="{{ config.extra.main_site_url }}"
+    href="{{ config.extra.main_site_url | url }}"
     title="Return to main site"
-    class="md-source"
+    class="md-source perovsat-main-site-link"
     data-md-component="source"
   >
-    <div class="md-source__icon md-icon">
-      {% include ".icons/fontawesome/solid/house.svg" %}
-    </div>
     <div class="md-source__repository">Main site</div>
+    <svg
+      class="perovsat-main-site-link__icon md-icon"
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      aria-hidden="true"
+    >
+      <path
+        d="M2 10 L10 2 M5.5 2 H10 V6.5"
+        stroke="currentColor"
+        stroke-width="1.5"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <rect
+        x="1"
+        y="5"
+        width="6"
+        height="6"
+        rx="1"
+        stroke="currentColor"
+        stroke-width="1.5"
+        fill="none"
+      />
+    </svg>
   </a>
 {% endif %}

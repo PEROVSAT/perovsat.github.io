@@ -1,4 +1,4 @@
-site_name: PEROVSAT Documentation
+site_name: Documentation
 site_description: Technical documentation for the PEROVSAT CubeSat mission
 site_url: https://perovsat.github.io/documentation/
 site_author: PEROVSAT Team
@@ -13,25 +13,13 @@ theme:
   name: material
   custom_dir: content/overrides
 
-  logo: assets/MissionPatchV1.png
+  logo: assets/PerovskiteLogoV2DarkBG.png
   favicon: assets/MissionPatchV1.png
-
-  icon:
-    repo: fontawesome/solid/house
 
   palette:
     - scheme: default
       primary: custom
       accent: custom
-      toggle:
-        icon: material/brightness-4
-        name: Switch to dark mode
-    - scheme: perovsat
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/brightness-7
-        name: Switch to light mode
 
   font:
     text: Source Sans 3
@@ -66,7 +54,6 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 
-copyright: Copyright &copy; 2025 PEROVSAT — Rhodes College
-
 extra:
+  generator: false
   main_site_url: /
