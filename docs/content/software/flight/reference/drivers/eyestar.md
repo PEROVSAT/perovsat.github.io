@@ -29,11 +29,15 @@ struct eyestar_transfer_result {
 Does a transfer session with the Eyestar to send TX (if tx_len > 0) and download RX if available
 #### Parameters
 `const uint8_t *tx_buf` - The packet to be transmitted
+
 `size_t tx_len` - Length of packet to send. If `tx_len` <= 0, then no packet will be sent
+
 `uint8_t *rx_buf` - Buffer to place the uplinked packet into. Must be at least 205 bytes
+
 `struct eyestar_transfer_result *res` - Result of transfer operations. Struct shown above
 #### Return
 An integer status code
+
 | Code | Status Category | Description |
 | --- | --- | --- |
 | 0 | Success | Transfer completed successfully|

@@ -16,6 +16,7 @@ Any required hardware or communication bus initialization goes here
 TODO: Identify configuration parameters
 #### Return
 An integer status code
+
 | Code | Status Category | Description |
 | --- | --- | --- |
 | 0 | Success | Initialzed successfully |
@@ -31,6 +32,7 @@ Pulls accel and/or gyro data from hardware into driver's SRAM
 `enum sensor_channel channel` - Which of the custom sensor channels to read
 #### Return
 An integer status code
+
 | Code | Status Category | Description |
 | --- | --- | --- |
 | 0 | Success | Initialzed successfully |
@@ -43,9 +45,11 @@ An integer status code
 Formats the hardware data (in driver SRAM from `sample_fetch`) into the sensor_value format for specified channel
 #### Parameters
 `enum sensor_channel channel` - Which of the custom sensor channels to write to *val
+
 `struct sensor_value *val` - Memory pointer to load requested value into
 #### Return
 An integer status code
+
 | Code | Status Category | Description |
 | --- | --- | --- |
 | 0 | Success | Initialzed successfully |
