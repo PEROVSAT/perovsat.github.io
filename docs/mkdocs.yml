@@ -14,7 +14,7 @@ theme:
   custom_dir: content/overrides
 
   logo: assets/PerovskiteLogoV2DarkBG.png
-  favicon: assets/MissionPatchV1.png
+  favicon: assets/PerovskiteLogoV2DarkBG.png
 
   palette:
     - scheme: default
