@@ -9,7 +9,7 @@ Technical descriptions of PEROVSAT software components, APIs, and configuration.
 
 ### Build system
 
-- [DBuild](dbuild/index.md) — per-device mock/hardware/emulation configuration
+- [DBuild](dbuild/index.md) — `dbuild.yml`, snippets, and `west dbuild`
 - [Workspace Setup](workspace-setup/index.md) — west workspace and onboarding
 
 ### Drivers

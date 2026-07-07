@@ -1,26 +1,43 @@
 # DBuild Reference
 
-!!! warning "Under Construction"
-    This page is a stub and still under construction. Details may be incomplete or change.
+DBuild is a custom [west](https://docs.zephyrproject.org/latest/develop/west/index.html) command for PEROVSAT flight software. It reads `dbuild.yml`, resolves each selected device to a Zephyr snippet and backend Kconfig symbol, validates the build configuration, and invokes `west build` with the correct flags.
 
-DBuild (Device Build) is PEROVSAT's west extension for selecting per-device mock, hardware, or emulation modes at build time.
-
-## Pages
-
-- [The DBuild Command](../dbuild.md) — full command reference, validation, and CLI
-- [Device Configuration](dbuild-config.md) — `dbuild_devices.conf` format
-- [Device Map](device-map.md) — `dbuild/device_map.yml` schema
-- [Snippets](snippets.md) — snippet directory layout and Zephyr integration
+Application source does not change between modes. Only devicetree aliases, Kconfig selections, and which driver modules are required differ — and those are driven by snippets and `dbuild.yml`.
 
 ## Data flow
 
 ```text
-dbuild_devices.conf  →  device_map.yml  →  snippets/*  →  west build -S ...
+dbuild.yml (selections → devices)  →  snippets/* + backend -D flags  →  west build -S …
 ```
 
-Application C code stays the same; only devicetree aliases and Kconfig fragments change between modes.
+## Pages
 
-## How-to
+- [Configuration](configuration.md) — `dbuild.yml` schema (`selections` and `devices`)
+- [Command-line interface](cli.md) — `west dbuild` flags, examples, and troubleshooting
+- [Snippets](snippets.md) — snippet directory layout and Zephyr integration
 
-- [Basic Usage](../../how-to/dbuild/basic-usage.md)
-- [Add a device to dbuild](../../how-to/add-device-to-dbuild.md)
+## Source files
+
+| File | Purpose |
+|------|---------|
+| `dbuild.yml` | Device selections and mode catalog |
+| `dbuild/west-commands.yml` | Registers `west dbuild` with west |
+| `dbuild/west_commands/dbuild.py` | Command implementation |
+| `snippets/` | Per-mode Zephyr snippets |
+| `west.yml` | West manifest, including driver modules |
+
+The command is registered on the application project's `self` entry in `west.yml`:
+
+```yaml
+self:
+  path: perovsat-app
+  west-commands: dbuild/west-commands.yml
+```
+
+After cloning or when the extension changes, run `west update` once so west discovers the command.
+
+## Related
+
+- [DBuild overview](../../explanation/dbuild/index.md) — conceptual background
+- [Getting Started](../../tutorials/getting-started.md) — first build with `public-mock` modes
+- [Add a device to DBuild](../../how-to/dbuild/add-device.md) — register a new logical device

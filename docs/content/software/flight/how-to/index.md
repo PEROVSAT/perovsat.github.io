@@ -9,8 +9,7 @@ Goal-oriented recipes for common PEROVSAT flight software tasks.
 
 ### DBuild
 
-- [DBuild guides](dbuild/index.md) — build, flash, and register devices
-- [Add a device to dbuild](add-device-to-dbuild.md) — end-to-end device registration (legacy single-page guide)
+- [DBuild guides](dbuild/index.md) — register devices and extend the build configuration
 
 ### Drivers
 

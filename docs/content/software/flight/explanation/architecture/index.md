@@ -20,4 +20,4 @@ An **epoch** is the basic timing unit between thread wakeups (likely one second)
 - [Threads](threads/index.md) — roles, wake conditions, and dependencies for each application thread
 - [Drivers](drivers/index.md) — custom device drivers and how they sit on Zephyr buses
 
-Build-time device selection (mock vs hardware vs emulation) is handled separately by [dbuild](../../reference/dbuild.md); application source does not change between modes.
+Build-time device selection (mock vs hardware vs emulation) is handled separately by [DBuild](../dbuild/index.md); application source does not change between modes.

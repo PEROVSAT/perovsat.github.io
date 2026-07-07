@@ -36,5 +36,5 @@ Reference implementation: `mpu6050-mock-driver` in the workspace.
 
 ## Next steps
 
-- Wire into `perovsat-app` via [Add a Driver to DBuild](../dbuild/add-a-driver.md)
+- Wire into `perovsat-app` via [Add a device to DBuild](../dbuild/add-device.md)
 - Add [tests](adding-tests.md) as you implement behavior

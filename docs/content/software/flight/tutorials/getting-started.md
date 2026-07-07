@@ -55,6 +55,6 @@ Use control+c to stop the program
 
 ## Next steps
 - Try running the software on [hardware](./running-hardware.md)
-- Learn how the `dbuild` system works in [The DBuild Command](../reference/dbuild.md)
+- Learn how the `dbuild` system works in [DBuild overview](../explanation/dbuild/index.md)
 - Browse the [how-to guides](../how-to/index.md) for common development tasks
 - Consult the [reference](../reference/index.md) for API and configuration details
