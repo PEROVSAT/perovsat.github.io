@@ -43,6 +43,10 @@ markdown_extensions:
   - attr_list
   - md_in_html
   - tables
+  - pymdownx.arithmatex:
+      generic : true
+
+
   - toc:
       permalink: true
   - pymdownx.details
@@ -57,3 +61,7 @@ markdown_extensions:
 extra:
   generator: false
   main_site_url: /
+
+extra_javascript:
+- https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
