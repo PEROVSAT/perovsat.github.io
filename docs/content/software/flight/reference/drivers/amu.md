@@ -1,4 +1,8 @@
 # AMU Driver Reference
+
+!!! warning "Out of date"
+    This page predates the current quad-backend driver model. See [Driver Model](../../explanation/driver-model.md) for how drivers are structured today.
+
 ## Design
 The underlying library is singleton-based, but the driver resolves which device in the Zephyr DeviceTree it should access
 

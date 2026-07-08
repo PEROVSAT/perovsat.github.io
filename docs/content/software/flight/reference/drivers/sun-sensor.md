@@ -1,4 +1,8 @@
 # Sun Sensor Driver Reference
+
+!!! warning "Out of date"
+    This page predates the current quad-backend driver model. See [Driver Model](../../explanation/driver-model.md) for how drivers are structured today.
+
 ## Design
 Sun Sensors work well in integrating with Zephyr's Sensor API, which is just a standardized set of driver API functions. The only aspect that really needs to be custom is that there is not a Sensor Channel for sun angles, so we need to have a custom one.
 

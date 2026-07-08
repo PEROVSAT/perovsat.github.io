@@ -1,16 +1,16 @@
 # Driver How-to Guides
 
-!!! warning "Under Construction"
-    This page is a stub and still under construction. Details may be incomplete or change.
-
 Recipes for working with PEROVSAT out-of-tree Zephyr driver modules.
 
 ## Guides
 
-- [Creating a Driver](creation.md) — bootstrap from `driver-template`
-- [Add a Driver API](add-an-api.md) — expose a function table to application code
-- [Adding Emulation](adding-emulation.md) — I2C emulator backends for integration and SITL
-- [Adding Tests](adding-tests.md) — unit, integration, and SITL Twister harnesses
-- [Custom Channels](custom-channels.md) — sensor channels beyond stock Zephyr types
+- [Implement a driver](implement-a-driver.md) — bootstrap from template, binding, library, transfers, and driver shell
+- [Expose an API](expose-an-api.md) — Sensor API or custom function table
+- [Wire into perovsat-app](wire-into-application.md) — west manifest, snippets, `dbuild.yml`, and aliases
 
-Reference: [Driver Model](../../reference/driver-model/index.md).
+## Prerequisites
+
+- Completed [Getting Started](../../tutorials/getting-started.md)
+- Familiarity with [Driver Model overview](../../explanation/driver-model.md)
+
+Reference: [Driver model](../../reference/driver-model/index.md).

@@ -19,4 +19,4 @@ west twister -T tests/integration -p qemu_cortex_m3
 
 These tests catch devicetree, Kconfig, and driver API wiring issues that unit tests miss.
 
-See [Adding Tests](../../how-to/drivers/adding-tests.md) and [Adding Emulation](../../how-to/drivers/adding-emulation.md).
+See [Driver Model](../driver-model.md).

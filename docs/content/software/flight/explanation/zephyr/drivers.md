@@ -31,7 +31,7 @@ if (!device_is_ready(dev)) {
 3. Declare config/data structs; map devicetree properties in a per-instance init macro.
 4. Register with `DEVICE_DT_INST_DEFINE` + `DT_INST_FOREACH_STATUS_OKAY`.
 
-PEROVSAT driver repos follow this pattern via `driver-template`. See [Driver Model Components](../../reference/driver-model/components.md).
+PEROVSAT driver repos follow this pattern via `driver-template`. See [Driver Model](../driver-model.md) and the [driver model reference](../../reference/driver-model/index.md).
 
 ## Parent buses
 

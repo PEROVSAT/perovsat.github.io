@@ -11,4 +11,4 @@ Recipes for working with the DBuild device configuration system.
 - Completed [Getting Started](../../tutorials/getting-started.md) (workspace setup and a first `west dbuild` run)
 - Familiarity with [DBuild configuration](../../reference/dbuild/configuration.md) and [snippets](../../reference/dbuild/snippets.md)
 
-For conceptual background, see [DBuild overview](../../explanation/dbuild/index.md).
+For conceptual background, see [DBuild overview](../../explanation/dbuild.md).

@@ -2,7 +2,7 @@
 
 This guide walks through registering a new logical device in the DBuild system.
 
-For background, see [DBuild overview](../../explanation/dbuild/index.md) and [Configuration](../../reference/dbuild/configuration.md).
+For background, see [DBuild overview](../../explanation/dbuild.md) and [Configuration](../../reference/dbuild/configuration.md).
 
 ## Overview
 

@@ -1,4 +1,8 @@
 # Eyestar Driver Reference
+
+!!! warning "Out of date"
+    This page predates the current quad-backend driver model. See [Driver Model](../../explanation/driver-model.md) for how drivers are structured today.
+
 ## Design
 The Eyestar interface is a bit unique with the way that it does uplink and downlink. We have an NDA with Nearspace Launch, and we have decided not to risk sharing too many details at the API level. The only thing to note is that all communication is done at once, so an application calling the driver has to be prepared for both TX and RX.
 

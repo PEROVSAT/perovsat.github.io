@@ -13,7 +13,7 @@ Goal-oriented recipes for common PEROVSAT flight software tasks.
 
 ### Drivers
 
-- [Driver guides](drivers/index.md) — create, test, and integrate out-of-tree drivers
+- [Driver guides](drivers/index.md) — bootstrap, implement, and integrate out-of-tree drivers
 
 ## Planned topics
 

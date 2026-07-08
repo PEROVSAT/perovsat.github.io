@@ -14,7 +14,7 @@ Technical descriptions of PEROVSAT software components, APIs, and configuration.
 
 ### Drivers
 
-- [Driver Model](driver-model/index.md) — out-of-tree module layout and testing scaffold
+- [Driver Model](driver-model/index.md) — out-of-tree module layout and quad-backend model
 
 ### Style
 

@@ -38,6 +38,6 @@ After cloning or when the extension changes, run `west update` once so west disc
 
 ## Related
 
-- [DBuild overview](../../explanation/dbuild/index.md) — conceptual background
+- [DBuild overview](../../explanation/dbuild.md) — conceptual background
 - [Getting Started](../../tutorials/getting-started.md) — first build with `public-mock` modes
 - [Add a device to DBuild](../../how-to/dbuild/add-device.md) — register a new logical device
