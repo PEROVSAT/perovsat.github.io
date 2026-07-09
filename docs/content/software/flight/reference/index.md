@@ -18,7 +18,7 @@ Technical descriptions of PEROVSAT software components, APIs, and configuration.
 
 ### Style
 
-- [Code Style](code-style/index.md) — formatting and automation hooks
+- [Code Style](code_style.md) — formatting and automation hooks
 
 ## Planned topics
 

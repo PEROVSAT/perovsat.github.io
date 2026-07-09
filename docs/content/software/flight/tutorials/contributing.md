@@ -27,4 +27,4 @@ The PEROVSAT flight software lives across many GitHub repositories, shown below,
 If you want to learn more about git, [MIT's Missing Semester](https://missing.csail.mit.edu/2026/version-control/) is a great resource. AI can also be very useful if you get stuck.
 
 !!! note "Git Commit Errors"
-    Due to the use of clang-format in a pre-commit script (see [Code Style Automation](../reference/code-style/automation.md) for details), your commits may "fail" to go through. This is expected, and just a result of git seeing that clang-format changed some files that were going to be committed. You can readd any files that were changed, and try to commit again.
+    Due to the use of clang-format in a pre-commit script (see [Code Style](../reference/code_style.md#pre-commit) for details), your commits may "fail" to go through. This is expected, and just a result of git seeing that clang-format changed some files that were going to be committed. You can readd any files that were changed, and try to commit again.
