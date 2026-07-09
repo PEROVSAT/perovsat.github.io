@@ -1,5 +1,7 @@
 # `west dbuild`
 
+Updated: 7/9/26
+
 Build PEROVSAT flight software with per-device modes resolved from `dbuild.yml`.
 
 ## Synopsis
@@ -76,6 +78,14 @@ west flash
 
 ## Troubleshooting
 
+### `west` command not found
+
+Activate the workspace Python virtual environment (created by `setup.sh`):
+
+```bash
+source ../.venv/bin/activate
+```
+
 ### Unknown device in selections
 
 **Message:** `unknown device '…' in selections (not defined under "devices" in dbuild.yml)`
@@ -117,14 +127,6 @@ The west project path exists but is not a valid Zephyr module. Check the driver 
 **Message:** `is not supported on board '…'; supported boards: …`
 
 The selected mode has `board_overlay_required: true` but the snippet has no `boards/<board>.overlay` for the target board, or the board is not listed in `snippet.yml`. Add board support to the snippet or choose a different board or mode.
-
-### `west` command not found
-
-Activate the workspace Python virtual environment (created by `setup.sh`):
-
-```bash
-source ../.venv/bin/activate
-```
 
 (from `perovsat-app` inside `perovsat-workspace`).
 
