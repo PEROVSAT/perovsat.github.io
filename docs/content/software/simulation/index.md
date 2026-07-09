@@ -1,273 +1,50 @@
 # Simulation Software
 
-## Overview
+Updated: 7/9/26
 
-The simulation environment used in this project is built upon **Basilisk**, an open-source astrodynamics simulation framework, together with **Vizard**, Basilisk's three-dimensional visualization software.
+PEROVSAT's simulation stack is built on **[Basilisk](https://hanspeterschaub.info/basilisk/)**, an open-source spacecraft dynamics and GNC framework from CU Boulder's AVS Lab, with **[Vizard](https://hanspeterschaub.info/basilisk/Vizard.html)** for 3D playback of results.
 
-Basilisk serves as the computational engine of the simulation, providing high-fidelity models for spacecraft dynamics, environmental effects, sensors, actuators, and control algorithms. Vizard complements Basilisk by visualizing the simulation results through an interactive three-dimensional environment.
+## Basilisk
 
-Unlike real-time visualization systems, this project uses **file-based visualization**. During simulation execution, Basilisk records the spacecraft state to a visualization file, which can later be loaded into Vizard for playback and analysis. This separation between simulation and visualization provides a flexible workflow for development, debugging, and post-processing.
+### What it does
 
----
+Basilisk simulates spacecraft motion and the subsystems that affect it. In practice that means:
 
-# Basilisk
+- Orbital and attitude dynamics
+- Environmental models (gravity, atmosphere, magnetic field, solar radiation pressure, etc.)
+- Sensors, actuators, and control algorithms
+- Flight-software-facing device models for SITL (see [Basilisk Flight Software Interface](basilisk-flight-software-interface.md))
 
-## Introduction
+Simulation components are independent modules that communicate through a publish-subscribe message system rather than sharing internal state directly. That makes it straightforward to swap, extend, or test individual pieces without rewiring the whole scenario.
 
-Basilisk is an open-source spacecraft simulation framework developed by the **Autonomous Vehicle Systems (AVS) Laboratory** at the **University of Colorado Boulder**. It is designed to support spacecraft mission analysis, guidance, navigation and control (GNC) development, spacecraft dynamics research, and educational applications.
+### How it works
 
-The framework provides a modular software architecture in which individual simulation components communicate through a standardized message-passing interface. This allows new simulation modules to be integrated with minimal modification to the existing simulation.
+Each simulation step, Basilisk gathers forces, torques, and sensor outputs from the active modules, then advances the spacecraft state forward in time.
 
-In this project, Basilisk provides the numerical simulation environment responsible for propagating spacecraft motion and executing all simulation modules.
+State propagation uses a **4th-order Runge-Kutta (RK4)** integrator. Instead of assuming constant acceleration over a timestep, RK4 evaluates the dynamics at several points within the step and combines those samples into a single update. That gives better accuracy than a simple Euler step, which matters when environmental effects and control torques change quickly across a timestep.
 
----
+## Developer experience
 
-## Features
+Most day-to-day work happens in **Python simulation scenarios**: you assemble modules, wire messages, set initial conditions, and run the sim.
 
-Basilisk provides a comprehensive collection of spacecraft simulation capabilities, including:
+When stock Basilisk modules are not enough, you can write **custom C++ modules** (compiled into the Basilisk build) for new physics, sensors, or actuators. Our project-specific modules live under `ExternalModules/`. Python wrappers and small helpers (e.g. orbit setup, factory utilities) sit alongside them so scenarios stay readable.
 
-- Orbital mechanics and orbit propagation
-- Spacecraft translational dynamics
-- Spacecraft attitude dynamics
-- Gravity models
-- Atmospheric drag models
-- Solar radiation pressure
-- Earth's magnetic field models
-- Sensor simulations
-- Actuator simulations
-- Guidance, Navigation and Control (GNC)
-- Flight software development
-- Data logging
-- Visualization support
+For deeper dives on specific models we have added, see the linked pages below.
 
-Its modular architecture makes it suitable for both rapid prototyping and high-fidelity spacecraft simulations.
+## Vizard
 
----
+Vizard is Basilisk's 3D viewer. It does not run the simulation — it replays state history that Basilisk records during a run.
 
-## Modular Architecture
-
-Basilisk follows a modular design philosophy where each subsystem performs a dedicated task.
-
-Typical simulation modules include
+We use **file-based visualization** rather than Vizard's live-stream mode: Basilisk writes a `.bin` file (typically under `_VizFiles/`) while the sim runs, and you open that file in Vizard afterward. This keeps visualization decoupled from the numerical loop, which is important as we move toward full SITL runs where Basilisk must stay in sync with emulated flight software. Recording to disk avoids the overhead and timing coupling of a live render stream, and lets you replay or share results without rerunning the sim.
 
 ```text
-Simulation
-
-│
-
-├── Spacecraft Dynamics
-
-├── Gravity Model
-
-├── Environment Models
-
-├── Sensor Models
-
-├── Actuator Models
-
-├── Guidance & Control
-
-├── Navigation
-
-└── Data Logging
+Python scenario  →  Basilisk (integrate)  →  .bin file  →  Vizard playback
 ```
 
-Each module can be developed, tested, and reused independently.
+## Further reading
 
----
-
-## Message-Based Communication
-
-Modules within Basilisk communicate using a publish-subscribe message architecture.
-
-Rather than directly accessing another module's internal variables, each module publishes its outputs as messages that other modules may subscribe to.
-
-```text
-Environment Model
-        │
-        ▼
-Published Message
-        │
-        ▼
-Spacecraft Module
-        │
-        ▼
-Computed Dynamics
-```
-
-This architecture improves modularity, scalability, and maintainability while simplifying integration of new simulation components.
-
----
-
-## Numerical Simulation
-
-Basilisk numerically propagates the spacecraft state by integrating the equations of motion throughout the simulation.
-
-During each simulation step, Basilisk updates:
-
-- Spacecraft position
-- Spacecraft velocity
-- Spacecraft attitude
-- Angular velocity
-- Environmental effects
-- External forces
-- External torques
-
-Each simulation module contributes to the overall spacecraft dynamics through Basilisk's message-passing system.
-
----
-
-## Extensibility
-
-One of Basilisk's major advantages is its extensibility.
-
-Users can:
-
-- Develop custom C++ simulation modules.
-- Write simulation scenarios using Python.
-- Create custom environmental models.
-- Implement new sensors and actuators.
-- Develop spacecraft control algorithms.
-- Integrate additional physics models.
-
-This flexibility allows Basilisk to support a wide range of spacecraft simulation applications.
-
----
-
-# Vizard
-
-## Introduction
-
-Vizard is Basilisk's three-dimensional visualization software used to display spacecraft simulations. Unlike the simulation engine itself, Vizard does not perform any numerical calculations. Instead, it visualizes the results generated by Basilisk.
-
-In this project, Vizard operates in **file-based visualization mode**, where the simulation is executed independently of the visualization software.
-
----
-
-## File-Based Visualization
-
-During simulation execution, Basilisk records the spacecraft state to a Unity visualization file.
-
-The recorded information includes:
-
-- Spacecraft position
-- Spacecraft velocity
-- Spacecraft attitude
-- Simulation time
-- Coordinate reference frames
-- Spacecraft geometry
-- Additional visualization objects
-
-After the simulation completes, the generated visualization file is opened in Vizard for playback.
-
-This workflow separates numerical computation from graphical rendering, allowing simulations to be replayed multiple times without rerunning the numerical model.
-
----
-
-## Visualization Workflow
-
-```text
-Simulation Script
-        │
-        ▼
-Basilisk Simulation
-        │
-        ▼
-Spacecraft State History
-(Position, Velocity, Attitude)
-        │
-        ▼
-Unity Visualization File (.bin)
-        │
-        ▼
-Load File into Vizard
-        │
-        ▼
-3D Playback and Analysis
-```
-
----
-
-## Visualization Files
-
-During execution, Basilisk automatically generates visualization files that contain the complete spacecraft state history.
-
-A typical output directory is
-
-```text
-_VizFiles/
-    simulation_UnityViz.bin
-```
-
-These files are later opened directly in Vizard for visualization.
-
----
-
-## Advantages of File-Based Visualization
-
-Using file-based visualization provides several advantages:
-
-- Simulation and visualization remain independent.
-- Simulation results can be replayed multiple times.
-- Visualization does not affect simulation performance.
-- Results can be archived and shared.
-- Different visualization settings can be applied to the same simulation data.
-- Simulations can be analyzed after execution without rerunning the model.
-
----
-
-# Basilisk–Vizard Workflow
-
-The complete software workflow is illustrated below.
-
-```text
-Simulation Script
-        │
-        ▼
-Initialize Simulation
-        │
-        ▼
-Create Spacecraft
-        │
-        ▼
-Configure Environment Models
-        │
-        ▼
-Configure Sensors & Actuators
-        │
-        ▼
-Run Numerical Simulation
-        │
-        ▼
-Generate Spacecraft State History
-        │
-        ▼
-Write Unity Visualization File
-        │
-        ▼
-Open Visualization File in Vizard
-        │
-        ▼
-3D Playback and Analysis
-```
-
----
-
-# Advantages of the Simulation Framework
-
-The combination of Basilisk and Vizard provides a powerful platform for spacecraft simulation by offering:
-
-- Modular software architecture
-- High-fidelity spacecraft dynamics
-- Flexible integration of custom simulation modules
-- Accurate environmental modeling
-- Support for Guidance, Navigation and Control (GNC) development
-- Efficient offline visualization
-- Reproducible simulation results
-- Cross-platform compatibility
-
----
-
-# Summary
-
-The simulation framework combines Basilisk's high-fidelity spacecraft simulation capabilities with Vizard's three-dimensional visualization tools. Basilisk performs all numerical computations, including spacecraft dynamics, environmental interactions, and subsystem modeling, while Vizard provides file-based playback of the recorded simulation results. This separation between computation and visualization creates a flexible, modular, and efficient workflow for spacecraft analysis, algorithm development, and simulation validation.
+- [Basilisk Flight Software Interface](basilisk-flight-software-interface.md) — SITL device modeling and firmware integration
+- [Hysteresis Rods](Hysterisis_Rods.md)
+- [World Magnetic Model (WMM)](WMM.md)
+- [Permanent Magnet Attitude Control (PMAC)](PMAC.md)
+- [Zephyr-driven synchronization](zephyr-driven-synchronization.md)
