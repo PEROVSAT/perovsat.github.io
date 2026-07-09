@@ -10,60 +10,87 @@ Hysteresis rods are soft ferromagnetic cylinders mounted along chosen body axes.
 Our Basilisk module models each rod with the **Jiles–Atherton (JA)** constitutive law, driven by the geomagnetic field from the [WMM](WMM.md). Material parameters for HyMu-80 are loaded from JSON configs in `hysteresis_configs/`.
 
 
-## **Math Guide**
+## Math Guide
 
-This section outlines the mathematical progression implemented in the module, moving from spacecraft kinematics to the Jiles-Atherton ODE, and finally to the resulting magnetic torque.
+This section outlines the mathematical progression implemented in the module, moving from spacecraft kinematics to the Jiles–Atherton ODE, and finally to the resulting magnetic torque.
 
-### **1\. Field Kinematics**
+### Field kinematics
 
-The module first determines the axial magnetic field strength $H$ and its rate of change $\\dot{H}$ along the rod's unit direction $\\hat{u}$ in the body frame.  
-The inertial magnetic field $B\_N$ is rotated into the spacecraft body frame using the direction cosine matrix $\[BN\]$:
+The module determines the axial magnetic field strength \(H\) and its rate of change \(\dot{H}\) along the rod's unit direction \(\hat{\mathbf{u}}\) in the body frame. The inertial magnetic field \(\mathbf{B}_N\) is rotated into the spacecraft body frame using the direction cosine matrix \([BN]\):
 
 !!! note
-    We are currently working on a continuous version of the WMM that does this more accurately. See [Continuous WMM Module](./WMM.md) for details
+    We are currently working on a continuous version of the WMM that does this more accurately. See [Continuous WMM Module](WMM.md) for details.
 
-$$B\_B \= \[BN\]B\_N$$  
-Applying the transport theorem using the spacecraft's body angular velocity $\\omega\_{B/N}$, the rate of change of the magnetic flux density in the body frame is:
+$$
+\mathbf{B}_B = [BN]\,\mathbf{B}_N
+$$
 
-$$\\dot{B}\_B \= \[BN\]\\dot{B}\_N \- \\omega\_{B/N} \\times B\_B$$  
-*(Note: $\\dot{B}\_N$ is computed via a finite difference of the discrete magnetometer updates.)*  
-Using the vacuum permeability $\\mu\_0$, these vectors are projected onto the rod's orientation $\\hat{u}$ to find the scalar field strength and its time derivative:
+Applying the transport theorem with the spacecraft's body angular velocity \(\boldsymbol{\omega}_{B/N}\), the rate of change of the magnetic flux density in the body frame is:
 
-$$H \= \\frac{B\_B \\cdot \\hat{u}}{\\mu\_0}$$
+$$
+\dot{\mathbf{B}}_B = [BN]\,\dot{\mathbf{B}}_N - \boldsymbol{\omega}_{B/N} \times \mathbf{B}_B
+$$
 
-$$\\dot{H} \= \\frac{\\dot{B}\_B \\cdot \\hat{u}}{\\mu\_0}$$
+\(\dot{\mathbf{B}}_N\) is computed via a finite difference of the discrete magnetometer updates. Projecting onto the rod orientation with vacuum permeability \(\mu_0\):
 
-### **2\. Jiles-Atherton Magnetization ODE**
+$$
+H = \frac{\mathbf{B}_B \cdot \hat{\mathbf{u}}}{\mu_0}, \qquad
+\dot{H} = \frac{\dot{\mathbf{B}}_B \cdot \hat{\mathbf{u}}}{\mu_0}
+$$
 
-The core of the module computes the rate of change of magnetization $\\frac{dM}{dt}$ using a modified Jiles-Atherton model that accounts for demagnetization.  
-First, the effective field $H\_e$ experienced by the domain walls is calculated, incorporating both the interdomain coupling $\\alpha$ and the demagnetizing factor $N\_d$:
+### Jiles–Atherton magnetization ODE
 
-$$H\_e \= H \+ (\\alpha \- N\_d)M$$  
-The anhysteretic magnetization $M\_{an}$ (the ideal, lossless magnetization curve) is modeled using the Langevin function, scaled by the saturation magnetization $M\_s$ and the shape parameter $a$. Let $x \= \\frac{H\_e}{a}$:
+The module computes \(\frac{dM}{dt}\) using a modified Jiles–Atherton model that accounts for demagnetization. The effective field \(H_e\) incorporates interdomain coupling \(\alpha\) and the demagnetizing factor \(N_d\):
 
-$$M\_{an} \= M\_s \\left( \\coth(x) \- \\frac{1}{x} \\right)$$
+$$
+H_e = H + (\alpha - N_d)\,M
+$$
 
-$$\\frac{dM\_{an}}{dH\_e} \= \\frac{M\_s}{a} \\left( 1 \- \\coth^2(x) \+ \\frac{1}{x^2} \\right)$$  
-*(For numerical stability near $H\_e \= 0$, the module utilizes a small-argument expansion: $M\_{an} \\approx M\_s \\frac{x}{3}$ and $\\frac{dM\_{an}}{dH\_e} \\approx \\frac{M\_s}{3a}$).*  
-To handle the irreversible domain wall pinning, the direction of the changing field is approximated smoothly to prevent ODE solver stalling:
+The anhysteretic magnetization follows the Langevin function. Let \(x = H_e / a\):
 
-$$\\delta \\approx \\tanh\\left(\\frac{\\dot{H}}{\\delta\_{smooth}}\\right)$$  
-The irreversible differential susceptibility $\\chi\_{irr}$ dictates how magnetization lags behind the anhysteretic curve. It is strictly evaluated to prevent non-physical "pushing" of the magnetization against the field direction. If $\\delta(M\_{an} \- M) \\le 0$, then $\\chi\_{irr} \= 0$. Otherwise:
+$$
+M_{an} = M_s\left(\coth(x) - \frac{1}{x}\right)
+$$
 
-$$\\chi\_{irr} \= \\frac{M\_{an} \- M}{k\\delta \- (\\alpha \- N\_d)(M\_{an} \- M)}$$  
-Where $k$ is the pinning parameter.  
-The total magnetic susceptibility $\\frac{dM}{dH}$ linearly combines the reversible and irreversible components using the reversibility parameter $c$. Letting $K \= (1-c)\\chi\_{irr} \+ c \\frac{dM\_{an}}{dH\_e}$:
+$$
+\frac{dM_{an}}{dH_e} = \frac{M_s}{a}\left(1 - \coth^2(x) + \frac{1}{x^2}\right)
+$$
 
-$$\\frac{dM}{dH} \= \\frac{K}{1 \- (\\alpha \- N\_d)K}$$  
-Finally, the state derivative passed to the integrator is computed using the chain rule:
+Near \(H_e = 0\), the module uses the small-argument expansion \(M_{an} \approx M_s x / 3\) and \(dM_{an}/dH_e \approx M_s / (3a)\).
 
-$$\\frac{dM}{dt} \= \\frac{dM}{dH}\\dot{H}$$
+The field-rate sign is smoothed to prevent ODE solver stalling:
 
-### **3\. Magnetic Torque**
+$$
+\delta \approx \tanh\!\left(\frac{\dot{H}}{\delta_{\mathrm{smooth}}}\right)
+$$
 
-Once the magnetization $M$ is integrated, the rod's magnetic dipole moment vector $m\_{rod}$ in the body frame is found using the rod's volume $V$:
+The irreversible susceptibility \(\chi_{irr}\) is zero when \(\delta\,(M_{an} - M) \le 0\); otherwise:
 
-$$m\_{rod} \= (MV)\\hat{u}$$  
-The resulting mechanical torque $\\tau\_B$ exerted on the spacecraft body by the rod's interaction with the external magnetic field is:
+$$
+\chi_{irr} = \frac{M_{an} - M}{k\,\delta - (\alpha - N_d)(M_{an} - M)}
+$$
 
-$$\\tau\_B \= m\_{rod} \\times B\_B$$
+The total susceptibility blends reversible and irreversible contributions. Let \(K = (1-c)\,\chi_{irr} + c\,\frac{dM_{an}}{dH_e}\):
+
+$$
+\frac{dM}{dH} = \frac{K}{1 - (\alpha - N_d)\,K}
+$$
+
+The state derivative passed to the integrator is:
+
+$$
+\frac{dM}{dt} = \frac{dM}{dH}\,\dot{H}
+$$
+
+### Magnetic torque
+
+The rod's dipole moment and the resulting body-frame torque are:
+
+$$
+\mathbf{m}_{rod} = M\,V\,\hat{\mathbf{u}}
+$$
+
+$$
+\boldsymbol{\tau}_B = \mathbf{m}_{rod} \times \mathbf{B}_B
+$$
+
