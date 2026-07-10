@@ -1,4 +1,4 @@
-# Measureing IV Curves
+# Measuring IV Curves
 ## Device Identification
 
 Red ID numbers shall be defined as the upper end of the cells
