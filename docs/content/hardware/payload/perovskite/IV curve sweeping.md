@@ -1,8 +1,12 @@
 # Measureing IV Curves
 ## Device Identification
+
 Red ID numbers shall be defined as the upper end of the cells
+
 Primary number used for identification is the first 1-2 digits at the upper left corner of the cell
+
 The surface with the ID number shall be the front side of the devices
+
 The surface with 6 gold contanct pads chall be the back side of the devices
 
 While having the pv cell face up:
@@ -30,7 +34,7 @@ Environment:
 - Solar simulator is turned on for at least a 30 seconds before measurement
 - The jig lies parallel and directly under the solar simulator light
 
-In LabVIEW 2026:
+In NI LabVIEW 2026:
 
 - Sweep Direction: Descending
 - Source Mode: Voltage
@@ -55,13 +59,26 @@ Directions:
 3. Place pogo PCB so that the pogo pins are in contact with contact pads of the pv cell. The pixel A label on the PCB should match pixel A of the pv cell.
 4. Screw in corners in diagonal order, not too tight or loose.
 
-## Switching Between 2-Wire and 4-Wire on LabVIEW/Keithley 24XX
-Perovskite cells can be swept in either 2-wire or 4-wire arrangement. 2-wire arrangement combines sense wires (I) and force wires (V) into single positive and negative wires. This arrangement is best for quick perovskite testing with no components between to add resistance. 4-wire arrangement isolates the sense and force wires, creating four +I/-I/+V/-V wires. This arrangement is going to be implemented onto the AMU/perovsktie circuit. Because the sense wire carry no current, it eliminates all lead and series resistance for highly accurate measurements.
+##2-Wire and 4-Wire on NI LabVIEW/Keithley 24XX
+Perovskite cells can be swept in either 2-wire or 4-wire arrangement. 2-wire arrangement combines sense wires (I) and force wires (V) into single positive and negative wires. This arrangement is best for quick perovskite testing with no components between to add resistance. On the Keithley, only the HI/LO on the right side is used. 4-wire arrangement isolates the sense and force wires, creating four +I/-I/+V/-V wires. This arrangement is going to be implemented onto the AMU/perovsktie circuit. Because the sense wire carry no current, it eliminates all lead and series resistance for highly accurate measurements. On the Keithley, both HI/LO is used.
 
-Directions:
+Checking Measurement Mode:
+
+1. Open NI MAX
+2. Check measurement mode by going on NI MAX > My System > Devices and Interfaces > NI GPIB-USB-HS "GPIB0" > Instrument 0
+3. Right click Instrument 0, in the "Send String" field, write `:SYST:RSEN?` and press "Query"
+4. If String Received = `0`, 2-wire mode; if `1`, 4-wire mode
+
+Switching Measurement Mode:
+
+1. Open NI LabVIEW 2026 Q1 (32-bit)
+2. Select IVMeasurement_Keithley2400
+3. Press `ctrl+E` to open block diagram
+4. On the left side there should be a "Configure the measurement and output" note. Below is VISA write block with pink block containing `:SYST:RSEN:OFF`
+5. If OFF = 2-wire, if ON = 4-wire. Edit as needed and save
+
+On new installation or version, you might need recreate block diagram:
 1. 
 
-## 2-Wire Arrangement
-## 4-Wire Arrangement
 ## Best Practices
 
