@@ -20,29 +20,40 @@ Identifying summer 2026 "chenchao jar" pervoskite batch (observed 05-28-26):
 - Device #10: small scratch on the back side glass layer next to pixel B
 - Device #11: prominent scratch on the front side on top of pixel B, **pixel 11B is dead**
   
-## Measuring Condition
+## Measuring Condition & Configuration
+Environment:
 - Distance from solar simulator light from cell: 10cm (tip: put the pv cell on top of the glass container it came in)
 - Room light ON
 - Solar simulator is turned on for at least a 30 seconds before measurement
 - The jig lies parallel and directly under the solar simulator light
 
+In LabVIEW 2026:
+- Sweep Direction: Descending
+- Source Mode: Voltage
+- Vmin: 0
+- Vmax: 1.2 (should be tweeked for reference cells so that Isc shows)
+- Number of points: ~60
+- VISA Resource Name: GPIBO::24
+  
 ## Testing Jig Mounting
 The testing jig is a sandwich:
--top layer: metal cnc'd plate
--middle layer: perovskite cell
--bottom layer: pogo PCB
+- top layer: metal cnc'd plate
+- middle layer: perovskite cell
+- bottom layer: pogo PCB
 
 Pay special attention to mounting orientation as it is critical for correct pixel identifications and measurement.
 
 Directions:
 1. Put metal plate caved side up and in vertical position (2 columns x 3 rows of hole)
-2. Place perovskite cell face down/metal plate side up into the plate in the same vertical poistion. From this viewpoint, the top-left corner is the backside of pixel A.
+2. Before anything, give the cell a quick wipe. Place perovskite cell face down/metal plate side up into the plate in the same vertical poistion. From this viewpoint, the top-left corner is the backside of pixel A.
 3. Place pogo PCB so that the pogo pins are in contact with contact pads of the pv cell. The pixel A label on the PCB should match pixel A of the pv cell.
 4. Screw in corners in diagonal order, not too tight or loose.
 
+## Switching Between 2-Wire and 4-Wire on LabVIEW/Keithley 24XX
+Perovskite cells can be swept in either 2-wire or 4-wire arrangement. 2-wire arrangement combines sense wires (I) and force wires (V) into single positive and negative wires. This arrangement is best for quick perovskite testing with no components between to add resistance. 4-wire arrangement isolates the sense and force wires, creating four +I/-I/+V/-V wires. This arrangement is going to be implemented onto the AMU/perovsktie circuit. Because the sense wire carry no current, it eliminates all lead and series resistance for highly accurate measurements.
 
-## Switching Between 2-Wire and 4-Wire on LabVIEW/Keithley 
-
+Directions:
+1. 
 
 ## 2-Wire Arrangement
 ## 4-Wire Arrangement
