@@ -45,4 +45,4 @@ The overlay file must exist at `boards/nucleo_u575zi_q.overlay`. DBuild matches 
 
 Snippet directory names typically follow `<device>-<mode>`. The `snippet` field in `dbuild.yml` must match the directory name.
 
-See [Add a device to DBuild](../../how-to/dbuild/add-device.md) for the full registration workflow.
+See [Add a device](../../how-to/dbuild/add-a-device.md) for the full registration workflow.

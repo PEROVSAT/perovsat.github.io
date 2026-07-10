@@ -1,5 +1,7 @@
 # Contributing to Flight Software
 
+Updated: 7/10/26
+
 The PEROVSAT flight software lives across many GitHub repositories, shown below, but the process of making contributions to them is largely the same.
 
 ## Repositories

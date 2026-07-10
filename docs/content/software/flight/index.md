@@ -18,7 +18,7 @@ The exact facts: file formats, CLI flags, Kconfig symbols, API signatures. Dry a
 
 ## How-to guides
 
-Recipes for a specific task, written for someone who already knows the concepts — register a device, implement a driver, wire it in. Browse the [How-to index](./how-to/index.md).
+Recipes for a specific task, written for someone who already knows the concepts — register a device, implement a driver, wire it in.
 
 ## Tutorials
 
@@ -50,3 +50,5 @@ Before adding or editing a page, decide which of the four jobs above it's actual
     Each piece of information should live ONCE, in the place where it makes the most sense. If you're tempted to restate it elsewhere, link to the primary source instead.
 
 When in doubt, write less: a one-line link to the section that owns a fact is better than a duplicated paragraph that will drift out of sync.
+
+Another good rule of thumb when writing `reference` documentation: large code blocks should only be used when the reference docs ARE the definition, which the code implements. Just repasting code into documentation is unnecessary duplication
