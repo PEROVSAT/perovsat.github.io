@@ -27,14 +27,14 @@ Identifying summer 2026 "chenchao jar" pervoskite batch (observed 05-28-26):
 - Device #11: prominent scratch on the front side on top of pixel B, **pixel 11B is dead**
   
 ## Measuring Condition & Configuration
-Environment:
+**Environment:**
 
 - Distance from solar simulator light from cell: 10cm (tip: put the pv cell on top of the glass container it came in)
 - Room light ON
 - Solar simulator is turned on for at least a 30 seconds before measurement
 - The jig lies parallel and directly under the solar simulator light
 
-In NI LabVIEW 2026:
+**In NI LabVIEW 2026:**
 
 - Sweep Direction: Descending
 - Source Mode: Voltage
@@ -50,9 +50,9 @@ The testing jig is a sandwich:
 - middle layer: perovskite cell
 - bottom layer: pogo PCB
 
-Pay special attention to mounting orientation as it is critical for correct pixel identifications and measurement.
+**Pay special attention to mounting orientation as it is critical for correct pixel identifications and measurement.**
 
-Directions:
+**Directions:**
 
 1. Put metal plate caved side up and in vertical position (2 columns x 3 rows of hole)
 2. Before anything, give the cell a quick wipe. Place perovskite cell face down/metal plate side up into the plate in the same vertical poistion. From this viewpoint, the top-left corner is the backside of pixel A.
@@ -62,14 +62,14 @@ Directions:
 ##2-Wire and 4-Wire on NI LabVIEW/Keithley 24XX
 Perovskite cells can be swept in either 2-wire or 4-wire arrangement. 2-wire arrangement combines sense wires (I) and force wires (V) into single positive and negative wires. This arrangement is best for quick perovskite testing with no components between to add resistance. On the Keithley, only the HI/LO on the right side is used. 4-wire arrangement isolates the sense and force wires, creating four +I/-I/+V/-V wires. This arrangement is going to be implemented onto the AMU/perovsktie circuit. Because the sense wire carry no current, it eliminates all lead and series resistance for highly accurate measurements. On the Keithley, both HI/LO is used.
 
-Checking Measurement Mode:
+**Checking Measurement Mode:**
 
 1. Open NI MAX
 2. Check measurement mode by going on NI MAX > My System > Devices and Interfaces > NI GPIB-USB-HS "GPIB0" > Instrument 0
 3. Right click Instrument 0, in the "Send String" field, write `:SYST:RSEN?` and press "Query"
 4. If String Received = `0`, 2-wire mode; if `1`, 4-wire mode
 
-Switching Measurement Mode:
+**Switching Measurement Mode:**
 
 1. Open NI LabVIEW 2026 Q1 (32-bit)
 2. Select IVMeasurement_Keithley2400
@@ -78,7 +78,10 @@ Switching Measurement Mode:
 5. If OFF = 2-wire, if ON = 4-wire. Edit as needed and save
 
 On new installation or version, you might need recreate block diagram:
-1. 
+1. Right-click > Instrument I/O > VISA > VISA Write
+2. On VISA write block, right-click pink "write buffer" input > Create > Constant
+3. Write `:SYST:RSEN:OFF` or `:SYST:RSEN:ON`
+4. Disconnect purple wire and dotted yellow wire between Initialize box and MEAS box, and put previously made VISA block then reconnect the two wires
+5. Save
 
-## Best Practices
 
