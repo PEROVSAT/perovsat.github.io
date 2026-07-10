@@ -78,6 +78,7 @@ Perovskite cells can be swept in either 2-wire or 4-wire arrangement. 2-wire arr
 5. If OFF = 2-wire, if ON = 4-wire. Edit as needed and save
 
 On new installation or version, you might need recreate block diagram:
+
 1. Right-click > Instrument I/O > VISA > VISA Write
 2. On VISA write block, right-click pink "write buffer" input > Create > Constant
 3. Write `:SYST:RSEN:OFF` or `:SYST:RSEN:ON`
