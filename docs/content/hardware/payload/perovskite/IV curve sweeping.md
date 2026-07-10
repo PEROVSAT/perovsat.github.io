@@ -85,4 +85,8 @@ On new installation or version, you might need recreate block diagram:
 4. Disconnect purple wire and dotted yellow wire between Initialize box and MEAS box, and put previously made VISA block then reconnect the two wires
 5. Save
 
+## Measuring
+
+With all the desired configurations above, change filename directory to desired folder path. You need a create a temporary .txt file in the desired folder to select. Press `RUN` button on the top-left corners. 
+
 (updated 7/10/2026)
