@@ -84,4 +84,4 @@ On new installation or version, you might need recreate block diagram:
 4. Disconnect purple wire and dotted yellow wire between Initialize box and MEAS box, and put previously made VISA block then reconnect the two wires
 5. Save
 
-
+(updated 7/10/2026)
