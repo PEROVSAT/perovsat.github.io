@@ -1,62 +1,256 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import TextBlock from '../components/TextBlock.astro';
+import SatScrolly from '../components/SatScrolly.astro';
+import HomeCta from '../components/HomeCta.astro';
 import { withBase } from '../utils/url';
 ---
 
-<Layout title="PEROVSAT — Under Construction">
-  <section class="hero">
-    <p class="hero__badge">CubeSat Mission</p>
-    <h1>Under Construction</h1>
-    <p class="hero__lead">
-      The PEROVSAT mission website is being built. Check back soon for mission updates,
-      team information, and outreach content.
-    </p>
-    <p class="hero__note">
-      Technical documentation is available in the
-      <a href={withBase('documentation/')}>Documentation</a> section.
-    </p>
-  </section>
+<Layout title="PEROVSAT — Rhodes College CubeSat" starfield contentWidth="wide">
+  <div class="home">
+    <section class="hero">
+      <div class="hero__stage" aria-hidden="true">
+        <img
+          class="hero__earth"
+          src={withBase('assets/EarthProjection.png')}
+          alt=""
+          width="1200"
+          height="1200"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+
+      <div class="hero__copy">
+        <img
+          class="hero__logo"
+          src={withBase('PerovskiteLogoV2DarkBG.png')}
+          alt=""
+          width="160"
+          height="160"
+        />
+        <div class="hero__text">
+          <p class="hero__eyebrow">Rhodes College · 1U CubeSat</p>
+          <h1>PEROVSAT</h1>
+          <p class="hero__lead">
+            Flight data on perovskite solar cells in orbit — compared against
+            silicon, across two illumination histories.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <SatScrolly>
+      <TextBlock slot="experiment" variant="instrument" title="The experiment" eyebrow="Science">
+        <p>Placeholder. The two-face illumination experiment goes here.</p>
+      </TextBlock>
+
+      <div slot="timeline" class="timeline">
+        <p class="timeline__eyebrow">Mission</p>
+        <h2 class="timeline__title">Timeline</h2>
+        <ol class="timeline__list">
+          <li>Concept</li>
+          <li>Design</li>
+          <li>Integration</li>
+          <li>Launch</li>
+        </ol>
+      </div>
+
+      <TextBlock slot="rhodes" variant="instrument" title="Built at Rhodes" eyebrow="Team">
+        <p>Placeholder. Students and faculty in Memphis, with mission partners.</p>
+      </TextBlock>
+    </SatScrolly>
+
+    <HomeCta />
+  </div>
 </Layout>
 
 <style>
-  .hero {
-    text-align: center;
-    padding: 4rem 0;
+  .home {
+    padding-bottom: 2rem;
   }
 
-  .hero__badge {
-    display: inline-block;
-    margin: 0 0 1rem;
-    padding: 0.35rem 0.75rem;
-    border: 1px solid var(--rhodes-border);
-    border-radius: 999px;
-    color: var(--rhodes-text-muted);
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 64vh;
+    margin: 0 0 0.5rem;
+  }
+
+  .hero__stage {
+    position: absolute;
+    top: -18%;
+    bottom: -4%;
+    left: 50%;
+    width: 100vw;
+    margin-left: -50vw;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero__earth {
+    position: absolute;
+    right: -6%;
+    top: 42%;
+    width: min(880px, 72vw);
+    height: auto;
+    transform: translateY(-50%);
+    -webkit-mask-image: radial-gradient(closest-side, #000 97%, transparent 100%);
+    mask-image: radial-gradient(closest-side, #000 97%, transparent 100%);
+  }
+
+  .hero__copy {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.25rem 1.5rem;
+    align-items: center;
+    max-width: 36rem;
+    padding: 2.5rem 0 1.25rem;
+  }
+
+  .hero__logo {
+    width: 132px;
+    height: auto;
+    display: block;
+    mix-blend-mode: lighten;
+  }
+
+  .hero__eyebrow {
+    margin: 0 0 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
+    color: var(--rhodes-red);
   }
 
   h1 {
-    margin: 0 0 1rem;
-    font-size: clamp(2rem, 5vw, 3rem);
-    color: var(--rhodes-red);
+    margin: 0 0 0.65rem;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    letter-spacing: 0.08em;
+    color: var(--rhodes-text);
+    text-shadow: 0 2px 28px rgba(0, 0, 0, 0.75);
   }
 
   .hero__lead {
-    max-width: 36rem;
-    margin: 0 auto 1.5rem;
-    color: var(--rhodes-text-muted);
-    font-size: 1.125rem;
-  }
-
-  .hero__note {
     margin: 0;
     color: var(--rhodes-text-muted);
+    font-size: 1.08rem;
+    line-height: 1.55;
+    text-shadow: 0 1px 16px rgba(0, 0, 0, 0.9);
   }
 
-  .hero__note a {
+  .timeline {
+    padding: 1.15rem 1.6rem 1.2rem;
+    background-color: rgba(10, 10, 12, 0.52);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-image:
+      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
+      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
+      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
+      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
+      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
+      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
+      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
+      linear-gradient(var(--rhodes-red), var(--rhodes-red));
+    background-size:
+      18px 2px, 2px 18px,
+      18px 2px, 2px 18px,
+      18px 2px, 2px 18px,
+      18px 2px, 2px 18px;
+    background-position:
+      left top, left top,
+      right top, right top,
+      left bottom, left bottom,
+      right bottom, right bottom;
+    background-repeat: no-repeat;
+  }
+
+  .timeline__eyebrow {
+    margin: 0 0 0.25rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
     color: var(--rhodes-red);
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
+  }
+
+  .timeline__title {
+    margin: 0 0 1rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--rhodes-text);
+  }
+
+  .timeline__list {
+    margin: 0;
+    padding: 0.85rem 0.2rem 0.1rem;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border-top: 1px solid rgba(196, 2, 43, 0.55);
+  }
+
+  .timeline__list li {
+    position: relative;
+    padding-top: 0.85rem;
+    color: var(--rhodes-text-muted);
+    font-size: 0.88rem;
+    letter-spacing: 0.04em;
+    text-align: center;
+    flex: 1;
+  }
+
+  .timeline__list li::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -5px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--rhodes-red);
+    box-shadow: 0 0 0 3px rgba(196, 2, 43, 0.2);
+    transform: translateX(-50%);
+  }
+
+  @media (max-width: 800px) {
+    .hero {
+      min-height: 62vh;
+      justify-content: center;
+    }
+
+    .hero__copy {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+      max-width: 34rem;
+      margin-inline: auto;
+    }
+
+    .hero__earth {
+      right: 50%;
+      top: 40%;
+      width: min(560px, 110vw);
+      transform: translate(50%, -50%);
+      opacity: 0.42;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .timeline__list {
+      flex-wrap: wrap;
+    }
   }
 </style>

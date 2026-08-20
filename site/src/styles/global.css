@@ -22,13 +22,20 @@ body {
   background: var(--rhodes-black);
   color: var(--rhodes-text);
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 main {
+  position: relative;
+  z-index: 1;
   flex: 1;
   width: min(960px, 100%);
   margin: 0 auto;
   padding: 3rem 1.5rem;
+}
+
+main[data-width='wide'] {
+  width: min(1120px, 100%);
 }
 
 a {

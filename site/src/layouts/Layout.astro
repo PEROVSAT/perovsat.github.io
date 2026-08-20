@@ -1,17 +1,22 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import StarBackground from '../components/StarBackground.astro';
 import { withBase } from '../utils/url';
 import '../styles/global.css';
 
 interface Props {
   title?: string;
   description?: string;
+  starfield?: boolean;
+  contentWidth?: 'default' | 'wide';
 }
 
 const {
   title = 'PEROVSAT',
   description = 'Perovskite Solar Cell CubeSat Mission — Rhodes College',
+  starfield = false,
+  contentWidth = 'default',
 } = Astro.props;
 ---
 
@@ -31,8 +36,9 @@ const {
     <link rel="icon" type="image/png" href={withBase('PerovskiteLogoV2BlackBackgroundSquare.png')} />
   </head>
   <body>
+    {starfield && <StarBackground />}
     <Header />
-    <main>
+    <main data-width={contentWidth}>
       <slot />
     </main>
     <Footer />

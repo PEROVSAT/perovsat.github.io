@@ -1,0 +1,197 @@
+---
+/**
+ * Procedural starfield. Fixed behind page content; layers parallax on scroll
+ * so stars drift slower than the sections above them.
+ */
+---
+
+<div class="starfield" aria-hidden="true">
+  <canvas class="starfield__canvas"></canvas>
+  <div class="starfield__vignette"></div>
+</div>
+
+<style>
+  .starfield,
+  .starfield__canvas,
+  .starfield__vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .starfield__canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .starfield__vignette {
+    background: radial-gradient(
+      ellipse 80% 70% at 50% 40%,
+      transparent 40%,
+      rgba(0, 0, 0, 0.4) 100%
+    );
+  }
+</style>
+
+<script>
+  const SEED = 0x5045524f; // "PERO"
+  const TILE_VH = 3.2;
+  const LAYERS = [
+    { count: 520, parallax: 0.12, size: [0.4, 1.05], alpha: [0.12, 0.42], glow: false },
+    { count: 210, parallax: 0.28, size: [0.7, 1.55], alpha: [0.28, 0.72], glow: false },
+    { count: 55, parallax: 0.46, size: [1.05, 2.15], alpha: [0.5, 0.92], glow: true },
+  ] as const;
+
+  type Star = {
+    x: number;
+    y: number;
+    size: number;
+    alpha: number;
+    r: number;
+    g: number;
+    b: number;
+    glow: number;
+  };
+
+  type Layer = { parallax: number; stars: Star[] };
+
+  function mulberry32(seed: number) {
+    let a = seed | 0;
+    return () => {
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function stellarColor(rng: () => number): { r: number; g: number; b: number } {
+    const t = rng();
+    if (t < 0.5) return { r: 198, g: 216, b: 255 };
+    if (t < 0.8) return { r: 248, g: 248, b: 255 };
+    if (t < 0.93) return { r: 255, g: 228, b: 186 };
+    return { r: 255, g: 186, b: 140 };
+  }
+
+  function generateLayer(
+    seed: number,
+    count: number,
+    sizeRange: readonly [number, number],
+    alphaRange: readonly [number, number],
+    allowGlow: boolean,
+  ): Star[] {
+    const rng = mulberry32(seed);
+    const clusterCount = 7;
+    const clusters = Array.from({ length: clusterCount }, () => ({
+      x: rng(),
+      y: rng(),
+      spread: 0.035 + rng() * 0.07,
+    }));
+
+    const stars: Star[] = [];
+    for (let i = 0; i < count; i++) {
+      let x: number;
+      let y: number;
+      if (rng() < 0.32) {
+        const c = clusters[(rng() * clusters.length) | 0];
+        x = ((c.x + (rng() - 0.5) * c.spread) + 1) % 1;
+        y = ((c.y + (rng() - 0.5) * c.spread) + 1) % 1;
+      } else {
+        x = rng();
+        y = rng();
+      }
+
+      const mag = rng() ** 2.15;
+      const size = sizeRange[0] + mag * (sizeRange[1] - sizeRange[0]);
+      const alpha = alphaRange[0] + mag * (alphaRange[1] - alphaRange[0]);
+      const { r, g, b } = stellarColor(rng);
+      const glow = allowGlow && mag > 0.72 ? 6 + mag * 10 : 0;
+
+      stars.push({ x, y, size, alpha, r, g, b, glow });
+    }
+    return stars;
+  }
+
+  const canvas = document.querySelector<HTMLCanvasElement>('.starfield__canvas');
+  if (!canvas) {
+    // Starfield is optional decoration; nothing to do if the node is missing.
+  } else {
+    const ctx = canvas.getContext('2d', { alpha: false });
+    if (!ctx) {
+      // Canvas 2D unavailable; keep the page's solid background.
+    } else {
+      let layers: Layer[] = [];
+      let tileHeight = 1;
+      let width = 0;
+      let height = 0;
+      let ticking = false;
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = window.innerWidth;
+        height = window.innerHeight;
+        tileHeight = height * TILE_VH;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        layers = LAYERS.map((spec, i) => ({
+          parallax: reduceMotion ? 0 : spec.parallax,
+          stars: generateLayer(SEED + i * 9973, spec.count, spec.size, spec.alpha, spec.glow),
+        }));
+        draw();
+      }
+
+      function draw() {
+        const scrollY = reduceMotion ? 0 : window.scrollY || 0;
+        ctx.fillStyle = '#03040a';
+        ctx.fillRect(0, 0, width, height);
+
+        for (const layer of layers) {
+          const offset = scrollY * layer.parallax;
+          for (const star of layer.stars) {
+            let y = (star.y * tileHeight - offset) % tileHeight;
+            if (y < 0) y += tileHeight;
+
+            const x = star.x * width;
+            for (const dy of [0, -tileHeight, tileHeight]) {
+              const ys = y + dy;
+              if (ys < -8 || ys > height + 8) continue;
+
+              if (star.glow > 0) {
+                const g = ctx.createRadialGradient(x, ys, 0, x, ys, star.glow);
+                g.addColorStop(0, `rgba(${star.r}, ${star.g}, ${star.b}, ${star.alpha * 0.35})`);
+                g.addColorStop(1, `rgba(${star.r}, ${star.g}, ${star.b}, 0)`);
+                ctx.fillStyle = g;
+                ctx.beginPath();
+                ctx.arc(x, ys, star.glow, 0, Math.PI * 2);
+                ctx.fill();
+              }
+
+              ctx.fillStyle = `rgba(${star.r}, ${star.g}, ${star.b}, ${star.alpha})`;
+              ctx.beginPath();
+              ctx.arc(x, ys, star.size, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+        }
+      }
+
+      function requestDraw() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          draw();
+          ticking = false;
+        });
+      }
+
+      resize();
+      window.addEventListener('scroll', requestDraw, { passive: true });
+      window.addEventListener('resize', resize);
+    }
+  }
+</script>

@@ -1,0 +1,503 @@
+---
+import { withBase } from '../utils/url';
+import TextBlock from './TextBlock.astro';
+
+const FRAME_COUNT = 60;
+const IMAGE_SIZE = 1080;
+const frameBase = withBase('assets/PEROVSAT_Render/');
+const firstFrame = `${frameBase}0001.webp`;
+
+interface Point {
+  x: number;
+  y: number;
+}
+
+interface Part {
+  id: string;
+  title: string;
+  eyebrow: string;
+  /** Pixel targets on 0060.webp, origin at the top-left of the 1080×1080 frame. */
+  targets: Point[];
+}
+
+/**
+ * Leader-line endpoints on the last scrolly frame.
+ * Edit these pixel coordinates to aim at the right hardware.
+ */
+const PARTS: Part[] = [
+  {
+    id: 'perovskites',
+    title: 'Perovskites',
+    eyebrow: 'Payload',
+    targets: [
+      { x: 600, y: 75 },
+      { x: 700, y: 230 },
+    ],
+  },
+  {
+    id: 'reference-cells',
+    title: 'Reference cells',
+    eyebrow: 'Payload',
+    targets: [{ x: 420, y: 140 }],
+  },
+  {
+    id: 'power-cells',
+    title: 'Power cells',
+    eyebrow: 'Bus',
+    targets: [{ x: 800, y: 600 }],
+  },
+  {
+    id: 'antenna',
+    title: 'Antenna',
+    eyebrow: 'Bus',
+    targets: [{ x: 534, y: 900 }],
+  },
+];
+
+const PLACEHOLDER: Record<string, string> = {
+  perovskites: 'Experimental solar cells. Two large tandem cells and two smaller 1-inch cells on each face',
+  'reference-cells': 'Standard space-grade silicon solar cells, used as the experiment control',
+  'power-cells': 'Body-mounted solar array to keep PEROVSAT operational',
+  antenna: 'Downlinks scientific data via the Iridium network',
+};
+---
+
+<section
+  class="scrolly"
+  data-sat-scrolly
+  data-frame-base={frameBase}
+  data-frame-count={FRAME_COUNT}
+  data-image-size={IMAGE_SIZE}
+>
+  <div class="scrolly__visual">
+    <div class="scrolly__pin">
+      <div class="scrolly__stage">
+        <img
+          class="scrolly__fallback"
+          src={firstFrame}
+          alt="PEROVSAT CubeSat"
+          width={IMAGE_SIZE}
+          height={IMAGE_SIZE}
+          decoding="async"
+        />
+        <canvas class="scrolly__canvas" width={IMAGE_SIZE} height={IMAGE_SIZE} aria-hidden="true"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="scrolly__copy">
+    <div class="scrolly__chapter">
+      <div class="scrolly__panel">
+        <slot name="experiment" />
+      </div>
+    </div>
+
+    <div class="scrolly__chapter">
+      <div class="scrolly__panel">
+        <slot name="timeline" />
+      </div>
+    </div>
+
+    <div class="scrolly__chapter">
+      <div class="scrolly__panel">
+        <slot name="rhodes" />
+      </div>
+    </div>
+
+    <div class="scrolly__hold" aria-hidden="true"></div>
+
+    <div class="scrolly__parts">
+      {PARTS.map((part) => (
+        <div
+          class="scrolly__part"
+          data-part={part.id}
+          data-targets={part.targets.map((p) => `${p.x},${p.y}`).join(';')}
+        >
+          <TextBlock variant="instrument" title={part.title} eyebrow={part.eyebrow}>
+            <p>{PLACEHOLDER[part.id]}</p>
+          </TextBlock>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <svg class="scrolly__leaders" aria-hidden="true">
+    {PARTS.flatMap((part) =>
+      part.targets.map((_, i) => (
+        <g data-leader={`${part.id}-${i}`}>
+          <line />
+          <circle r="3.5" />
+        </g>
+      ))
+    )}
+  </svg>
+</section>
+
+<style>
+  .scrolly {
+    --stage-h: min(59.5vh, 918px);
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--stage-h) minmax(0, 1fr);
+    gap: 1.5rem 2.25rem;
+  }
+
+  .scrolly__visual {
+    min-height: 100%;
+  }
+
+  .scrolly__copy {
+    position: relative;
+    z-index: 2;
+  }
+
+  .scrolly__pin {
+    position: sticky;
+    top: max(5.25rem, calc(40dvh - (var(--stage-h) / 2)));
+    height: var(--stage-h);
+    width: var(--stage-h);
+    max-width: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .scrolly__stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+  }
+
+  .scrolly__fallback,
+  .scrolly__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    mix-blend-mode: lighten;
+  }
+
+  .scrolly__canvas {
+    opacity: 0;
+  }
+
+  .scrolly.is-ready .scrolly__fallback {
+    visibility: hidden;
+  }
+
+  .scrolly.is-ready .scrolly__canvas {
+    opacity: 1;
+  }
+
+  .scrolly__chapter {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 62vh;
+    width: 100%;
+    padding: 3.5vh 0;
+  }
+
+  .scrolly__panel,
+  .scrolly__part {
+    width: 100%;
+    max-width: 32rem;
+  }
+
+  .scrolly__panel :global(.tb--instrument),
+  .scrolly__part :global(.tb--instrument) {
+    padding: 1.15rem 1.6rem 1.2rem;
+  }
+
+  .scrolly__panel :global(.tb--instrument .tb__header),
+  .scrolly__part :global(.tb--instrument .tb__header) {
+    margin-bottom: 0.55rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .scrolly__panel :global(.tb--instrument .tb__title),
+  .scrolly__part :global(.tb--instrument .tb__title) {
+    font-size: 1.15rem;
+  }
+
+  .scrolly__panel :global(.tb--instrument .tb__body),
+  .scrolly__part :global(.tb--instrument .tb__body) {
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .scrolly__hold {
+    height: 40vh;
+  }
+
+  .scrolly__parts {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 88vh;
+    justify-content: center;
+    padding: 6vh 0 10vh;
+  }
+
+  .scrolly__leaders {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    overflow: visible;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .scrolly.is-callouts .scrolly__leaders {
+    opacity: 1;
+  }
+
+  .scrolly__leaders line {
+    stroke: var(--rhodes-red);
+    stroke-width: 1;
+  }
+
+  .scrolly__leaders circle {
+    fill: var(--rhodes-red);
+    stroke: rgba(196, 2, 43, 0.28);
+    stroke-width: 3;
+  }
+
+  @media (max-width: 720px) {
+    .scrolly {
+      --stage-h: min(44vh, 360px);
+      grid-template-columns: 1fr;
+    }
+
+    .scrolly__visual,
+    .scrolly__copy {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .scrolly__copy {
+      padding-top: var(--stage-h);
+    }
+
+    .scrolly__pin {
+      margin-inline: auto;
+    }
+
+    .scrolly__chapter {
+      justify-content: center;
+      align-items: flex-end;
+      min-height: 58vh;
+    }
+
+    .scrolly__panel,
+    .scrolly__part {
+      width: 100%;
+      max-width: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scrolly__pin {
+      position: relative;
+      top: auto;
+    }
+
+    .scrolly__hold {
+      height: 0;
+    }
+
+    .scrolly__chapter {
+      min-height: 0;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .scrolly__parts {
+      min-height: 0;
+      padding: 1.5rem 0;
+    }
+
+    .scrolly__leaders {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-sat-scrolly]');
+  if (root) {
+    const pin = root.querySelector<HTMLElement>('.scrolly__pin')!;
+    const stage = root.querySelector<HTMLElement>('.scrolly__stage')!;
+    const canvas = root.querySelector<HTMLCanvasElement>('.scrolly__canvas')!;
+    const leaders = root.querySelector<SVGSVGElement>('.scrolly__leaders')!;
+    const ctx = canvas.getContext('2d', { alpha: true });
+    const frameBase = root.dataset.frameBase ?? '';
+    const frameCount = Number(root.dataset.frameCount ?? 60);
+    const imageSize = Number(root.dataset.imageSize ?? 1080);
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /** Unfold finishes as the last text chapter leaves; remainder is hold + parts. */
+    const UNFOLD_END = 0.62;
+    const CALLOUT_START = 0.78;
+
+    const frames: (HTMLImageElement | undefined)[] = new Array(frameCount);
+    let drawn = -1;
+    let target = 0;
+    let ticking = false;
+
+    const parts = Array.from(root.querySelectorAll<HTMLElement>('[data-targets]'));
+
+    function srcFor(index: number) {
+      return `${frameBase}${String(index + 1).padStart(4, '0')}.webp`;
+    }
+
+    function loadFrame(index: number): Promise<HTMLImageElement> {
+      const existing = frames[index];
+      if (existing && existing.complete && existing.naturalWidth > 0) {
+        return Promise.resolve(existing);
+      }
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          frames[index] = img;
+          if (index === target) {
+            drawn = -1;
+            draw(target);
+          }
+          resolve(img);
+        };
+        img.onerror = () => reject(new Error(`Failed to load ${srcFor(index)}`));
+        img.src = srcFor(index);
+      });
+    }
+
+    function nearestLoaded(index: number): HTMLImageElement | undefined {
+      if (frames[index]) return frames[index];
+      for (let d = 1; d < frameCount; d++) {
+        if (index - d >= 0 && frames[index - d]) return frames[index - d];
+        if (index + d < frameCount && frames[index + d]) return frames[index + d];
+      }
+      return undefined;
+    }
+
+    function draw(index: number) {
+      if (!ctx) return;
+      target = index;
+      const img = nearestLoaded(index);
+      if (!img) return;
+      if (index === drawn && frames[index]) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      drawn = frames[index] ? index : -1;
+    }
+
+    function pinProgress(): number {
+      const stickyTop = Number.parseFloat(getComputedStyle(pin).top) || 0;
+      const rootRect = root.getBoundingClientRect();
+      const startTop = stickyTop;
+      const endTop = stickyTop + pin.offsetHeight - root.offsetHeight;
+      const span = startTop - endTop;
+      if (span <= 0) return 0;
+      return Math.min(1, Math.max(0, (startTop - rootRect.top) / span));
+    }
+
+    function frameForProgress(progress: number) {
+      if (progress <= 0) return 0;
+      if (progress >= UNFOLD_END) return frameCount - 1;
+      return Math.round((progress / UNFOLD_END) * (frameCount - 1));
+    }
+
+    function parseTargets(value: string) {
+      return value.split(';').map((pair) => {
+        const [x, y] = pair.split(',').map(Number);
+        return { x, y };
+      });
+    }
+
+    function syncLeaders() {
+      const stageRect = stage.getBoundingClientRect();
+      const scaleX = stageRect.width / imageSize;
+      const scaleY = stageRect.height / imageSize;
+
+      for (const part of parts) {
+        const targets = parseTargets(part.dataset.targets ?? '');
+        const box = part.getBoundingClientRect();
+        const count = targets.length;
+
+        targets.forEach((pt, i) => {
+          const t = count === 1 ? 0.5 : (i + 1) / (count + 1);
+          const x1 = box.left;
+          const y1 = box.top + box.height * t;
+          const x2 = stageRect.left + pt.x * scaleX;
+          const y2 = stageRect.top + pt.y * scaleY;
+          const group = leaders.querySelector(`[data-leader="${part.dataset.part}-${i}"]`);
+          const line = group?.querySelector('line');
+          const dot = group?.querySelector('circle');
+          if (!line || !dot) return;
+          line.setAttribute('x1', String(x1));
+          line.setAttribute('y1', String(y1));
+          line.setAttribute('x2', String(x2));
+          line.setAttribute('y2', String(y2));
+          dot.setAttribute('cx', String(x2));
+          dot.setAttribute('cy', String(y2));
+        });
+      }
+    }
+
+    function update() {
+      const progress = reduceMotion ? 1 : pinProgress();
+      const index = reduceMotion ? frameCount - 1 : frameForProgress(progress);
+      draw(index);
+      root.classList.toggle('is-callouts', reduceMotion || progress >= CALLOUT_START);
+      syncLeaders();
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        update();
+        ticking = false;
+      });
+    }
+
+    async function preloadRest() {
+      const concurrency = 8;
+      let next = 0;
+      async function worker() {
+        while (next < frameCount) {
+          const i = next++;
+          if (frames[i]) continue;
+          try {
+            await loadFrame(i);
+          } catch {
+            /* keep nearest-loaded fallback */
+          }
+        }
+      }
+      await Promise.all(Array.from({ length: concurrency }, () => worker()));
+    }
+
+    const startIndex = reduceMotion ? frameCount - 1 : 0;
+    loadFrame(startIndex)
+      .then(() => {
+        draw(startIndex);
+        root.classList.add('is-ready');
+        update();
+      })
+      .catch(() => {
+        /* fallback <img> stays visible */
+      });
+
+    if (!reduceMotion) void preloadRest();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+  }
+</script>

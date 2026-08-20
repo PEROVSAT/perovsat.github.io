@@ -1,0 +1,231 @@
+---
+interface Props {
+  title: string;
+  /** Visual treatment. */
+  variant: 'glass' | 'editorial' | 'banner' | 'instrument' | 'split';
+  /** Optional small label above the title (section kicker). */
+  eyebrow?: string;
+}
+
+const { title, variant, eyebrow } = Astro.props;
+const headingId = `tb-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+---
+
+<section class:list={['tb', `tb--${variant}`]} aria-labelledby={headingId}>
+  <header class="tb__header">
+    {eyebrow && <p class="tb__eyebrow">{eyebrow}</p>}
+    <h2 class="tb__title" id={headingId}>{title}</h2>
+  </header>
+  <div class="tb__body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .tb {
+    --tb-pad: 1.75rem 1.85rem;
+    color: var(--rhodes-text);
+  }
+
+  .tb__eyebrow {
+    margin: 0 0 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--rhodes-red);
+  }
+
+  .tb__title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: 0.02em;
+  }
+
+  .tb__body {
+    color: var(--rhodes-text-muted);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  .tb__body :global(p) {
+    margin: 0;
+  }
+
+  .tb__body :global(p + p) {
+    margin-top: 0.9rem;
+  }
+
+  /* ── 1. Glass: frosted panel, red spine ── */
+  .tb--glass {
+    padding: var(--tb-pad);
+    background: rgba(12, 12, 14, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-left: 3px solid var(--rhodes-red);
+    border-radius: 4px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  }
+
+  .tb--glass .tb__header {
+    margin-bottom: 0.85rem;
+  }
+
+  .tb--glass .tb__title {
+    color: var(--rhodes-text);
+  }
+
+  /* ── 2. Editorial: open type, no box ── */
+  .tb--editorial {
+    text-align: center;
+    padding: 0.5rem 0.5rem 0;
+    max-width: 38rem;
+    margin-inline: auto;
+  }
+
+  .tb--editorial .tb__header {
+    margin-bottom: 1.35rem;
+  }
+
+  .tb--editorial .tb__title {
+    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+    color: var(--rhodes-text);
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.85);
+  }
+
+  .tb--editorial .tb__title::after {
+    content: '';
+    display: block;
+    width: 3rem;
+    height: 2px;
+    margin: 1rem auto 0;
+    background: var(--rhodes-red);
+  }
+
+  .tb--editorial .tb__body {
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9);
+  }
+
+  /* ── 3. Banner: red title bar ── */
+  .tb--banner {
+    overflow: hidden;
+    border-radius: 4px;
+    border: 1px solid rgba(196, 2, 43, 0.35);
+    background: rgba(10, 10, 12, 0.82);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  }
+
+  .tb--banner .tb__header {
+    background: var(--rhodes-red);
+    padding: 0.9rem 1.5rem;
+  }
+
+  .tb--banner .tb__eyebrow {
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .tb--banner .tb__title {
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .tb--banner .tb__body {
+    padding: 1.5rem 1.5rem 1.65rem;
+  }
+
+  /* ── 4. Instrument: corner ticks, console panel ── */
+  .tb--instrument {
+    position: relative;
+    padding: calc(1.75rem + 4px) 1.85rem 1.75rem;
+    background-color: rgba(10, 10, 12, 0.52);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* four corner brackets */
+    background-image:
+      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
+      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
+      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
+      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
+      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
+      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
+      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
+      linear-gradient(var(--rhodes-red), var(--rhodes-red));
+    background-size:
+      18px 2px, 2px 18px,
+      18px 2px, 2px 18px,
+      18px 2px, 2px 18px,
+      18px 2px, 2px 18px;
+    background-position:
+      left top, left top,
+      right top, right top,
+      left bottom, left bottom,
+      right bottom, right bottom;
+    background-repeat: no-repeat;
+  }
+
+  .tb--instrument .tb__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .tb--instrument .tb__eyebrow {
+    letter-spacing: 0.22em;
+  }
+
+  .tb--instrument .tb__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--rhodes-text);
+  }
+
+  /* ── 5. Split: title left, body right ── */
+  .tb--split {
+    display: grid;
+    grid-template-columns: minmax(11rem, 0.38fr) 1fr;
+    gap: 2rem 2.5rem;
+    align-items: start;
+    padding: var(--tb-pad);
+    background: rgba(10, 10, 12, 0.68);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+  }
+
+  .tb--split .tb__header {
+    padding-right: 0.5rem;
+    border-right: 2px solid var(--rhodes-red);
+  }
+
+  .tb--split .tb__title {
+    font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+    color: var(--rhodes-text);
+  }
+
+  @media (max-width: 640px) {
+    .tb--split {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .tb--split .tb__header {
+      padding-right: 0;
+      padding-bottom: 0.85rem;
+      border-right: none;
+      border-bottom: 2px solid var(--rhodes-red);
+    }
+  }
+</style>
