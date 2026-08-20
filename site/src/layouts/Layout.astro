@@ -6,14 +6,15 @@ import { withBase } from '../utils/url';
 import '../styles/global.css';
 
 interface Props {
-  title?: string;
+  /** Page name. Rendered as `PEROVSAT - {title}`. */
+  title: string;
   description?: string;
   starfield?: boolean;
   contentWidth?: 'default' | 'wide';
 }
 
 const {
-  title = 'PEROVSAT',
+  title,
   description = 'Perovskite Solar Cell CubeSat Mission — Rhodes College',
   starfield = false,
   contentWidth = 'default',
@@ -26,7 +27,7 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <title>{title}</title>
+    <title>PEROVSAT - {title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

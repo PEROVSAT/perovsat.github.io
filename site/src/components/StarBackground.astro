@@ -1,23 +1,40 @@
 ---
 /**
- * Procedural starfield. Fixed behind page content; layers parallax on scroll
- * so stars drift slower than the sections above them.
+ * Homepage space backdrop: a fixed starfield plus an Earth globe that
+ * sits in the document (out of flow) so it never affects layout height.
  */
+import { withBase } from '../utils/url';
 ---
 
-<div class="starfield" aria-hidden="true">
-  <canvas class="starfield__canvas"></canvas>
-  <div class="starfield__vignette"></div>
+<div class="space-bg" aria-hidden="true">
+  <div class="starfield">
+    <canvas class="starfield__canvas"></canvas>
+    <div class="starfield__vignette"></div>
+  </div>
+
+  <img
+    class="starfield__earth"
+    src={withBase('assets/EarthProjection.png')}
+    alt=""
+    width="1200"
+    height="1200"
+    fetchpriority="high"
+    decoding="async"
+  />
 </div>
 
 <style>
+  .space-bg {
+    position: relative;
+    z-index: 0;
+    pointer-events: none;
+  }
+
   .starfield,
   .starfield__canvas,
   .starfield__vignette {
     position: fixed;
     inset: 0;
-    pointer-events: none;
-    z-index: 0;
   }
 
   .starfield__canvas {
@@ -32,6 +49,27 @@
       transparent 40%,
       rgba(0, 0, 0, 0.4) 100%
     );
+  }
+
+  .starfield__earth {
+    position: absolute;
+    top: 9.5rem;
+    right: -6%;
+    display: block;
+    width: min(880px, 72vw);
+    height: auto;
+    -webkit-mask-image: radial-gradient(closest-side, #000 97%, transparent 100%);
+    mask-image: radial-gradient(closest-side, #000 97%, transparent 100%);
+  }
+
+  @media (max-width: 800px) {
+    .starfield__earth {
+      right: 50%;
+      top: 7.5rem;
+      width: min(560px, 110vw);
+      transform: translateX(50%);
+      opacity: 0.42;
+    }
   }
 </style>
 
@@ -115,83 +153,77 @@
   }
 
   const canvas = document.querySelector<HTMLCanvasElement>('.starfield__canvas');
-  if (!canvas) {
-    // Starfield is optional decoration; nothing to do if the node is missing.
-  } else {
-    const ctx = canvas.getContext('2d', { alpha: false });
-    if (!ctx) {
-      // Canvas 2D unavailable; keep the page's solid background.
-    } else {
-      let layers: Layer[] = [];
-      let tileHeight = 1;
-      let width = 0;
-      let height = 0;
-      let ticking = false;
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ctx = canvas?.getContext('2d', { alpha: false });
+  if (canvas && ctx) {
+    let layers: Layer[] = [];
+    let tileHeight = 1;
+    let width = 0;
+    let height = 0;
+    let ticking = false;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      function resize() {
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        width = window.innerWidth;
-        height = window.innerHeight;
-        tileHeight = height * TILE_VH;
-        canvas.width = Math.floor(width * dpr);
-        canvas.height = Math.floor(height * dpr);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      tileHeight = height * TILE_VH;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-        layers = LAYERS.map((spec, i) => ({
-          parallax: reduceMotion ? 0 : spec.parallax,
-          stars: generateLayer(SEED + i * 9973, spec.count, spec.size, spec.alpha, spec.glow),
-        }));
-        draw();
-      }
+      layers = LAYERS.map((spec, i) => ({
+        parallax: reduceMotion ? 0 : spec.parallax,
+        stars: generateLayer(SEED + i * 9973, spec.count, spec.size, spec.alpha, spec.glow),
+      }));
+      draw();
+    }
 
-      function draw() {
-        const scrollY = reduceMotion ? 0 : window.scrollY || 0;
-        ctx.fillStyle = '#03040a';
-        ctx.fillRect(0, 0, width, height);
+    function draw() {
+      const scrollY = reduceMotion ? 0 : window.scrollY || 0;
+      ctx.fillStyle = '#03040a';
+      ctx.fillRect(0, 0, width, height);
 
-        for (const layer of layers) {
-          const offset = scrollY * layer.parallax;
-          for (const star of layer.stars) {
-            let y = (star.y * tileHeight - offset) % tileHeight;
-            if (y < 0) y += tileHeight;
+      for (const layer of layers) {
+        const offset = scrollY * layer.parallax;
+        for (const star of layer.stars) {
+          let y = (star.y * tileHeight - offset) % tileHeight;
+          if (y < 0) y += tileHeight;
 
-            const x = star.x * width;
-            for (const dy of [0, -tileHeight, tileHeight]) {
-              const ys = y + dy;
-              if (ys < -8 || ys > height + 8) continue;
+          const x = star.x * width;
+          for (const dy of [0, -tileHeight, tileHeight]) {
+            const ys = y + dy;
+            if (ys < -8 || ys > height + 8) continue;
 
-              if (star.glow > 0) {
-                const g = ctx.createRadialGradient(x, ys, 0, x, ys, star.glow);
-                g.addColorStop(0, `rgba(${star.r}, ${star.g}, ${star.b}, ${star.alpha * 0.35})`);
-                g.addColorStop(1, `rgba(${star.r}, ${star.g}, ${star.b}, 0)`);
-                ctx.fillStyle = g;
-                ctx.beginPath();
-                ctx.arc(x, ys, star.glow, 0, Math.PI * 2);
-                ctx.fill();
-              }
-
-              ctx.fillStyle = `rgba(${star.r}, ${star.g}, ${star.b}, ${star.alpha})`;
+            if (star.glow > 0) {
+              const g = ctx.createRadialGradient(x, ys, 0, x, ys, star.glow);
+              g.addColorStop(0, `rgba(${star.r}, ${star.g}, ${star.b}, ${star.alpha * 0.35})`);
+              g.addColorStop(1, `rgba(${star.r}, ${star.g}, ${star.b}, 0)`);
+              ctx.fillStyle = g;
               ctx.beginPath();
-              ctx.arc(x, ys, star.size, 0, Math.PI * 2);
+              ctx.arc(x, ys, star.glow, 0, Math.PI * 2);
               ctx.fill();
             }
+
+            ctx.fillStyle = `rgba(${star.r}, ${star.g}, ${star.b}, ${star.alpha})`;
+            ctx.beginPath();
+            ctx.arc(x, ys, star.size, 0, Math.PI * 2);
+            ctx.fill();
           }
         }
       }
-
-      function requestDraw() {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-          draw();
-          ticking = false;
-        });
-      }
-
-      resize();
-      window.addEventListener('scroll', requestDraw, { passive: true });
-      window.addEventListener('resize', resize);
     }
+
+    function requestDraw() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        draw();
+        ticking = false;
+      });
+    }
+
+    resize();
+    window.addEventListener('scroll', requestDraw, { passive: true });
+    window.addEventListener('resize', resize);
   }
 </script>

@@ -35,7 +35,7 @@ main {
 }
 
 main[data-width='wide'] {
-  width: min(1120px, 100%);
+  width: min(1240px, 100%);
 }
 
 a {
