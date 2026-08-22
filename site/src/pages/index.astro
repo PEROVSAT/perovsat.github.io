@@ -28,20 +28,28 @@ import { withBase } from '../utils/url';
     </section>
 
     <SatScrolly>
-      <TextBlock slot="rhodes" title="Built at Rhodes" eyebrow="Team">
-        <p>Made by the students and faculty of Rhodes College, augmenting the liberal arts with invaluable engineering experience</p>
+      <TextBlock slot="rhodes" variant="caption" title="Built at Rhodes" eyebrow="Team">
+        <p>A 1U CubeSat designed by students and faculty at Rhodes College — liberal arts, with real flight hardware on the table.</p>
       </TextBlock>
 
-      <TextBlock slot="perovskites" title="Perovskites" eyebrow="Science">
-        <p>Perovskites are an experimental type of solar cell that potentially offer high efficiency at low manufacturing costs compared to more traditional silicon cells. Our Perovskite cells are provided by the National Lab of the Rockies (formerly the National Renewable Energies Labratory)</p>
+      <TextBlock slot="perovskites" variant="caption" title="Why perovskites" eyebrow="Science">
+        <p>An experimental solar-cell chemistry that can be cheaper to make, and potentially more efficient, than the silicon cells spacecraft already fly.</p>
       </TextBlock>
 
-      <TextBlock slot="experiment" title="The experiment" eyebrow="Science">
-        <p>PEROVSAT aligns with Earth's magnetic fields to create two different illumination frequencies for its faces. The Z face experiences long expsosures infreqently, while the rotating -X face is hit with shorter bursts more frequently. Perovskite performance under these thermal stressors will advance our understanding of the material and open the possibility for its usage in future missions</p>
+      <TextBlock slot="source" variant="caption" title="From the National Lab of the Rockies" eyebrow="Partners">
+        <p>Our perovskite cells come from the National Lab of the Rockies (formerly NREL). PEROVSAT is how they leave the lab and see orbit.</p>
       </TextBlock>
 
-      <MissionTimeline slot="timeline" />
+      <TextBlock slot="experiment" variant="caption" title="Two ways to see the Sun" eyebrow="The experiment">
+        <p>PEROVSAT lines up with Earth’s magnetic field so two faces get very different light: long, infrequent soaks on Z, and short, frequent bursts on the rotating −X face.</p>
+      </TextBlock>
+
+      <TextBlock slot="payoff" variant="caption" title="What we learn" eyebrow="Why it matters">
+        <p>Those two thermal rhythms are the test. If perovskites hold up, they become a real option for future missions — not just a promising material on the ground.</p>
+      </TextBlock>
     </SatScrolly>
+
+    <MissionTimeline />
 
     <HomeCta />
   </div>

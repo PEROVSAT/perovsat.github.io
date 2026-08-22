@@ -91,7 +91,7 @@ function markerStyle(pt: Point) {
       <div class="scrolly__markers" aria-hidden="true">
         {PARTS.flatMap((part, n) =>
           part.targets.map((pt) => (
-            <span class="scrolly__marker" style={markerStyle(pt)}>{n + 1}</span>
+            <span class="scrolly__marker" style={markerStyle(pt)} data-part={part.id}>{n + 1}</span>
           ))
         )}
       </div>
@@ -106,20 +106,25 @@ function markerStyle(pt: Point) {
       <slot name="perovskites" />
     </div>
     <div class="scrolly__chapter">
+      <slot name="source" />
+    </div>
+    <div class="scrolly__chapter">
       <slot name="experiment" />
     </div>
-    <div class="scrolly__chapter scrolly__chapter--timeline">
-      <slot name="timeline" />
+    <div class="scrolly__chapter">
+      <slot name="payoff" />
     </div>
 
     <ol class="scrolly__parts">
       {PARTS.map((part, n) => (
-        <li class="callout">
-          <span class="callout__n" aria-hidden="true">{n + 1}</span>
-          <div class="callout__body">
-            <p class="callout__group">{part.group}</p>
-            <h3 class="callout__title">{n + 1}. {part.title}</h3>
-            <p class="callout__copy">{part.body}</p>
+        <li class="scrolly__chapter scrolly__chapter--part" data-part={part.id}>
+          <div class="callout">
+            <span class="callout__n" aria-hidden="true">{n + 1}</span>
+            <div class="callout__body">
+              <p class="callout__group">{part.group}</p>
+              <h3 class="callout__title">{part.title}</h3>
+              <p class="callout__copy">{part.body}</p>
+            </div>
           </div>
         </li>
       ))}
@@ -213,7 +218,7 @@ function markerStyle(pt: Point) {
     place-items: center;
     width: 1.35rem;
     height: 1.35rem;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(0.88);
     border-radius: 50%;
     background: var(--rhodes-red);
     color: #fff;
@@ -221,39 +226,35 @@ function markerStyle(pt: Point) {
     font-weight: 700;
     line-height: 1;
     box-shadow: 0 0 0 3px rgba(196, 2, 43, 0.28);
+    opacity: 0.4;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .scrolly__marker.is-active {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08);
   }
 
   .scrolly__chapter {
     display: flex;
     align-items: center;
-    min-height: 55vh;
-    padding: 2vh 0;
+    min-height: 78vh;
+    padding: 8vh 0;
   }
 
   .scrolly__chapter :global(.tb) {
     width: 100%;
-    max-width: 38rem;
-  }
-
-  .scrolly__chapter--timeline {
-    align-items: stretch;
-    min-height: 0;
-    padding: 6vh 0 8vh;
-  }
-
-  .scrolly__chapter--timeline :global(.tl) {
-    width: 100%;
-    max-width: none;
+    max-width: 34rem;
   }
 
   .scrolly__parts {
     margin: 0;
-    padding: 2rem 0 0.5rem;
+    padding: 0 0 12vh;
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    max-width: 38rem;
+  }
+
+  .scrolly__chapter--part {
+    max-width: 34rem;
   }
 
   .callout {
@@ -261,7 +262,7 @@ function markerStyle(pt: Point) {
     grid-template-columns: 1.7rem minmax(0, 1fr);
     gap: 0.85rem;
     align-items: start;
-    padding: 0.85rem 1rem 0.9rem;
+    padding: 1rem 1.15rem 1.1rem;
     background: rgba(10, 10, 12, 0.45);
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
@@ -327,16 +328,11 @@ function markerStyle(pt: Point) {
     .scrolly__chapter {
       justify-content: center;
       align-items: flex-end;
-      min-height: 58vh;
-    }
-
-    .scrolly__chapter--timeline {
-      align-items: stretch;
-      min-height: 0;
+      min-height: 72vh;
     }
 
     .scrolly__chapter :global(.tb),
-    .scrolly__parts {
+    .scrolly__chapter--part {
       max-width: none;
     }
   }
@@ -349,11 +345,11 @@ function markerStyle(pt: Point) {
 
     .scrolly__chapter {
       min-height: 0;
-      padding: 1.25rem 0;
+      padding: 1.75rem 0;
     }
 
     .scrolly__parts {
-      padding: 1.5rem 0;
+      padding-bottom: 2rem;
     }
 
     .scrolly__markers {
@@ -375,9 +371,9 @@ function markerStyle(pt: Point) {
     const cropSize = Number(root.dataset.cropSize ?? 1080);
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /** Unfold finishes as the last narrative chapter leaves; parts follow immediately. */
-    const UNFOLD_END = 0.86;
-    const CALLOUT_START = 0.88;
+    /** Unfold through the narrative beats; part callouts follow on the open satellite. */
+    const UNFOLD_END = 0.54;
+    const CALLOUT_START = 0.56;
 
     const frames: (HTMLImageElement | undefined)[] = new Array(frameCount);
     let drawn = -1;
@@ -444,11 +440,32 @@ function markerStyle(pt: Point) {
       return Math.round((progress / UNFOLD_END) * (frameCount - 1));
     }
 
+    const partChapters = Array.from(root.querySelectorAll<HTMLElement>('.scrolly__chapter[data-part]'));
+    const markers = Array.from(root.querySelectorAll<HTMLElement>('.scrolly__marker'));
+
+    function setActivePart(id: string | null) {
+      markers.forEach((marker) => {
+        marker.classList.toggle('is-active', Boolean(id) && marker.dataset.part === id);
+      });
+    }
+
+    function activePartId(): string | null {
+      const mid = window.innerHeight * 0.58;
+      let current: string | null = null;
+      for (const chapter of partChapters) {
+        const rect = chapter.getBoundingClientRect();
+        if (rect.top <= mid) current = chapter.dataset.part ?? null;
+      }
+      return current;
+    }
+
     function update() {
       const progress = reduceMotion ? 1 : pinProgress();
       const index = reduceMotion ? frameCount - 1 : frameForProgress(progress);
       draw(index);
-      root.classList.toggle('is-callouts', reduceMotion || progress >= CALLOUT_START);
+      const inCallouts = reduceMotion || progress >= CALLOUT_START;
+      root.classList.toggle('is-callouts', inCallouts);
+      setActivePart(inCallouts ? activePartId() : null);
     }
 
     function onScroll() {

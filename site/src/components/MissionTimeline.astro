@@ -1,150 +1,196 @@
 ---
 import { withBase } from '../utils/url';
+import TimelinePost from './TimelinePost.astro';
+import TimelineTrack from './TimelineTrack.astro';
+import type { StageStatus } from './TimelineStage.astro';
 
-type Status = 'complete' | 'current' | 'upcoming';
+interface TimelineImage {
+  src: string;
+  alt: string;
+}
+
+interface MissionEvent {
+  id: string;
+  title: string;
+  when: string;
+  whenShort?: string;
+  location?: string;
+  description?: string;
+  images?: TimelineImage[];
+  href?: string;
+}
 
 interface Stage {
   id: string;
   title: string;
-  dates: string;
-  status: Status;
-  description: string;
-  images?: { src: string; alt: string }[];
+  when: string;
+  status: StageStatus;
+  description?: string;
+  images?: TimelineImage[];
   href?: string;
+  events?: MissionEvent[];
 }
 
 const STAGES: Stage[] = [
   {
     id: 'mission-design',
     title: 'Mission Design',
-    dates: 'Summer 2026',
-    status: 'current',
-    description:
-      'Requirements, payload architecture, and the two-illumination experiment are being locked in before engineering-model hardware is built. ',
-    images: [
-      { src: withBase('assets/timeline_photos/payloadDesign.png'), alt: 'PDR - payload design' },
-      { src: withBase('assets/timeline_photos/missionGoal.png'), alt: 'PDR - Mission Goal' },
-      { src: withBase('assets/timeline_photos/FSWoverview.png'), alt: 'PDR - Flight Software Design' },
-      { src: withBase('MissionPatchV1.png'), alt: 'PEROVSAT mission patch' },
-      { src: withBase('assets/PEROVSAT_Render/0001.webp'), alt: 'PEROVSAT CubeSat render' },
+    when: 'Apr – Aug 2026',
+    status: 'complete',
+    description: 'TODO',
+    events: [
+      {
+        id: 'pdr',
+        title: 'Preliminary Design Review',
+        when: 'Jul 22, 2026',
+        whenShort: 'Jul 22',
+        images: [
+          { src: withBase('assets/timeline_photos/payloadDesign.png'), alt: 'PDR — payload design' },
+          { src: withBase('assets/timeline_photos/missionGoal.png'), alt: 'PDR — mission goal' },
+          { src: withBase('assets/timeline_photos/FSWoverview.png'), alt: 'PDR — flight software design' },
+        ],
+      },
+      {
+        id: 'smallsat',
+        title: 'SmallSat Conference',
+        when: 'Aug 23, 2026',
+        whenShort: 'Aug 23',
+        location: 'Salt Lake City, UT',
+        description: '',
+        images: [
+        ],
+      },
     ],
   },
   {
     id: 'em-integration',
     title: 'EM System Integration',
-    dates: 'Fall 2026 – Spring 2027',
-    status: 'upcoming',
-    description:
-      'Assemble the engineering model, bring up the flight computer and payload electronics, and verify the experiment faces against the bus.',
+    when: 'Sep 2026 – May 2027',
+    status: 'current',
   },
   {
     id: 'fm-integration',
     title: 'FM System Integration',
-    dates: 'Summer 2027',
+    when: 'Jun – Aug 2027',
     status: 'upcoming',
-    description:
-      'Build and integrate the flight-model spacecraft, replacing engineering-model hardware with flight-qualified parts.',
   },
   {
     id: 'testing',
     title: 'Testing and Iterating',
-    dates: 'Fall 2027 – Spring 2028',
+    when: 'Sep 2027 – May 2028',
     status: 'upcoming',
-    description:
-      'Environmental testing, anomaly resolution, and design updates as we shake out the flight article.',
   },
   {
     id: 'frr',
     title: 'Flight-Readiness Review',
-    dates: 'Summer 2028',
+    when: 'Jun – Aug 2028',
     status: 'upcoming',
-    description:
-      'Formal review that PEROVSAT is ready to ship for launch integration.',
   },
   {
     id: 'launch',
     title: 'Launch',
-    dates: 'Fall 2029',
+    when: 'Sep – Nov 2029',
     status: 'upcoming',
-    description:
-      'Rideshare to orbit and the start of on-orbit operations.',
   },
 ];
 
-const STATUS_LABEL: Record<Status, string> = {
-  complete: 'Complete',
-  current: 'In progress',
-  upcoming: 'Upcoming',
-};
+const FUTURE_GREYS = ['#7d7d7d', '#6a6a6a', '#585858', '#474747', '#3a3a3a'];
+const V_SPAN_BASE = 5.6;
+const V_SPAN_EVENT = 4.75;
+
+function compactSpan(eventCount: number) {
+  if (eventCount === 0) return V_SPAN_BASE;
+  return Math.max(V_SPAN_BASE, 2.8 + eventCount * V_SPAN_EVENT);
+}
+
+function slotAt(index: number, count: number) {
+  if (count <= 1) return 0.5;
+  return (index + 1) / (count + 1);
+}
+
+function arrowFill(stage: Stage, upcomingIndex: number) {
+  if (stage.status === 'complete') return 'var(--rhodes-green)';
+  if (stage.status === 'current') return 'var(--rhodes-red)';
+  return FUTURE_GREYS[Math.min(upcomingIndex, FUTURE_GREYS.length - 1)];
+}
+
+let upcomingIndex = 0;
+const view = STAGES.map((stage, i) => {
+  const fill = arrowFill(stage, stage.status === 'upcoming' ? upcomingIndex++ : 0);
+  const events = stage.events ?? [];
+  return {
+    ...stage,
+    fill,
+    span: `${compactSpan(events.length)}rem`,
+    z: STAGES.length - i,
+    events: events.map((event, index) => ({
+      ...event,
+      whenShort: event.whenShort ?? event.when,
+      along: slotAt(index, events.length),
+      index,
+    })),
+  };
+});
+
+const posts = view.flatMap((stage) => [
+  {
+    id: stage.id,
+    kind: 'stage' as const,
+    title: stage.title,
+    when: stage.when,
+    status: stage.status as StageStatus | undefined,
+    location: undefined as string | undefined,
+    description: stage.description,
+    images: stage.images,
+    href: stage.href,
+    fill: stage.fill,
+  },
+  ...stage.events.map((event) => ({
+    id: event.id,
+    kind: 'event' as const,
+    title: event.title,
+    when: event.when,
+    status: undefined as StageStatus | undefined,
+    location: event.location,
+    description: event.description,
+    images: event.images,
+    href: event.href,
+    fill: stage.fill,
+  })),
+]);
+
+const INITIAL_ID = STAGES.find((stage) => stage.status === 'current')?.id ?? STAGES[0].id;
 ---
 
-<section class="tl" aria-labelledby="tl-title" data-mission-timeline>
+<section class="tl" aria-labelledby="tl-title" data-mission-timeline data-initial={INITIAL_ID}>
   <header class="tl__header">
-    <p class="tl__eyebrow">Mission</p>
     <h2 class="tl__title" id="tl-title">Timeline</h2>
   </header>
 
-  <ol class="tl__stages">
-    {STAGES.map((stage) => {
-      const expanded = stage.status !== 'upcoming';
-      return (
-        <li class:list={['tl__stage', `tl__stage--${stage.status}`]} data-stage={stage.id}>
-          <div class="tl__node" aria-hidden="true"></div>
-          <div class="tl__card">
-            <div class="tl__meta">
-              <p class="tl__status">{STATUS_LABEL[stage.status]}</p>
-              <p class="tl__dates">{stage.dates}</p>
-            </div>
-            <h3 class="tl__name">{stage.title}</h3>
-            <p class="tl__copy">{stage.description}</p>
+  <div class="tl__h">
+    <TimelineTrack orientation="horizontal" stages={view} activeId={INITIAL_ID} />
+  </div>
+  <div class="tl__v">
+    <TimelineTrack orientation="vertical" stages={view} activeId={INITIAL_ID} />
+  </div>
 
-            {expanded && stage.images && stage.images.length > 0 && (
-              <div class="wheel" data-wheel>
-                <div class="wheel__frame" data-wheel-open>
-                  {stage.images.map((image, i) => (
-                    <img
-                      class:list={['wheel__img', i === 0 && 'is-active']}
-                      src={image.src}
-                      alt={image.alt}
-                      width="640"
-                      height="400"
-                      data-wheel-img
-                    />
-                  ))}
-                </div>
-                {stage.images.length > 1 && (
-                  <div class="wheel__controls">
-                    <button type="button" class="wheel__nav" data-wheel-prev aria-label="Previous photo">
-                      ‹
-                    </button>
-                    <div class="wheel__dots" role="tablist" aria-label="Photos">
-                      {stage.images.map((_, i) => (
-                        <button
-                          type="button"
-                          class:list={['wheel__dot', i === 0 && 'is-active']}
-                          data-wheel-dot
-                          aria-label={`Photo ${i + 1}`}
-                        />
-                      ))}
-                    </div>
-                    <button type="button" class="wheel__nav" data-wheel-next aria-label="Next photo">
-                      ›
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {expanded && stage.href && (
-              <a class="tl__link" href={stage.href}>
-                Read the full update
-              </a>
-            )}
-          </div>
-        </li>
-      );
-    })}
-  </ol>
+  <div class="tl__blog" data-blog aria-live="polite">
+    {posts.map((post) => (
+      <TimelinePost
+        id={post.id}
+        kind={post.kind}
+        title={post.title}
+        when={post.when}
+        status={post.status}
+        location={post.location}
+        description={post.description}
+        images={post.images}
+        href={post.href}
+        fill={post.fill}
+        active={post.id === INITIAL_ID}
+      />
+    ))}
+  </div>
 
   <dialog class="lightbox" data-lightbox aria-label="Enlarged timeline photo">
     <img class="lightbox__img" alt="" data-lightbox-img />
@@ -156,257 +202,34 @@ const STATUS_LABEL: Record<Status, string> = {
 
 <style>
   .tl {
+    --tip: 1.45rem;
+    --gap: 5px;
+    --arrow-w: 4.4rem;
+    --arrow-h: 3.35rem;
     width: 100%;
+    margin: 4.5rem 0 0;
+    overflow: visible;
   }
 
   .tl__header {
-    margin: 0 0 1.75rem;
-    padding-bottom: 0.85rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .tl__eyebrow {
-    margin: 0 0 0.35rem;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--rhodes-red);
+    margin: 0 0 1.5rem;
   }
 
   .tl__title {
     margin: 0;
-    font-size: 1.15rem;
-    font-weight: 600;
+    font-size: clamp(1.9rem, 4.2vw, 2.75rem);
+    font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--rhodes-text);
   }
 
-  .tl__stages {
-    --rail: 0.7rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
-  .tl__stage {
-    position: relative;
-    display: grid;
-    grid-template-columns: var(--rail) minmax(0, 1fr);
-    gap: 1.1rem;
-    padding: 0 0 1.65rem;
-  }
-
-  .tl__stage:last-child {
-    padding-bottom: 0;
-  }
-
-  .tl__stage::before {
-    content: '';
-    position: absolute;
-    left: calc(var(--rail) / 2);
-    top: 0.55rem;
-    bottom: -0.35rem;
-    width: 1px;
-    background: rgba(255, 255, 255, 0.12);
-    transform: translateX(-50%);
-  }
-
-  .tl__stage:last-child::before {
+  .tl__v {
     display: none;
   }
 
-  .tl__node {
-    position: relative;
-    z-index: 1;
-    width: var(--rail);
-    height: var(--rail);
+  .tl__blog {
     margin-top: 0.45rem;
-    border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.28);
-    background: rgba(10, 10, 12, 0.9);
-  }
-
-  .tl__stage--complete .tl__node,
-  .tl__stage--current .tl__node {
-    border-color: var(--rhodes-red);
-    background: var(--rhodes-red);
-    box-shadow: 0 0 0 3px rgba(196, 2, 43, 0.22);
-  }
-
-  .tl__card {
-    min-width: 0;
-  }
-
-  .tl__stage--complete .tl__card,
-  .tl__stage--current .tl__card {
-    padding: 1.1rem 1.35rem 1.2rem;
-    background-color: rgba(10, 10, 12, 0.52);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background-image:
-      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
-      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
-      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
-      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
-      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
-      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
-      linear-gradient(var(--rhodes-red), var(--rhodes-red)),
-      linear-gradient(var(--rhodes-red), var(--rhodes-red));
-    background-size:
-      18px 2px, 2px 18px,
-      18px 2px, 2px 18px,
-      18px 2px, 2px 18px,
-      18px 2px, 2px 18px;
-    background-position:
-      left top, left top,
-      right top, right top,
-      left bottom, left bottom,
-      right bottom, right bottom;
-    background-repeat: no-repeat;
-  }
-
-  .tl__meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0.35rem 1rem;
-    margin-bottom: 0.3rem;
-  }
-
-  .tl__status {
-    margin: 0;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--rhodes-text-muted);
-  }
-
-  .tl__stage--current .tl__status,
-  .tl__stage--complete .tl__status {
-    color: var(--rhodes-red);
-  }
-
-  .tl__dates {
-    margin: 0;
-    font-size: 0.82rem;
-    letter-spacing: 0.04em;
-    color: var(--rhodes-text-muted);
-  }
-
-  .tl__name {
-    margin: 0 0 0.4rem;
-    font-size: 1.05rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    color: var(--rhodes-text);
-  }
-
-  .tl__copy {
-    margin: 0;
-    color: var(--rhodes-text-muted);
-    font-size: 0.95rem;
-    line-height: 1.55;
-  }
-
-  .tl__stage--upcoming .tl__name {
-    font-size: 0.98rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .tl__stage--upcoming .tl__copy {
-    font-size: 0.9rem;
-  }
-
-  .tl__link {
-    display: inline-block;
-    margin-top: 0.9rem;
-    font-size: 0.88rem;
-    letter-spacing: 0.04em;
-    color: var(--rhodes-text);
-    border-bottom: 1px solid rgba(196, 2, 43, 0.7);
-  }
-
-  .tl__link:hover {
-    color: var(--rhodes-red);
-  }
-
-  .wheel {
-    margin-top: 1rem;
-  }
-
-  .wheel__frame {
-    position: relative;
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-    background: rgba(0, 0, 0, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    cursor: zoom-in;
-  }
-
-  .wheel__img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .wheel__img.is-active {
-    opacity: 1;
-  }
-
-  .wheel__controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    margin-top: 0.65rem;
-  }
-
-  .wheel__nav {
-    width: 2rem;
-    height: 2rem;
-    padding: 0;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    background: rgba(10, 10, 12, 0.6);
-    color: var(--rhodes-text);
-    font-size: 1.25rem;
-    line-height: 1;
-    cursor: pointer;
-  }
-
-  .wheel__nav:hover {
-    border-color: var(--rhodes-red);
-    color: var(--rhodes-red);
-  }
-
-  .wheel__dots {
-    display: flex;
-    gap: 0.4rem;
-  }
-
-  .wheel__dot {
-    width: 7px;
-    height: 7px;
-    padding: 0;
-    border: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.28);
-    cursor: pointer;
-  }
-
-  .wheel__dot.is-active {
-    background: var(--rhodes-red);
   }
 
   .lightbox {
@@ -448,9 +271,203 @@ const STATUS_LABEL: Record<Status, string> = {
     border-color: var(--rhodes-red);
   }
 
+  @media (max-width: 800px) {
+    .tl {
+      --arrow-w: 3.15rem;
+      --tip: 1.2rem;
+      margin-top: 3rem;
+    }
+
+    .tl__h {
+      display: none;
+    }
+
+    .tl__v {
+      display: block;
+    }
+
+    .tl__blog {
+      margin-top: 0.7rem;
+    }
+  }
 </style>
 
 <script>
+  const root = document.querySelector<HTMLElement>('[data-mission-timeline]');
+  if (root) {
+    const posts = Array.from(root.querySelectorAll<HTMLElement>('[data-post]'));
+    const triggers = Array.from(root.querySelectorAll<HTMLElement>('[data-open]'));
+    const stages = Array.from(root.querySelectorAll<HTMLElement>('[data-stage]'));
+    const ids = new Set(posts.map((post) => post.dataset.post));
+    const initial = root.dataset.initial ?? posts[0]?.dataset.post;
+
+    function select(id: string, scroll = false) {
+      posts.forEach((post) => {
+        const on = post.dataset.post === id;
+        post.hidden = !on;
+        post.classList.toggle('is-active', on);
+        if (on && scroll) {
+          post.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+
+      triggers.forEach((trigger) => {
+        const on = trigger.dataset.open === id;
+        trigger.classList.toggle('is-active', on);
+        trigger.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+
+      stages.forEach((stage) => {
+        const owned = Array.from(stage.querySelectorAll<HTMLElement>('[data-open]')).some(
+          (trigger) => trigger.dataset.open === id,
+        );
+        stage.classList.toggle('is-lit', owned);
+      });
+    }
+
+    triggers.forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        const id = trigger.dataset.open;
+        if (!id) return;
+        select(id, true);
+      });
+    });
+
+    const hashId = decodeURIComponent(location.hash.replace(/^#/, ''));
+    select(ids.has(hashId) ? hashId : initial ?? '', false);
+
+    function intersects(a: DOMRect, b: DOMRect, gap: number) {
+      return !(
+        a.right + gap <= b.left ||
+        a.left >= b.right + gap ||
+        a.bottom + gap <= b.top ||
+        a.top >= b.bottom + gap
+      );
+    }
+
+    function applyBox(el: HTMLElement, x: number, y: number) {
+      el.style.setProperty('--box-x', `${x}px`);
+      el.style.setProperty('--box-y', `${y}px`);
+      const len = Math.max(Math.hypot(x, y), 8);
+      el.style.setProperty('--stem-len', `${len}px`);
+      el.style.setProperty('--stem-angle', `${Math.atan2(-x, y)}rad`);
+    }
+
+    function layoutTrack(track: HTMLElement) {
+      const vertical = track.dataset.track === 'vertical';
+      track.querySelectorAll<HTMLElement>('[data-stage]').forEach((stage) => {
+        const events = Array.from(stage.querySelectorAll<HTMLElement>('[data-event]'));
+        if (events.length === 0) return;
+
+        const gap = 10;
+        const baseX = vertical ? 18 : 0;
+        const baseY = vertical ? 0 : 11;
+        const stageRect = stage.getBoundingClientRect();
+        const spine = stage.querySelector('.stage__spine');
+
+        events.forEach((event) => {
+          event.style.removeProperty('top');
+          event.style.setProperty('--nudge', '0px');
+          applyBox(event, baseX, baseY);
+        });
+
+        if (vertical && spine instanceof HTMLElement) {
+          const rootSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+          const tipRaw = getComputedStyle(stage).getPropertyValue('--tip').trim();
+          const tip = tipRaw.endsWith('rem')
+            ? Number.parseFloat(tipRaw) * rootSize
+            : Number.parseFloat(tipRaw) || 20;
+          const stackGap = 14;
+
+          let cursor = tip + 10;
+          events.forEach((event) => {
+            applyBox(event, baseX, 0);
+            const box = event.querySelector('[data-event-box]');
+            if (box instanceof HTMLElement) {
+              const remain = stageRect.right - event.getBoundingClientRect().left - baseX - 4;
+              box.style.maxWidth = `${Math.max(96, remain)}px`;
+            }
+            const height = box instanceof HTMLElement ? box.getBoundingClientRect().height : 48;
+            cursor += height / 2;
+            event.style.top = `${cursor}px`;
+            applyBox(event, baseX, 0);
+            cursor += height / 2 + stackGap;
+          });
+
+          const needed = Math.round(cursor + tip);
+          const next = `${Math.max(needed, Math.round(tip * 2 + 48))}px`;
+          if (spine.style.minHeight !== next) spine.style.minHeight = next;
+          return;
+        }
+
+        events.forEach((event, i) => {
+          let x = baseX;
+          let y = baseY;
+          let guard = 0;
+          while (guard++ < 20) {
+            applyBox(event, x, y);
+            const box = event.querySelector('[data-event-box]');
+            if (!(box instanceof HTMLElement)) break;
+            const rect = box.getBoundingClientRect();
+            const hit = events.slice(0, i).some((other) => {
+              const otherBox = other.querySelector('[data-event-box]');
+              return otherBox instanceof HTMLElement && intersects(rect, otherBox.getBoundingClientRect(), gap);
+            });
+            if (!hit) break;
+
+            const overlapRight = events.slice(0, i).reduce((max, other) => {
+              const otherBox = other.querySelector('[data-event-box]');
+              if (!(otherBox instanceof HTMLElement)) return max;
+              const otherRect = otherBox.getBoundingClientRect();
+              if (!intersects(rect, otherRect, gap)) return max;
+              return Math.max(max, otherRect.right + gap - rect.left);
+            }, 0);
+            const nextX = x + overlapRight;
+            if (overlapRight > 1 && Math.abs(nextX) <= 72) {
+              x = nextX;
+            } else {
+              x = baseX;
+              y += rect.height + gap;
+            }
+          }
+          applyBox(event, x, y);
+        });
+
+        if (spine instanceof HTMLElement) {
+          const spineBottom = spine.getBoundingClientRect().bottom;
+          let extra = 36;
+          events.forEach((event) => {
+            const box = event.querySelector('[data-event-box]');
+            if (!(box instanceof HTMLElement)) return;
+            extra = Math.max(extra, box.getBoundingClientRect().bottom - spineBottom + 10);
+          });
+          const next = `${Math.round(extra)}px`;
+          if (stage.style.paddingBottom !== next) stage.style.paddingBottom = next;
+        }
+      });
+    }
+
+    function layoutVisible() {
+      root.querySelectorAll<HTMLElement>('[data-track]').forEach((track) => {
+        if (track.offsetWidth === 0 && track.offsetHeight === 0) return;
+        layoutTrack(track);
+      });
+    }
+
+    let frame = 0;
+    function scheduleLayout() {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        layoutVisible();
+      });
+    }
+    layoutVisible();
+    document.fonts?.ready.then(scheduleLayout);
+    window.addEventListener('resize', scheduleLayout);
+    new ResizeObserver(scheduleLayout).observe(root);
+  }
+
   const lightbox = document.querySelector<HTMLDialogElement>('[data-lightbox]');
   const lightboxImg = document.querySelector<HTMLImageElement>('[data-lightbox-img]');
 
@@ -470,9 +487,20 @@ const STATUS_LABEL: Record<Status, string> = {
       dots.forEach((dot, i) => dot.classList.toggle('is-active', i === index));
     }
 
-    prev?.addEventListener('click', () => show(index - 1));
-    next?.addEventListener('click', () => show(index + 1));
-    dots.forEach((dot, i) => dot.addEventListener('click', () => show(i)));
+    prev?.addEventListener('click', (event) => {
+      event.stopPropagation();
+      show(index - 1);
+    });
+    next?.addEventListener('click', (event) => {
+      event.stopPropagation();
+      show(index + 1);
+    });
+    dots.forEach((dot, i) =>
+      dot.addEventListener('click', (event) => {
+        event.stopPropagation();
+        show(i);
+      }),
+    );
 
     open?.addEventListener('click', () => {
       const current = images[index];

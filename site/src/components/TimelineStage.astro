@@ -1,0 +1,312 @@
+---
+import TimelineEvent from './TimelineEvent.astro';
+
+export type StageStatus = 'complete' | 'current' | 'upcoming';
+
+export const STATUS_LABEL: Record<StageStatus, string> = {
+  complete: 'Complete',
+  current: 'In progress',
+  upcoming: 'Upcoming',
+};
+
+interface StageEvent {
+  id: string;
+  title: string;
+  when: string;
+  whenShort?: string;
+  along: number;
+  index: number;
+}
+
+interface Props {
+  id: string;
+  title: string;
+  when: string;
+  status: StageStatus;
+  orientation: 'horizontal' | 'vertical';
+  fill: string;
+  span: string;
+  z: number;
+  events?: StageEvent[];
+  activeId?: string;
+}
+
+const { id, title, when, status, orientation, fill, span, z, events = [], activeId } =
+  Astro.props;
+const axis = orientation === 'horizontal' ? 'h' : 'v';
+const stageActive = activeId === id;
+const lit = stageActive || events.some((event) => event.id === activeId);
+---
+
+<li
+  class:list={['stage', `stage--${axis}`, `stage--${status}`, lit && 'is-lit']}
+  data-stage={id}
+  style={`--span: ${span}; --fill: ${fill}; --z: ${z};`}
+>
+  <button
+    class:list={['stage__head', stageActive && 'is-active']}
+    type="button"
+    data-open={id}
+    aria-controls={id}
+    aria-pressed={stageActive ? 'true' : 'false'}
+  >
+    <span class="stage__eyebrow">{STATUS_LABEL[status]}</span>
+    <span class="stage__title">{title}</span>
+    <span class="stage__when">{when}</span>
+  </button>
+
+  <div class="stage__spine">
+    <button
+      class:list={['stage__arrow', stageActive && 'is-active']}
+      type="button"
+      data-open={id}
+      aria-controls={id}
+      aria-pressed={stageActive ? 'true' : 'false'}
+      aria-label={`${title}, ${STATUS_LABEL[status]}`}
+    ></button>
+    {events.map((event) => (
+      <TimelineEvent
+        id={event.id}
+        title={event.title}
+        when={event.whenShort ?? event.when}
+        along={event.along}
+        index={event.index}
+        orientation={orientation}
+        active={activeId === event.id}
+      />
+    ))}
+  </div>
+</li>
+
+<style>
+  .stage {
+    position: relative;
+    z-index: var(--z);
+    min-width: 0;
+    list-style: none;
+  }
+
+  .stage--h {
+    flex: 1 1 11rem;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 4.75rem;
+  }
+
+  .stage--v {
+    display: grid;
+    grid-template-columns: minmax(5.6rem, 8.75rem) var(--arrow-w) minmax(0, 1fr);
+    column-gap: 0.65rem;
+    min-height: var(--span);
+    overflow: visible;
+  }
+
+  .stage--v + .stage--v {
+    margin-top: calc(var(--tip) * -1 + var(--gap));
+  }
+
+  .stage--h + .stage--h {
+    margin-left: calc(var(--tip) * -1 + var(--gap));
+  }
+
+  .stage__head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.18rem;
+    width: 100%;
+    margin: 0 0 0.7rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .stage--h .stage__head {
+    width: calc(100% - var(--tip) + var(--gap));
+    height: 5.7rem;
+    min-height: 5.7rem;
+    margin-bottom: 0.55rem;
+    padding-right: 0.35rem;
+    justify-content: flex-end;
+  }
+
+  .stage--h:last-child .stage__head {
+    width: 100%;
+  }
+
+  .stage--v .stage__head {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    align-items: flex-end;
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: calc(var(--tip) * 0.45) 0 0;
+    text-align: right;
+  }
+
+  .stage__head:focus-visible {
+    outline: 1px solid var(--rhodes-red);
+    outline-offset: 4px;
+  }
+
+  .stage__eyebrow {
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rhodes-text-muted);
+  }
+
+  .stage--complete .stage__eyebrow {
+    color: #8fbc8f;
+  }
+
+  .stage--current .stage__eyebrow {
+    color: var(--rhodes-red);
+  }
+
+  .stage__title {
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    color: var(--rhodes-text);
+    text-wrap: balance;
+  }
+
+  .stage--h .stage__title {
+    font-size: 0.84rem;
+    letter-spacing: 0.02em;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+
+  .stage--v .stage__title {
+    font-size: 0.88rem;
+    letter-spacing: 0.02em;
+  }
+
+  .stage__head:hover .stage__title,
+  .stage__head.is-active .stage__title,
+  .stage.is-lit .stage__title {
+    color: #fff;
+  }
+
+  .stage__head.is-active .stage__title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+  }
+
+  .stage__when {
+    font-size: 0.74rem;
+    letter-spacing: 0.03em;
+    color: var(--rhodes-text-muted);
+  }
+
+  .stage--h .stage__when {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .stage__spine {
+    position: relative;
+    overflow: visible;
+  }
+
+  .stage--h .stage__spine {
+    height: var(--arrow-h);
+    flex-shrink: 0;
+  }
+
+  .stage--v .stage__spine {
+    grid-column: 2;
+    grid-row: 1;
+    width: var(--arrow-w);
+    height: 100%;
+    min-height: var(--span);
+  }
+
+  .stage__arrow {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 32%),
+      var(--fill);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    box-shadow: none;
+    transition: filter 0.15s ease;
+  }
+
+  .stage--h .stage__arrow {
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.16), transparent 28%),
+      var(--fill);
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--tip)) 0,
+      100% 50%,
+      calc(100% - var(--tip)) 100%,
+      0 100%,
+      var(--tip) 50%
+    );
+  }
+
+  .stage--h:first-child .stage__arrow {
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--tip)) 0,
+      100% 50%,
+      calc(100% - var(--tip)) 100%,
+      0 100%
+    );
+  }
+
+  .stage--v .stage__arrow {
+    clip-path: polygon(
+      0 0,
+      50% var(--tip),
+      100% 0,
+      100% calc(100% - var(--tip)),
+      50% 100%,
+      0 calc(100% - var(--tip))
+    );
+  }
+
+  .stage--v:first-child .stage__arrow {
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - var(--tip)),
+      50% 100%,
+      0 calc(100% - var(--tip))
+    );
+  }
+
+  .stage__arrow:hover,
+  .stage__arrow.is-active {
+    filter: brightness(1.18);
+  }
+
+  .stage__arrow:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: -3px;
+  }
+</style>

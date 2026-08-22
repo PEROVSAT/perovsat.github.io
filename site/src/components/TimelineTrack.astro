@@ -1,0 +1,76 @@
+---
+import TimelineStage from './TimelineStage.astro';
+import type { StageStatus } from './TimelineStage.astro';
+
+interface StageEvent {
+  id: string;
+  title: string;
+  when: string;
+  whenShort?: string;
+  along: number;
+  index: number;
+}
+
+interface TrackStage {
+  id: string;
+  title: string;
+  when: string;
+  status: StageStatus;
+  fill: string;
+  span: string;
+  z: number;
+  events: StageEvent[];
+}
+
+interface Props {
+  orientation: 'horizontal' | 'vertical';
+  stages: TrackStage[];
+  activeId: string;
+}
+
+const { orientation, stages, activeId } = Astro.props;
+const axis = orientation === 'horizontal' ? 'h' : 'v';
+---
+
+<ol
+  class:list={['track', `track--${axis}`]}
+  data-track={orientation}
+>
+  {stages.map((stage) => (
+    <TimelineStage
+      id={stage.id}
+      title={stage.title}
+      when={stage.when}
+      status={stage.status}
+      orientation={orientation}
+      fill={stage.fill}
+      span={stage.span}
+      z={stage.z}
+      events={stage.events}
+      activeId={activeId}
+    />
+  ))}
+</ol>
+
+<style>
+  .track {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow: visible;
+  }
+
+  .track--h {
+    display: flex;
+    align-items: stretch;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+    padding-bottom: 0.35rem;
+  }
+
+  .track--v {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

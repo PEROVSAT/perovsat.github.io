@@ -1,0 +1,167 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  when: string;
+  /** 0–1 position along the parent stage arrow, by event order. */
+  along: number;
+  index: number;
+  orientation: 'horizontal' | 'vertical';
+  active?: boolean;
+}
+
+const { id, title, when, along, index, orientation, active = false } = Astro.props;
+const axis = orientation === 'horizontal' ? 'h' : 'v';
+---
+
+<button
+  class:list={['event', `event--${axis}`, active && 'is-active']}
+  type="button"
+  data-open={id}
+  data-event
+  aria-controls={id}
+  aria-pressed={active ? 'true' : 'false'}
+  style={`--along: ${along}; --i: ${index};`}
+>
+  <span class="event__diamond" aria-hidden="true"></span>
+  <span class="event__stem" aria-hidden="true"></span>
+  <span class="event__box" data-event-box>
+    <span class="event__title">{title}</span>
+    <span class="event__when">{when}</span>
+  </span>
+</button>
+
+<style>
+  .event {
+    --box-x: 0px;
+    --box-y: 0.7rem;
+    --stem-len: 0.7rem;
+    --stem-angle: 0deg;
+    --nudge: 0px;
+    position: absolute;
+    z-index: calc(30 - var(--i));
+    width: 0;
+    height: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .event--h {
+    left: calc(var(--tip) + var(--along) * (100% - 2 * var(--tip)));
+    top: 50%;
+  }
+
+  .event--v {
+    --box-x: 1.15rem;
+    --box-y: 0px;
+    --stem-len: 1.15rem;
+    --stem-angle: -90deg;
+    top: calc(var(--tip) + var(--along) * (100% - 2 * var(--tip)) + var(--nudge));
+    left: 50%;
+  }
+
+  .event__diamond {
+    position: absolute;
+    z-index: 2;
+    width: 0.7rem;
+    height: 0.7rem;
+    background: #fff;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--fill) 80%, #000);
+    transform: translate(-50%, -50%) rotate(45deg);
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+
+  .event:hover .event__diamond,
+  .event:focus-visible .event__diamond,
+  .event.is-active .event__diamond {
+    background: var(--rhodes-red);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--fill) 70%, #000);
+  }
+
+  .event.is-active .event__diamond {
+    transform: translate(-50%, -50%) rotate(45deg) scale(1.12);
+  }
+
+  .event:focus-visible {
+    outline: none;
+  }
+
+  .event:focus-visible .event__box {
+    outline: 1px solid var(--rhodes-red);
+    outline-offset: 2px;
+  }
+
+  .event__stem {
+    position: absolute;
+    z-index: 0;
+    left: 0;
+    top: 0;
+    width: 1px;
+    height: var(--stem-len);
+    background: rgba(255, 255, 255, 0.55);
+    transform-origin: 50% 0;
+    transform: rotate(var(--stem-angle));
+    pointer-events: none;
+  }
+
+  .event__box {
+    position: absolute;
+    z-index: 1;
+    left: var(--box-x);
+    top: var(--box-y);
+    min-width: 6.25rem;
+    max-width: 9.25rem;
+    padding: 0.38rem 0.5rem 0.42rem;
+    border: 1px dashed rgba(255, 255, 255, 0.32);
+    background: rgba(12, 12, 14, 0.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    text-align: left;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .event--h .event__box {
+    transform: translateX(-50%);
+  }
+
+  .event--v .event__box {
+    min-width: 0;
+    max-width: 11rem;
+    transform: translateY(-50%);
+  }
+
+  .event:hover .event__box,
+  .event:focus-visible .event__box,
+  .event.is-active .event__box {
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.55);
+    background: rgba(12, 12, 14, 0.98);
+  }
+
+  .event.is-active .event__box {
+    border-color: var(--rhodes-red);
+  }
+
+  .event__title {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    line-height: 1.25;
+    color: var(--rhodes-text);
+  }
+
+  .event__when {
+    display: block;
+    margin-top: 0.12rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    color: var(--rhodes-text-muted);
+    white-space: nowrap;
+  }
+</style>

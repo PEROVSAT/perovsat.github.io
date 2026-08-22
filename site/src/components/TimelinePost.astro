@@ -1,0 +1,166 @@
+---
+import TimelineGallery from './TimelineGallery.astro';
+import type { StageStatus } from './TimelineStage.astro';
+import { STATUS_LABEL } from './TimelineStage.astro';
+
+interface TimelineImage {
+  src: string;
+  alt: string;
+}
+
+interface Props {
+  id: string;
+  kind: 'stage' | 'event';
+  title: string;
+  when: string;
+  status?: StageStatus;
+  location?: string;
+  description?: string;
+  images?: TimelineImage[];
+  href?: string;
+  fill?: string;
+  active?: boolean;
+}
+
+const {
+  id,
+  kind,
+  title,
+  when,
+  status,
+  location,
+  description,
+  images,
+  href,
+  fill,
+  active = false,
+} = Astro.props;
+
+const copy = description && description !== 'TODO' ? description : '';
+const hasMedia = Boolean(images?.length);
+const eyebrow = kind === 'stage' && status ? STATUS_LABEL[status] : 'Event';
+---
+
+<article
+  class:list={['post', status && `post--${status}`, active && 'is-active']}
+  id={id}
+  data-post={id}
+  hidden={!active}
+  style={fill ? `--fill: ${fill};` : undefined}
+>
+  <header class="post__header">
+    <p class="post__eyebrow">{eyebrow}</p>
+    <h3 class="post__title">{title}</h3>
+    <p class="post__meta">
+      <span>{when}</span>
+      {location && (
+        <>
+          <span aria-hidden="true">·</span>
+          <span>{location}</span>
+        </>
+      )}
+    </p>
+  </header>
+  <div class="post__body">
+    {copy ? (
+      <p class="post__copy">{copy}</p>
+    ) : (
+      !hasMedia && <p class="post__copy post__copy--muted">Details coming soon.</p>
+    )}
+    {images && <TimelineGallery images={images} />}
+    {href && (
+      <a class="post__link" href={href}>
+        Read the full update
+      </a>
+    )}
+  </div>
+</article>
+
+<style>
+  .post {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid var(--fill, var(--rhodes-red));
+    background: rgba(10, 10, 12, 0.78);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    scroll-margin-top: 5.5rem;
+  }
+
+  .post--complete {
+    --fill: var(--rhodes-green);
+  }
+
+  .post--current {
+    --fill: var(--rhodes-red);
+  }
+
+  .post--upcoming {
+    --fill: #585858;
+  }
+
+  .post__header {
+    padding: 1rem 1.15rem 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .post__eyebrow {
+    margin: 0 0 0.35rem;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rhodes-text-muted);
+  }
+
+  .post--complete .post__eyebrow {
+    color: #8fbc8f;
+  }
+
+  .post--current .post__eyebrow {
+    color: var(--rhodes-red);
+  }
+
+  .post__title {
+    margin: 0 0 0.35rem;
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1.25;
+    color: var(--rhodes-text);
+  }
+
+  .post__meta {
+    margin: 0;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    color: var(--rhodes-text-muted);
+  }
+
+  .post__body {
+    padding: 1rem 1.15rem 1.2rem;
+  }
+
+  .post__copy {
+    margin: 0;
+    color: var(--rhodes-text-muted);
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  .post__copy--muted {
+    font-style: italic;
+  }
+
+  .post__link {
+    display: inline-block;
+    margin-top: 0.9rem;
+    font-size: 0.88rem;
+    letter-spacing: 0.04em;
+    color: var(--rhodes-text);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+  }
+
+  .post__link:hover {
+    color: var(--rhodes-red);
+  }
+</style>
