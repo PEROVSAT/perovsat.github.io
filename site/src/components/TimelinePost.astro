@@ -15,6 +15,7 @@ interface Props {
   when: string;
   status?: StageStatus;
   location?: string;
+  /** Mini-blog copy. Wrap lines freely; a blank line starts a new paragraph. */
   description?: string;
   images?: TimelineImage[];
   href?: string;
@@ -36,7 +37,18 @@ const {
   active = false,
 } = Astro.props;
 
-const copy = description && description !== 'TODO' ? description : '';
+/** Wrap lines freely in the source; a blank line starts a new paragraph. */
+function toParagraphs(text?: string): string[] {
+  if (!text) return [];
+  const trimmed = text.trim();
+  if (!trimmed || trimmed === 'TODO') return [];
+  return trimmed
+    .split(/\n\s*\n/)
+    .map((para) => para.replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+}
+
+const copy = toParagraphs(description);
 const hasMedia = Boolean(images?.length);
 const eyebrow = kind === 'stage' && status ? STATUS_LABEL[status] : 'Event';
 ---
@@ -62,8 +74,8 @@ const eyebrow = kind === 'stage' && status ? STATUS_LABEL[status] : 'Event';
     </p>
   </header>
   <div class="post__body">
-    {copy ? (
-      <p class="post__copy">{copy}</p>
+    {copy.length ? (
+      copy.map((para) => <p class="post__copy">{para}</p>)
     ) : (
       !hasMedia && <p class="post__copy post__copy--muted">Details coming soon.</p>
     )}
@@ -145,6 +157,10 @@ const eyebrow = kind === 'stage' && status ? STATUS_LABEL[status] : 'Event';
     color: var(--rhodes-text-muted);
     font-size: 0.98rem;
     line-height: 1.55;
+  }
+
+  .post__copy + .post__copy {
+    margin-top: 0.9rem;
   }
 
   .post__copy--muted {

@@ -15,6 +15,7 @@ interface MissionEvent {
   when: string;
   whenShort?: string;
   location?: string;
+  /** Mini-blog copy. Wrap lines freely; a blank line starts a new paragraph. */
   description?: string;
   images?: TimelineImage[];
   href?: string;
@@ -25,6 +26,7 @@ interface Stage {
   title: string;
   when: string;
   status: StageStatus;
+  /** Mini-blog copy. Wrap lines freely; a blank line starts a new paragraph. */
   description?: string;
   images?: TimelineImage[];
   href?: string;
@@ -37,16 +39,31 @@ const STAGES: Stage[] = [
     title: 'Mission Design',
     when: 'Apr – Aug 2026',
     status: 'complete',
-    description: 'TODO',
+    description: `
+      Over the summer, PEROVSAT research students set out the mission
+      goals and initial design for PEROVSAT, culminating in a
+      preliminary design review with industry professionals.
+    `,
     events: [
       {
         id: 'pdr',
         title: 'Preliminary Design Review',
-        when: 'Jul 22, 2026',
-        whenShort: 'Jul 22',
+        when: 'Jun 25, 2026',
+        description: `
+          PEROVSAT presented and passed its Preliminary Design Review
+          (PDR), which proposed our design work on the mission experiment,
+          payload hardware, circuitry, and flight software.
+
+          A group of industry professionals, including some former members
+          of the RHOK-SAT project, critiqued and helped us refine our ideas
+          as we move towards the EM build. Some slide highlights are
+          featured here.
+        `,
+        whenShort: 'Jun 25',
         images: [
-          { src: withBase('assets/timeline_photos/payloadDesign.png'), alt: 'PDR — payload design' },
           { src: withBase('assets/timeline_photos/missionGoal.png'), alt: 'PDR — mission goal' },
+          { src: withBase('assets/timeline_photos/payloadDesign.png'), alt: 'PDR — payload design' },
+          { src: withBase('assets/timeline_photos/detumbleMethod.png'), alt: 'PDR — detumble method' },
           { src: withBase('assets/timeline_photos/FSWoverview.png'), alt: 'PDR — flight software design' },
         ],
       },
@@ -56,7 +73,14 @@ const STAGES: Stage[] = [
         when: 'Aug 23, 2026',
         whenShort: 'Aug 23',
         location: 'Salt Lake City, UT',
-        description: '',
+        description: `
+          PEROVSAT Members Damian Nguyen, Remy Bozung, and Theo Shin attended the
+          2026 SmallSat Conference.
+
+          Given the early stage of our work, the trip focused on reviewing the work
+          other university and industry CubeSats are doing, and to network with companies and graduate
+          programs for future opportunities after PEROVSAT.
+        `,
         images: [
         ],
       },
@@ -66,30 +90,47 @@ const STAGES: Stage[] = [
     id: 'em-integration',
     title: 'EM System Integration',
     when: 'Sep 2026 – May 2027',
+    description: `
+      Once we recieve the engineering model satellite bus from Nearspace Launch, we will begin manufacturing 
+      the payload and circuitry hardware made over the mission design period, as well as initial integration testing
+      for the flight software.
+    `,
     status: 'current',
   },
   {
     id: 'fm-integration',
     title: 'FM System Integration',
     when: 'Jun – Aug 2027',
+    description: `
+      With the EM complete, we can begin integrating the more finalized hardware designs into the Flight Model (FM).
+    `,
     status: 'upcoming',
   },
   {
     id: 'testing',
     title: 'Testing and Iterating',
     when: 'Sep 2027 – May 2028',
+    description: `
+      
+    `,
     status: 'upcoming',
   },
   {
     id: 'frr',
     title: 'Flight-Readiness Review',
     when: 'Jun – Aug 2028',
+    description: `
+      
+    `,
     status: 'upcoming',
   },
   {
     id: 'launch',
     title: 'Launch',
     when: 'Sep – Nov 2029',
+    description: `
+      
+    `,
     status: 'upcoming',
   },
 ];

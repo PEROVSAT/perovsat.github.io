@@ -1,9 +1,6 @@
 # Flight Software Architecture
 
-!!! warning "Under Construction"
-    This page is a stub and still under construction. Details may be incomplete or change.
-
-PEROVSAT flight software runs on [Zephyr RTOS](https://docs.zephyrproject.org/) as a multi-threaded application. Application logic is split into cooperating threads; hardware access goes through custom and stock Zephyr drivers.
+PEROVSAT flight software runs on [Zephyr RTOS](https://docs.zephyrproject.org/), split into threaded application code and driver code
 
 ## High-level layout
 

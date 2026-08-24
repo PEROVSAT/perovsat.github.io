@@ -27,25 +27,53 @@ import { withBase } from '../utils/url';
       </div>
     </section>
 
+    <div class="glance">
+      <TextBlock title="At a glance" eyebrow="Mission">
+        <p>
+          A student-built CubeSat comparing experimental Perovskite solar cells
+          to space-grade silicon, under two lighting and thermal regimes in orbit.
+        </p>
+        <dl class="glance__facts">
+          <div class="glance__fact">
+            <dt>Form factor</dt>
+            <dd>1U CubeSat</dd>
+          </div>
+          <div class="glance__fact">
+            <dt>Built at</dt>
+            <dd>Rhodes College</dd>
+          </div>
+          <div class="glance__fact">
+            <dt>Payload</dt>
+            <dd>Perovskite + silicon PV</dd>
+          </div>
+          <div class="glance__fact">
+            <dt>Experiment</dt>
+            <dd>Dual-face Perovskite illumination</dd>
+          </div>
+          <div class="glance__fact">
+            <dt>Bus</dt>
+            <dd>Nearspace Launch</dd>
+          </div>
+          <div class="glance__fact">
+            <dt>Cells</dt>
+            <dd>National Lab of the Rockies</dd>
+          </div>
+        </dl>
+      </TextBlock>
+    </div>
+
     <SatScrolly>
       <TextBlock slot="rhodes" variant="caption" title="Built at Rhodes" eyebrow="Team">
-        <p>A 1U CubeSat designed by students and faculty at Rhodes College — liberal arts, with real flight hardware on the table.</p>
+        <p>PEROVSAT is a 1U CubeSat made by students of Rhodes College, enables STEM students fantastic real-world engineering experince.</p>
+        <p>Multiple graduates of RHOK-SAT, PEROVSAT's predecessor, have landed aerospace jobs due to their experience with the program.</p>
       </TextBlock>
 
-      <TextBlock slot="perovskites" variant="caption" title="Why perovskites" eyebrow="Science">
-        <p>An experimental solar-cell chemistry that can be cheaper to make, and potentially more efficient, than the silicon cells spacecraft already fly.</p>
+      <TextBlock slot="perovskites" variant="caption" title="Perovskites" eyebrow="Science">
+        <p>PEROVSAT's namesake is its payload: experimental Perovskite solar cells. These present potential for high efficiency solar energy at low manufacturing costs</p>
       </TextBlock>
 
-      <TextBlock slot="source" variant="caption" title="From the National Lab of the Rockies" eyebrow="Partners">
-        <p>Our perovskite cells come from the National Lab of the Rockies (formerly NREL). PEROVSAT is how they leave the lab and see orbit.</p>
-      </TextBlock>
-
-      <TextBlock slot="experiment" variant="caption" title="Two ways to see the Sun" eyebrow="The experiment">
-        <p>PEROVSAT lines up with Earth’s magnetic field so two faces get very different light: long, infrequent soaks on Z, and short, frequent bursts on the rotating −X face.</p>
-      </TextBlock>
-
-      <TextBlock slot="payoff" variant="caption" title="What we learn" eyebrow="Why it matters">
-        <p>Those two thermal rhythms are the test. If perovskites hold up, they become a real option for future missions — not just a promising material on the ground.</p>
+      <TextBlock slot="source" variant="caption" title="The Experiment" eyebrow="Science">
+        <p>PEROVSAT aims to evaluate the feasiblity of Perovskite use in space missions. The dual payload face design allows us to test efficiency degradation across vastly different thermal conditions</p>
       </TextBlock>
     </SatScrolly>
 
@@ -64,22 +92,23 @@ import { withBase } from '../utils/url';
   .hero {
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: 1.25rem 1.5rem;
+    gap: 1.25rem 1.75rem;
     align-items: center;
-    max-width: 36rem;
-    margin: 0 0 1.5rem;
+    max-width: 46rem;
+    min-height: min(28vh, 16rem);
+    margin: 0 auto 6rem;
   }
 
   .hero__logo {
-    width: 132px;
+    width: 152px;
     height: auto;
     display: block;
     mix-blend-mode: lighten;
   }
 
   .hero__eyebrow {
-    margin: 0 0 0.4rem;
-    font-size: 0.72rem;
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -87,8 +116,8 @@ import { withBase } from '../utils/url';
   }
 
   h1 {
-    margin: 0 0 0.65rem;
-    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    margin: 0 0 0.75rem;
+    font-size: clamp(2.8rem, 6.5vw, 4.6rem);
     letter-spacing: 0.08em;
     color: var(--rhodes-text);
     text-shadow: 0 2px 28px rgba(0, 0, 0, 0.75);
@@ -97,14 +126,60 @@ import { withBase } from '../utils/url';
   .hero__lead {
     margin: 0;
     color: var(--rhodes-text-muted);
-    font-size: 1.08rem;
+    font-size: clamp(1.15rem, 2vw, 1.35rem);
     line-height: 1.55;
     text-shadow: 0 1px 16px rgba(0, 0, 0, 0.9);
   }
 
+  .glance {
+    margin: 0 0 4.5rem;
+  }
+
+  .glance :global(.tb) {
+    padding: 1.7rem 2.15rem 1.85rem;
+  }
+
+  .glance :global(.tb__header) {
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+  }
+
+  .glance :global(.tb__title) {
+    font-size: clamp(1.25rem, 2vw, 1.55rem);
+  }
+
+  .glance :global(.tb__body p) {
+    max-width: 44rem;
+    margin-bottom: 1.35rem;
+    color: var(--rhodes-text-muted);
+  }
+
+  .glance__facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.2rem 2rem;
+    margin: 0;
+  }
+
+  .glance__fact dt {
+    margin: 0 0 0.28rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rhodes-red);
+  }
+
+  .glance__fact dd {
+    margin: 0;
+    color: var(--rhodes-text);
+    font-size: 1.05rem;
+    line-height: 1.4;
+  }
+
   @media (max-width: 800px) {
     .home {
-      padding-top: 3rem;
+      padding-top: 4rem;
     }
 
     .hero {
@@ -112,7 +187,27 @@ import { withBase } from '../utils/url';
       justify-items: center;
       text-align: center;
       max-width: 34rem;
-      margin-inline: auto;
+      min-height: 0;
+      margin-bottom: 4.25rem;
+    }
+
+    .hero__logo {
+      width: 140px;
+    }
+
+    .glance :global(.tb) {
+      padding: 1.35rem 1.35rem 1.45rem;
+    }
+
+    .glance__facts {
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem 1.25rem;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .glance__facts {
+      grid-template-columns: 1fr;
     }
   }
 </style>

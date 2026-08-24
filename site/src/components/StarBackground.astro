@@ -53,22 +53,20 @@ import { withBase } from '../utils/url';
 
   .starfield__earth {
     position: absolute;
-    top: 9.5rem;
-    right: -6%;
+    top: 5rem;
+    left: 50%;
+    transform: translateX(-50%);
     display: block;
-    width: min(880px, 72vw);
+    width: min(840px, 70vw);
     height: auto;
+    opacity: 0.42;
     -webkit-mask-image: radial-gradient(closest-side, #000 97%, transparent 100%);
     mask-image: radial-gradient(closest-side, #000 97%, transparent 100%);
   }
 
   @media (max-width: 800px) {
     .starfield__earth {
-      right: 50%;
-      top: 7.5rem;
       width: min(560px, 110vw);
-      transform: translateX(50%);
-      opacity: 0.42;
     }
   }
 </style>
