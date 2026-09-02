@@ -1,30 +1,11 @@
 # Website Software
 
-!!! warning "Under Construction"
-    This page is a stub and still under construction. Details may be incomplete or change.
+PEROVSAT has two sites on the [`perovsat.github.io`](https://github.com/PEROVSAT/perovsat.github.io) repository:
 
-PEROVSAT publishes two related sites from the [`perovsat.github.io`](https://github.com/PEROVSAT/perovsat.github.io) repository:
+## Public Mission Site
 
-| Site | Build | Audience |
-|------|-------|----------|
-| Main site | Static HTML at repo root | Public mission overview |
-| Documentation | MkDocs Material under `docs/` | Technical docs (software, payload, electronics) |
+This is done in [Astro](https://astro.build/), and is primarily used for project visibility and recruiting
 
-Documentation source lives in `docs/content/`. MkDocs config is `docs/mkdocs.yml`.
+## MKDocs Documentation Site
 
-## Local preview
-
-From the `docs/` directory:
-
-```bash
-pip install -r requirements.txt
-mkdocs serve
-```
-
-## Adding pages
-
-See [How to Add Pages](how-to-add-pages.md).
-
-## Open questions
-
-- CI/deploy workflow (GitHub Actions vs manual) is not documented here yet.
+The documentation site you're currently on uses [MKDocs](https://www.mkdocs.org/), allowing us to write documentation in simple Markdown and let MKDocs translate it to a good-looking website
