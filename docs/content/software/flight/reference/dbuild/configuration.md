@@ -1,6 +1,6 @@
 # `dbuild.yml`
 
-Updated: 7/9/26
+Updated: 9/2/26
 
 Located at the root of `perovsat-app`. This single file holds both the active device mode selections and the full device catalog.
 

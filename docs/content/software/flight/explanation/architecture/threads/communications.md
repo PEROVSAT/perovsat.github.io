@@ -1,29 +1,27 @@
 # Communications Thread
 
-!!! warning "Under Construction"
-    This page is a stub and still under construction. Details may be incomplete or change.
+Updated: 9/2/26
 
-Communications handles application-level interaction with the Eyestar modem (Iridium). It downlinks filtered data, sends beacons, and forwards received ground commands to the Commands thread.
+Communications handles application-level interaction with the EyestarS4 radio, including:
 
-## Boot conditions
+- Downlinking filtered payload data
+- Sending beacons and telemetry
+- Receiving and forwarding uplinked commands to the [Commands](commands.md) thread
 
-Starts when `DEPLOY_COMPLETE` is set.
+## Power Status Behavior
 
-## Responsibilities
-
-| Status | Behavior (planned) |
+| Status | Behavior |
 |--------|-------------------|
-| **SAFE** | Ensure Eyestar is powered down |
-| **LOW** | Send beacon on interval; forward RX to Commands (DFA is off, so no filtered downlink) |
-| **NOMINAL** / **HIGH** | Transmit filtered DFA data; forward RX to Commands |
+| **SAFE** | Occasionally check for received commands (period TBD) |
+| **LOW** | Send beacons and check for receieved commands (period TBD) |
+| **NOMINAL** / **HIGH** | Full operation |
 
 ## Wake pattern
 
-Event-driven when DFA signals new data, with a long interval fallback (500+ epochs) for beacons.
+Interval: 500+ epochs
 
 ## Dependencies
 
-- Eyestar driver (UART-based Iridium interface)
-- EPS driver (Eyestar power control)
-- LittleFS (filtered data)
-- Commands thread (command forwarding and ACKs)
+- Eyestar driver
+- LittleFS - Fetch filtered data
+- Commands thread - Forwarding uplinked commands, sending completed acknowledgements

@@ -1,6 +1,6 @@
 # DBuild Reference
 
-Updated: 7/10/26
+Updated: 9/2/26
 
 DBuild resolves per-device build modes from `dbuild.yml` and invokes `west build` with the matching snippets and backend Kconfig symbols. For the *why*, see [DBuild](../../explanation/dbuild.md).
 

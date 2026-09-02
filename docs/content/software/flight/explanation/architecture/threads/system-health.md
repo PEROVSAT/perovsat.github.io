@@ -1,26 +1,22 @@
 # System Health Thread
 
-!!! warning "Under Construction"
-    This page is a stub and still under construction. Details may be incomplete or change.
+Updated: 9/2/26
 
-System Health is the always-on coordinator thread. It keeps the EPS alive, maintains mission-wide state, and decides which other threads should be running.
+System health oversees the flight software by:
 
-## Responsibilities
+- Managing a thread watchdog
+- Memory scrubbing for Single Event Upsets
+- Petting EPS watchdog
+- Setting power state
+    - May adjust microcontroller clock speed to save power in **LOW** or **SAFE**
 
-- Send the EPS heartbeat (Layer 1 watchdog — power cycle if missed)
-- Feed Zephyr / task watchdogs
-- Read RTC to set `DEPLOY_COMPLETE`
-- Read EPS power data to set `OP_STATUS` (**SAFE**, **LOW**, **NOMINAL**, **HIGH**)
-- Start or ensure started: Payload (always), DFA, Communications, Commands (when flags allow)
-- Reduce MCU clock speed in **SAFE** / **LOW** modes
+For more detailed on reliability strategies, see [explanation/reliability/index.md]
 
 ## Wake pattern
 
-Interval: roughly 1–5 epochs per cycle.
+Interval: 1-5 epochs
 
 ## Dependencies
 
-- EPS driver (battery info in, heartbeat and power control out)
-- Global flags consumed by all other application threads
-
-See also [Power Management](../../reliability/power-management.md) and [PEROVSAT FDIR Strategy](../../reliability/perovsat-strategy.md).
+- EPS driver - battery info in, heartbeat out
+- Ingress watchdog updates and telemetry from all threads

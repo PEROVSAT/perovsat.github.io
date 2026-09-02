@@ -1,6 +1,6 @@
 # DBuild Snippets
 
-Updated: 7/9/26
+Updated: 9/2/26
 
 Snippets live under `perovsat-app/snippets/<name>/`. Each is a small Zephyr configuration bundle referenced from `dbuild.yml` and applied via `west build -S <name>`.
 

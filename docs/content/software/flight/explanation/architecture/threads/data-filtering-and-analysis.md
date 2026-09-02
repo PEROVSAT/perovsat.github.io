@@ -1,32 +1,29 @@
 # Data Filtering and Analysis Thread
 
-!!! warning "Under Construction"
-    This page is a stub and still under construction. Details may be incomplete or change.
+Updated: 9/2/26
 
-The DFA thread processes raw payload data stored by the Payload thread, keeps the best measurements, and signals Communications when filtered data is ready for downlink.
+DFA processes the raw data read by [Payload](payload.md), including:
 
-## Boot conditions
+- Illumination accumulation from sun sensor data
+- IV Compression using either:
+    - Defined points method
+    - Curve fitting method
 
-Runs only when `DEPLOY_COMPLETE` is set and `OP_STATUS` is **NOMINAL** or **HIGH**.
+## Power Status Behavior
 
-## Responsibilities
+| Status | Behavior |
+|--------|-------------------|
+| **SAFE** / **LOW** | Disabled |
+| **NOMINAL** | Defined points analysis only |
+| **HIGH** | Full operation |
 
-- Read raw payload files from LittleFS
-- Filter by face exposure and quality metrics
-- In **NOMINAL**: keep top fraction of sweeps; in **HIGH**: run advanced IV analysis (details TBD)
-- Write filtered results back to LittleFS and delete raw inputs
-- Wake the Communications thread when new filtered data is available
+!!! note "Subject to change"
+    NREL has expressed some concerns with having only curve fit data, and more analysis on required compute power is needed
 
 ## Wake pattern
 
-Interval: 150–500 epochs. Exits early if no new raw data.
+Interval: 150–500 epochs
 
 ## Dependencies
 
-- LittleFS
-- System Health global flags
-- Communications message queue
-
-## Open questions
-
-- Exact filtering metrics, IV curve computation, and compression before downlink are not finalized.
+- LittleFS - Fetch raw payload, write filtered data, delete processed raw data

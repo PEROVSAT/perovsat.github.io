@@ -1,6 +1,6 @@
 # `west dbuild`
 
-Updated: 7/9/26
+Updated: 9/2/26
 
 Build PEROVSAT flight software with per-device modes resolved from `dbuild.yml`.
 

@@ -1,27 +1,27 @@
 # Payload Thread
 
-!!! warning "Under Construction"
-    This page is a stub and still under construction. Details may be incomplete or change.
+Updated: 9/2/26
 
-The Payload thread collects sensor and instrument readings and writes raw data to LittleFS. It also manages payload device power when it is the sole consumer of those devices.
+The payload thread reads and saves data from payload hardware, including:
 
-## Responsibilities
+- Sun sensors - track accumulated illuminance
+- AMUs - Read Perovskite IV curves and temperatures
+    - Only take reads if sun sensors indicate high sun angle
+- IMU - For tumbling telemetry in case of sun sensor failure
 
-Behavior depends on `OP_STATUS` (set by System Health):
+## Power Status Behavior
 
 | Status | Behavior (planned) |
 |--------|-------------------|
-| **SAFE** | Depower all payload devices |
-| **LOW** | Depower AMUs; read IMU, sun sensors, magnetometer; store to LittleFS |
-| **NOMINAL** / **HIGH** | Power payload; read sensors; sweep AMUs when sun angle exceeds threshold; store to LittleFS |
+| **SAFE** | Depower all devices |
+| **LOW** | Depower AMUs and IMU, read sun sensors |
+| **NOMINAL** / **HIGH** | Full operation |
 
 ## Wake pattern
 
-Interval: 10–60 epochs (exact values TBD).
+Interval: 10–60 epochs
 
 ## Dependencies
 
-- Sensor API (uniform read interface over drivers)
-- LittleFS (raw payload files)
-- System Health global flags
-- Zephyr power management for payload hardware
+- AMU, IMU, and Sun Sensor Drivers - Readings and power control
+- LittleFS - Write raw payload data
