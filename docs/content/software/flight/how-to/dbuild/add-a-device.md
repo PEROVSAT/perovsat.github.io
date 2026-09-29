@@ -19,20 +19,6 @@ Integration requires three areas of work:
 
 The MPU6050 / `IMU` setup in `perovsat-app` is the reference.
 
-## Ensure it's in the West project
-
-You likely already did this in the initial clone, but double check
-
-In `perovsat-app/west.yml`:
-
-```yaml
-- name: mpu6050-driver
-  remote: origin
-  revision: main
-```
-
-The `name` must match the driver repository name and `zephyr/module.yml`. Run `west update` or rerun `setup.sh` to clone it.
-
 ## Create snippets
 
 Create one directory per mode under `snippets/`
@@ -73,8 +59,3 @@ Confirm:
 - Your snippet appears in the `-S` list
 - The expected `CONFIG_PEROVSAT_<CHIP>_BACKEND_<MODE>=y` symbol is set
 - No west-project or board-overlay validation errors
-
-## Related
-
-- [DBuild configuration](../../reference/dbuild/configuration.md) — `dbuild.yml` schema and validation
-- [Driver Model overview](../../explanation/driver-model.md)

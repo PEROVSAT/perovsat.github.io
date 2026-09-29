@@ -10,46 +10,51 @@ Repos generated from [driver-template](https://github.com/PEROVSAT/driver-templa
 
 ```text
 mpu6050-driver/
-├── zephyr/module.yml
-├── Kconfig
-├── CMakeLists.txt
-├── src/
-│   ├── CMakeLists.txt
-│   ├── Kconfig
-│   ├── mpu6050.c
-│   ├── mpu6050.h
-│   ├── transfer.h
-│   ├── hardware_transfer.c
-│   ├── lib_mock_transfer.c
-│   └── simulation_transfer.c
-├── lib/
-│   ├── mpu6050_lib.c
-│   └── mpu6050_lib.h
-└── dts/bindings/
-    └── zephyr,mpu6050.yaml
+├── dts
+│   └── bindings
+│       └── invensense,mpu6050.yaml
+├── include
+│   └── mpu6050.h
+├── lib
+│   ├── mpu6050_bus.h
+│   └── mpu6050.c
+├── mock
+│   └── mpu6050.c
+├── samples
+│   └── repl
+│       ├── app.overlay
+│       ├── CMakeLists.txt
+│       ├── prj.conf
+│       ├── sample.yaml
+│       └── src
+│           └── main.c
+├── src
+│   ├── CMakeLists.txt
+│   ├── hardware_transfer.c
+│   ├── Kconfig
+│   ├── lib_mock_transfer.c
+│   ├── mpu6050_priv.h
+│   └── mpu6050.c
+├── tests
+│   └── unit
+│       ├── CMakeLists.txt
+│       ├── prj.conf
+│       ├── src
+│       │   └── main.c
+│       └── testcase.yaml
+└── zephyr
+    └── module.yml
 ```
 
 | Path | Role |
 |------|------|
-| `zephyr/module.yml` | Declares the west module name and CMake/Kconfig/devicetree roots |
-| `Kconfig` | Top-level entry; sources `src/Kconfig` |
-| `CMakeLists.txt` | Top-level entry; adds `src/` when the driver symbol is enabled |
-| `src/<chip>.c` | Zephyr driver shell — API, `init()`, device registration |
-| `src/<chip>.h` | Config/data structs, API declarations |
-| `src/transfer.h` | Transfer function contract shared by driver and backends |
-| `src/*_transfer.c` | One file per non–public-mock backend |
-| `lib/<chip>_lib.c` | Bus-agnostic protocol and register logic |
+| `include/<chip>.h` | User-level data structs and API declarations |
+| `lib/<chip>.c` | Device-logic implementation of the API |
+| `lib/<chip>_bus.h` | Transfer function declaration |
+| `src/<chip>.c` | Zephyr boilerplate for device discovery |
+| `src/<chip>.h` | Zephyr-level config/data structs |
+| `src/*_transfer.c` | Transfer function definitions |
+| `samples/repl/` | Small Zephyr app to use the driver in a shell |
+| `tests/unit/` | Small Zephyr app for unit-testing the library |
 | `dts/bindings/` | Devicetree binding YAML for the device `compatible` string |
-
-## Instance Definition
-The template code may need an adjustment to the DeviceTree Instance Definition if the driver uses the Sensor API
-
-| Macro | Use |
-|-------|-----|
-| `DEVICE_DT_INST_DEFINE` | Generic Zephyr device with a custom API struct |
-| `SENSOR_DEVICE_DT_INST_DEFINE` | Sensor API driver (e.g. MPU6050) |
-
-## Related
-
-- [DBuild](../dbuild/index.md) — per-device mode selection and snippet wiring
-- [Driver catalog](../drivers/index.md) — mission-specific API references
+| `zephyr/module.yml` | Declares the west module name and CMake/Kconfig/devicetree roots |

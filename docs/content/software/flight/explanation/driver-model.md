@@ -1,6 +1,6 @@
 # PEROVSAT Driver Model
 
-Updated: 7/10/26
+Updated: 9/29/26
 
 PEROVSAT device drivers are **out-of-tree Zephyr modules** — separate git repositories cloned into the west workspace and selected at build time through [DBuild](../reference/dbuild/index.md) snippets. Application code talks to hardware through Zephyr's `struct device` API and devicetree aliases, so it can remain unchanged during backend swaps
 
@@ -22,9 +22,11 @@ Each driver repo splits Zephyr integration from device protocol logic:
 
 | Layer | Location | Responsibility |
 |-------|----------|----------------|
-| Driver shell | `src/<chip>.c` | Zephyr registration, API implementation, `init()` |
-| Device library | `lib/<chip>_lib.c` | Core protocol and register access logic |
-| Transfer backend | `src/*_transfer.c` | Defines what actually happens when the library tries to access hardware |
+| Driver shell | `include/<chip>.h` | API and data structure declaration |
+| Device library | `lib/<chip>.c` | Device logic implementation of .h API |
+| Public mock | `mock/<chip>.c` | Public mock implementation of .h API |
+| Transfer backend | `src/*_transfer.c` | Defines communication behavior in hardware and mock transfers |
+| src | `src/` | Zephyr driver boilerplate |
 
 Libraries never call hardware interaction functions like `i2c_read` directly. Instead it receives a **transfer function**, which can proxy to any backend. The same library code runs against hardware or an in-memory register map depending on which transfer backend is compiled in.
 
