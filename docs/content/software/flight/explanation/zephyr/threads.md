@@ -36,6 +36,4 @@ else if (ret == -EAGAIN) { /* timeout */ }
 
 Child threads that should not run at boot are defined with delay `K_FOREVER`. System Health calls `k_thread_start(tid)` when global flags allow.
 
-See [Application Threads](../architecture/threads/index.md) for mission thread roles.
-
 Official reference: [Zephyr Threads](https://docs.zephyrproject.org/latest/kernel/services/threads/index.html).

@@ -81,4 +81,4 @@ The clang-format hook uses [pre-commit/mirrors-clang-format](https://github.com/
 
 When clang-format modifies staged files, the commit is **aborted**, so the user must re-add any changed files
 
-See also [Contributing](../../tutorials/contributing.md) for the basic git workflow.
+See also [Contributing](../tutorials/contributing.md) for the basic git workflow.

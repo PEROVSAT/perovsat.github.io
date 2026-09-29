@@ -13,7 +13,7 @@ PEROVSAT's architecture follows a three-layered approach.
 
 At the base, **Zephyr's communication drivers** handle the wire-level interactions with our hardware. See their [I2C driver](https://docs.zephyrproject.org/latest/doxygen/html/group__i2c__interface.html) for an example
 
-On top of those, we build **device drivers** that understand how a specific device works, and can expose a clean API to it. For example, imagine we wanted to read the Interial Measurement Unit (IMU) in the payload thread. Instead of having to know the I2C registers to read each time, the [MPU6050 driver](../../reference/drivers/mpu6050.md) could simply supply `mpu6050_sample_fetch()` and handle everything behind the scenes
+On top of those, we build **device drivers** that understand how a specific device works, and can expose a clean API to it. For example, imagine we wanted to read the Interial Measurement Unit (IMU) in the payload thread. Instead of having to know the I2C registers to read each time, the MPU6050 driver could simply supply `mpu6050_sample_fetch()` and handle everything behind the scenes
 
 Finally, the **application layer** threads act as the high level control of PEROVSAT's operation. They know things like how to process [commands](threads/commands.md), [compress data](threads/data-filtering-and-analysis.md), and make sure everything is running smoothly.
 

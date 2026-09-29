@@ -1,6 +1,6 @@
 # Mission Overview 
 
-This document covers the PEROVSAT mission at the highest level. A lot of this information may also be found on the [main site](perovsat.github.io), but this will cover it in a bit more detail here.
+This document covers the PEROVSAT mission at the highest level. A lot of this information may also be found on the [main site](https://perovsat.github.io), but this will cover it in a bit more detail here.
 
 ## Scientific Goal
 

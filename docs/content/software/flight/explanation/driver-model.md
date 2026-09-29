@@ -8,7 +8,7 @@ For Zephyr's general driver concepts (`DEVICE_DT_GET`, devicetree, registration)
 
 ## The Triple Backend
 
-Every driver from `driver-template` supports three compile-time backends, selected by [DBuild](./dbuild.md)
+Every driver from `driver-template` supports three compile-time backends, selected by [DBuild](./zephyr/dbuild.md)
 
 | Backend | Purpose |
 |---------|----------------|

@@ -17,4 +17,4 @@ Supported hosts: macOS and Linux (Windows via WSL).
 
 ## Links
 
-Tutorial walkthrough: [Getting Started](../../tutorials/getting-started.md).
+Tutorial walkthrough: [Getting Started](../tutorials/getting-started.md).

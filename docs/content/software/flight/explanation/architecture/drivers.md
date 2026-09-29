@@ -6,7 +6,7 @@ Catalog of mission device drivers. For how PEROVSAT drivers are structured, see 
 
 ### Aerospace Measurement Unit
 
-[API Reference](../../reference/drivers/amu.md) · [Repository](https://github.com/PEROVSAT/amu-driver)
+[API Reference](../../reference/drivers/amu.md) - [Repository](https://github.com/PEROVSAT/amu-driver)
 
 Currently, our only usage of the AMUs is taking IV sweeps and corresponding temperature data. All of this is encapsulated into a single call called `do_iv_sweep`.
 
@@ -16,7 +16,8 @@ The driver depends on Aerospace's [AMULIB](https://github.com/the-aerospace-corp
 
 ### Nearspace Launch Eyestar S4
 
-[API Reference](../../reference/drivers/eyestar.md) · [Repository](https://github.com/PEROVSAT/eyestar-driver)
+!!! note "Not implemented"
+    This driver is not yet built
 
 The Eyestar S4 is our radio modem that allows us to receive commands to the satellite and send data back to Earth. The way that Iridium does communication is a little odd, so instead of individual send and receive methods, the best way to interact with the modem is a single `transfer` call, which takes buffers for both uplink and downlink data.
 
@@ -26,21 +27,15 @@ The underlying operations of the modem are under NDA, so the library handling al
 
 ### Nearspace Launch Electrical Power System (EPS)
 
-[API Reference](../../reference/drivers/eps.md)
-
 !!! note "Not implemented"
     We have not yet received an Interface Control Document (ICD) to know how we'll interact with the EPS, so we have not created this driver yet.
 
 ### Inertial Measurement Unit
 
-[Repository](https://github.com/PEROVSAT/mpu6050-driver)
-
 !!! note "Model TBD"
     While we have created a driver for the MPU6050 for testing purposes, the actual model of IMU to fly on PEROVSAT is unknown. The MPU6050 driver is the reference implementation of the current driver model.
 
 ### Sun Sensor
-
-[API Reference](../../reference/drivers/sun-sensor.md)
 
 !!! note "Model TBD"
     The model of sun sensor to be used on PEROVSAT is unknown, as are its capabilities, so the API is not fully solidified either.

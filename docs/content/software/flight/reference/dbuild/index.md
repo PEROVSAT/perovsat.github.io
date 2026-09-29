@@ -2,7 +2,7 @@
 
 Updated: 9/2/26
 
-DBuild resolves per-device build modes from `dbuild.yml` and invokes `west build` with the matching snippets and backend Kconfig symbols. For the *why*, see [DBuild](../../explanation/dbuild.md).
+DBuild resolves per-device build modes from `dbuild.yml` and invokes `west build` with the matching snippets and backend Kconfig symbols. For the *why*, see [DBuild](../../explanation/zephyr/dbuild.md).
 
 ## File layout
 
@@ -40,6 +40,6 @@ perovsat-app/
 
 ## Related
 
-- [DBuild overview](../../explanation/dbuild.md) — why build-time selection exists
+- [DBuild overview](../../explanation/zephyr/dbuild.md) — why build-time selection exists
 - [Add a device](../../how-to/dbuild/add-a-device.md) — register a new logical device
 - [Driver model](../driver-model/index.md) — out-of-tree driver layout and backends

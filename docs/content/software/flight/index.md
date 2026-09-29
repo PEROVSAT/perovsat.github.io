@@ -3,10 +3,10 @@
 These docs follow the [Diátaxis](https://diataxis.fr) framework: documentation split by the reader's goal, not by subsystem. Each section below answers a different kind of question.
 
 !!! note "TLDR"
-    - Need to understand *why* something works the way it does? → [Explanation](explanation/architecture/index.md)
-    - Need an exact syntax, field, or option? → [Reference](reference/index.md)
-    - Know what you want, need the steps? → [How-to guides](how-to/index.md)
-    - Looking to start writing code? → [Tutorials](tutorials/getting-started.md)
+    - Need to understand *why* something works the way it does? -> [Explanation](explanation/architecture/index.md)
+    - Need an exact syntax, field, or option? -> Reference
+    - Know what you want, need the steps? -> How-to guides
+    - Looking to start writing code? -> [Tutorials](tutorials/getting-started.md)
 
 ## Explanation
 
@@ -14,7 +14,7 @@ The *why*: design decisions, trade-offs, and how the pieces fit together concept
 
 ## Reference
 
-The exact facts: file formats, CLI flags, Kconfig symbols, API signatures. Dry and structured, meant to be looked up rather than read start to finish. Browse the [Reference index](./reference/index.md).
+The exact facts: file formats, CLI flags, Kconfig symbols, API signatures. Dry and structured, meant to be looked up rather than read start to finish.
 
 ## How-to guides
 

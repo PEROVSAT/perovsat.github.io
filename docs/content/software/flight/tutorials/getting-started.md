@@ -65,6 +65,4 @@ Use control+c to stop the program
 
 ## Next steps
 - Try running the software on [hardware](./running-on-hardware.md)
-- Learn how the `dbuild` system works in [DBuild overview](../explanation/dbuild.md)
-- Browse the [how-to guides](../how-to/index.md) for common development tasks
-- Consult the [reference](../reference/index.md) for API and configuration details
+- Learn how the `dbuild` system works in [DBuild overview](../explanation/zephyr/dbuild.md)

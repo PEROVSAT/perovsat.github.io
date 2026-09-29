@@ -2,7 +2,7 @@
 
 Updated: 9/29/26
 
-This guide covers the integration of a new device into the [DBuild](../../explanation/dbuild.md) system.
+This guide covers the integration of a new device into the [DBuild](../../explanation/zephyr/dbuild.md) system.
 
 ## Prerequisites
 

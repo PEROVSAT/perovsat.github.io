@@ -13,7 +13,7 @@ Basilisk simulates spacecraft motion and the subsystems that affect it. In pract
 - Orbital and attitude dynamics
 - Environmental models (gravity, atmosphere, magnetic field, solar radiation pressure, etc.)
 - Sensors, actuators, and control algorithms
-- Flight-software-facing device models for SITL (see [Basilisk Flight Software Interface](basilisk-flight-software-interface.md))
+- Flight-software-facing device models for SITL
 
 Simulation components are independent modules that communicate through a publish-subscribe message system rather than sharing internal state directly. That makes it straightforward to swap, extend, or test individual pieces without rewiring the whole scenario.
 
@@ -43,8 +43,8 @@ Python scenario  →  Basilisk (integrate)  →  .bin file  →  Vizard playback
 
 ## Further reading
 
-- [Basilisk Flight Software Interface](basilisk-flight-software-interface.md) — SITL device modeling and firmware integration
-- [Hysteresis Rods](Hysterisis_Rods.md)
-- [World Magnetic Model (WMM)](WMM.md)
-- [Permanent Magnet Attitude Control (PMAC)](PMAC.md)
-- [Zephyr-driven synchronization](zephyr-driven-synchronization.md)
+- [Basilisk Flight Software Interface](./flight-software-testing/basilisk-flight-software-interface.md) — SITL device modeling and firmware integration
+- [Hysteresis Rods](./environment/Hysterisis_Rods.md)
+- [World Magnetic Model (WMM)](./environment/WMM.md)
+- [Permanent Magnet Attitude Control (PMAC)](./environment/PMAC.md)
+- [Zephyr-driven synchronization](./flight-software-testing/zephyr-driven-synchronization.md)
