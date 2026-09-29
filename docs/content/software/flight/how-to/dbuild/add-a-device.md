@@ -1,6 +1,6 @@
 # Wire a Driver into perovsat-app
 
-Updated: 7/10/26
+Updated: 9/29/26
 
 This guide covers the integration of a new device into the [DBuild](../../explanation/dbuild.md) system.
 
@@ -35,7 +35,7 @@ The `name` must match the driver repository name and `zephyr/module.yml`. Run `w
 
 ## Create snippets
 
-Create one directory per mode under `snippets/`. Naming convention: `<chip>-<mode>` (for example `mpu6050-public-mock`).
+Create one directory per mode under `snippets/`
 
 Each snippet needs:
 

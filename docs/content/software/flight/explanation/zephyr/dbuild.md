@@ -1,6 +1,6 @@
 # DBuild
 
-Updated: 7/10/26
+Updated: 7/29/26
 
 While developing PEROVSAT flight software, we often need to switch between different run configurations depending on what parts we are trying to test or what hardware we have available to run with. However, managing all the different configuration files and DeviceTree overlay files manually is really tedious.
 
@@ -12,8 +12,8 @@ The primary interaction with DBuild is done via the `selections` section, which 
 ```yaml
 selections:
   IMU: public-mock
-  MODEM: public-mock
   AMU: hardware
+  CONSOLE: off
 ```
 
 DBuild resolves the matching backend and snippet for that selection, and (after some verification), hands those off by running the normal `west build` with the added snippets and flags

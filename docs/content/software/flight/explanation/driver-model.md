@@ -6,15 +6,14 @@ PEROVSAT device drivers are **out-of-tree Zephyr modules** — separate git repo
 
 For Zephyr's general driver concepts (`DEVICE_DT_GET`, devicetree, registration), see [Zephyr Driver Model](./zephyr/drivers.md).
 
-## The Quad Backend
+## The Triple Backend
 
-Every driver from `driver-template` supports four compile-time backends, selected by [DBuild](./dbuild.md)
+Every driver from `driver-template` supports three compile-time backends, selected by [DBuild](./dbuild.md)
 
 | Backend | Purpose |
 |---------|----------------|
 | `public-mock` | Static data that doesn't require the library, so the public can use a driver for NDA hardware |
 | `library-mock` | Static data accessed by the library, primarily for testing |
-| `simulation` | Fetches data from [Basilisk](../../simulation/index.md) to do [SITL Testing](./testing/sitl.md) |
 | `hardware` | Actual hardware device interaction |
 
 ## Driver–library separation
@@ -27,7 +26,7 @@ Each driver repo splits Zephyr integration from device protocol logic:
 | Device library | `lib/<chip>_lib.c` | Core protocol and register access logic |
 | Transfer backend | `src/*_transfer.c` | Defines what actually happens when the library tries to access hardware |
 
-Libraries never call hardware interaction functions like `i2c_read` directly. Instead it receives a **transfer function**, which can proxy to any backend. The same library code runs against hardware, an in-memory register map, or a simulation socket depending on which transfer backend is compiled in.
+Libraries never call hardware interaction functions like `i2c_read` directly. Instead it receives a **transfer function**, which can proxy to any backend. The same library code runs against hardware or an in-memory register map depending on which transfer backend is compiled in.
 
 This layout supports a few things we rely on:
 
