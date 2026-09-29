@@ -1,5 +1,7 @@
 # Getting Started with PEROVSAT Flight Software
 
+Updated: 9/29/26
+
 This tutorial will guide you through setting up the PEROVSAT Zephyr workspace, and running the flight software
 
 ## Prerequisites
@@ -34,14 +36,25 @@ After running this script, the directory that perovsat-app was in will have been
 cd perovsat-app
 ```
 
-### 3. Configuration
+### 3. DBuild Configuration
 
-Run configuration is done by modifying the `dbuild.yml` file. To begin, set all the available devices in the `selections` section to be `public-mock`
+Run configuration is done by modifying the `dbuild.yml` file.
 
-!!! warning "Do not use simulation or hardware mode"
-    The `simulation` and `hardware` modes require additional configuration to get running, and will have other tutorials made for setup
+For running without any hardware we'll use the following configuration:
+- Drivers in "public-mock" mode
+- Flash in "virtual" mode
+- Console as "off"
 
-### 4. Build and Run
+### 4. Enter into virtual environment
+
+Nearly everything that needs to be run in the PEROVSAT project uses the same virtual environment. It's in `perovsat-workspace/.venv`. You can activate it using `source`
+
+For example, from the `perovsat-app` directory (which you should now be in, use `pwd` to check), you can run
+```bash
+source ../.venv/bin/activate
+```
+
+### 5. Build and Run
 We use the custom `dbuild` command to compile our code. Usually, building and running are separate steps, but since this tutorial uses a virtual QEMU device, they are done both at once using the `-t run` flag
 
 ```bash
@@ -50,11 +63,8 @@ west dbuild -b qemu_cortex_m3 -t run
 
 Use control+c to stop the program
 
-!!! note "Troubleshooting: west command not found"
-    If your shell was not able to find west, you likely are not in the Python virtual environment that the setup script made. It is in the `perovsat-workspace` directory, so if you're in the `perovsat-app` you can reactivate it with `source ../.venv/bin/activate`
-
 ## Next steps
-- Try running the software on [hardware](./running-hardware.md)
+- Try running the software on [hardware](./running-on-hardware.md)
 - Learn how the `dbuild` system works in [DBuild overview](../explanation/dbuild.md)
 - Browse the [how-to guides](../how-to/index.md) for common development tasks
 - Consult the [reference](../reference/index.md) for API and configuration details
