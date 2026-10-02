@@ -51,7 +51,7 @@ const struct device *imu = DEVICE_DT_GET(DT_ALIAS(imu)); // With alias
 Preview the resolved build:
 
 ```bash
-west dbuild -b qemu_cortex_m3 --dry-run
+west dbuild -b mps2/an521/cpu0 --dry-run
 ```
 
 Confirm:

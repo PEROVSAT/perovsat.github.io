@@ -16,7 +16,7 @@ west dbuild -b <board> [options] [west build args] [-- cmake args]
 
 | Option | Description |
 |--------|-------------|
-| `-b`, `--board` | **Required.** Target board short name (for example `nucleo_u575zi_q`, `qemu_cortex_m3`). |
+| `-b`, `--board` | **Required.** Target board short name (for example `nucleo_u575zi_q`, `mps2/an521/cpu0`). |
 | `--config` | Path to `dbuild.yml` (default: `dbuild.yml` in the application root). |
 | `-d`, `--build-dir` | Build directory to create or use. |
 | `-p`, `--pristine` | Pristine build policy: `auto`, `always`, or `never` (default: `always`). |
@@ -44,31 +44,31 @@ west dbuild -b nucleo_u575zi_q
 Build and run under QEMU (as in [Getting Started](../../tutorials/getting-started.md)):
 
 ```bash
-west dbuild -b qemu_cortex_m3 -t run
+west dbuild -b mps2/an521/cpu0 -t run
 ```
 
 Preview the resolved command:
 
 ```bash
-west dbuild -b nucleo_u575zi_q --dry-run
+west dbuild -b rpi_pico2/rp2350a/m33 --dry-run
 ```
 
 Faster incremental rebuild when device configuration is unchanged:
 
 ```bash
-west dbuild -b nucleo_u575zi_q -p never
+west dbuild -b rpi_pico2/rp2350a/m33 -p never
 ```
 
 Pass extra CMake options:
 
 ```bash
-west dbuild -b nucleo_u575zi_q -- -DCONFIG_LOG_DEFAULT_LEVEL=4
+west dbuild -b rpi_pico2/rp2350a/m33 -- -DCONFIG_LOG_DEFAULT_LEVEL=4
 ```
 
 Typical hardware workflow:
 
 ```bash
-west dbuild -b nucleo_u575zi_q
+west dbuild -b rpi_pico2/rp2350a/m33
 west flash
 ```
 

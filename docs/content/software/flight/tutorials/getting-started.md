@@ -58,7 +58,7 @@ source ../.venv/bin/activate
 We use the custom `dbuild` command to compile our code. Usually, building and running are separate steps, but since this tutorial uses a virtual QEMU device, they are done both at once using the `-t run` flag
 
 ```bash
-west dbuild -b qemu_cortex_m3 -t run
+west dbuild -b mps2/an521/cpu0 -t run
 ```
 
 Use control+c to stop the program

@@ -71,7 +71,7 @@ In `tests/unit/src/main.c`, enable or replace the commented example. Define test
 Test successful operations, invalid inputs, and transfer failures; include timeouts if the library polls for completion. The [AMU tests](https://github.com/PEROVSAT/amu-driver/blob/main/tests/unit/src/main.c) show the pattern.
 
 ```bash
-west twister -T tests/unit -p qemu_cortex_m3
+west twister -T tests/unit -p mps2/an521/cpu0
 ```
 
 ## 5. Connect the hardware
