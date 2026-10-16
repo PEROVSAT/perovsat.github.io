@@ -4,7 +4,7 @@ Updated: 7/9/26
 
 ## Overview
 
-The **Permanent Magnet** module models the restoring torque from a fixed magnetic dipole in Earth's field. It is the primary alignment element of Passive Magnetic Attitude Control (PMAC), working alongside [hysteresis rods](Hysterisis_Rods.md) that provide damping. The magnet needs no power, sensors, or control logic — it simply applies torque as the spacecraft tumbles.
+The **Permanent Magnet** module models the restoring torque from a fixed magnetic dipole in Earth's field. It is the primary alignment element of Passive Magnetic Attitude Control (PMAC), working alongside [hysteresis rods](../rod-model.md) that provide damping. The magnet needs no power, sensors, or control logic — it simply applies torque as the spacecraft tumbles.
 
 Each simulation step, the module reads \(\mathbf{B}\) from the [WMM](WMM.md), rotates it into the body frame using the current attitude, computes \(\boldsymbol{\tau} = \mathbf{m} \times \mathbf{B}\), and applies that torque to the spacecraft dynamics.
 
@@ -12,7 +12,7 @@ Each simulation step, the module reads \(\mathbf{B}\) from the [WMM](WMM.md), ro
 
 The module is a custom `DynamicEffector` in `ExternalModules/permanentMagnet/`. The dipole moment \(\mathbf{m}_B\) is set in Python via `magDipole_B` (body frame, A·m²). It subscribes to the WMM magnetic field message and publishes the computed torque for logging and visualization.
 
-Torque is evaluated inside `computeForceTorque` at integrator sub-steps, using the continuous attitude state from the hub MRPs rather than the discrete post-step value. That keeps the restoring torque consistent with the dynamics solver throughout each RK4 step.
+Torque is evaluated inside `computeForceTorque` at integrator sub-steps, using the continuous attitude state from the hub MRPs rather than the discrete post-step value. That keeps the restoring torque consistent with the dynamics solver throughout each adaptive RKF45 step.
 
 ## Math Guide
 
