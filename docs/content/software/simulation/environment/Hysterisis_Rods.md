@@ -2,8 +2,8 @@
 
 Updated: 7/9/26
 
-!!! warning "Validation in progress"
-    The Jiles–Atherton model is implemented and integrated into Basilisk, but hardware validation and parameter tuning are still ongoing.
+!!! warning "Earlier model — retained for reference"
+    This page describes the earlier Jiles–Atherton design. The current vehicle uses the [Flatley–Henretty rod model](../rod-model.md). Use the [simulation guides](../index.md) for current setup, parameters, and validation guidance.
 
 Hysteresis rods are soft ferromagnetic cylinders mounted along chosen body axes. As the spacecraft tumbles through Earth's magnetic field, the rod material magnetizes and demagnetizes along a **hysteresis loop** rather than tracking the field instantaneously. The area enclosed by that loop is energy lost as heat each cycle, which dissipates rotational kinetic energy and passively detumbles the spacecraft. Together with the [permanent magnet](PMAC.md), the rods form the Passive Magnetic Attitude Control (PMAC) system: the magnet provides restoring torque toward field alignment, while the rods provide damping.
 

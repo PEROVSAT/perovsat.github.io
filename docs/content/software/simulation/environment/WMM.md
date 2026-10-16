@@ -3,7 +3,7 @@
 Updated: 7/9/26
 
 !!! warning "Not implemented"
-    Simulations currently use Basilisk's stock `magneticFieldWMM` module. The continuous replacement described here is under development and not yet integrated.
+    Simulations currently use Basilisk's stock `magneticFieldWMM` module. The continuous replacement described here is under development and not yet integrated. This design note discusses the earlier Jiles–Atherton model; see the [current rod model](../rod-model.md#field-rate-and-validation) for the active field-rate calculation.
 
 The **World Magnetic Model** is the standard model of Earth's main magnetic field, published by NCEI and BGS. It describes how the field varies with position (latitude, longitude, altitude) and slowly over time, using spherical harmonic coefficients fit to satellite and ground measurements. In our PMAC simulations, the WMM is the environmental input: it provides \(\mathbf{B}\) at the spacecraft's location, which the [permanent magnet](PMAC.md) and [hysteresis rods](Hysterisis_Rods.md) modules use to compute passive magnetic torques.
 
@@ -13,4 +13,4 @@ Basilisk's built-in WMM evaluates the field once per simulation task step and ho
 
 The WMM itself is built from smooth, differentiable functions — there is nothing inherently discrete about the physics. A continuous module would evaluate \(\mathbf{B}\) and its material derivative \(\dot{\mathbf{B}} = (\mathbf{v} \cdot \nabla)\mathbf{B}\) analytically from the spacecraft's position and velocity, giving the hysteresis model a clean field rate without guessing from sampled data. The goal is more stable integration, larger usable timesteps, and results that do not depend on how coarsely the field is sampled.
 
-Work on this module lives in `ExternalModules/magneticFieldWMMContinuous/` in the [basilisk-simulation](https://github.com/PEROVSAT/basilisk-simulation) repo.
+Work on this module lives in `experimental/magneticFieldWMMContinuous/` in the [basilisk-simulation](https://github.com/PEROVSAT/basilisk-simulation) repo.

@@ -6,3 +6,9 @@ Here we cover every technical apsect of PEROVSAT (excluding details under NDA). 
 
 !!! warning "Under Construction"
     We are still pretty early on in our development, and designs still change rapidly. While we will do our best to keep everything up to date, some information may not be accurate, and documentation on certain aspects may be limited
+
+## Simulation
+
+[Simulation software](software/simulation/index.md) covers setup, architecture,
+development, power modelling, and passive magnetic attitude control. Start with
+the [first-run guide](software/simulation/getting-started.md).
