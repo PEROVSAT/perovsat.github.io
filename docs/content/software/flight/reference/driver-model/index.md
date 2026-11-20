@@ -1,6 +1,6 @@
 # Driver Model Reference
 
-Updated: 7/10/26
+Updated: 11/11/26
 
 ## Repository Layout
 
@@ -17,6 +17,7 @@ mpu6050-driver/
 │   └── mpu6050.h
 ├── lib
 │   ├── mpu6050_bus.h
+│   ├── mpu6050_regs.h
 │   └── mpu6050.c
 ├── mock
 │   └── mpu6050.c
@@ -51,6 +52,7 @@ mpu6050-driver/
 | `include/<chip>.h` | User-level data structs and API declarations |
 | `lib/<chip>.c` | Device-logic implementation of the API |
 | `lib/<chip>_bus.h` | Transfer function declaration |
+| `lib/<chip>_regs.h`| Register definition |
 | `src/<chip>.c` | Zephyr boilerplate for device discovery |
 | `src/<chip>.h` | Zephyr-level config/data structs |
 | `src/*_transfer.c` | Transfer function definitions |

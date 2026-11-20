@@ -18,4 +18,4 @@ int mpu6050_transfer(void *ctx, uint8_t reg, uint8_t *buf, size_t len, bool read
 | `len` | Number of bytes |
 | `read` | `true` for read, `false` for write |
 
-Return `0` on success or a negative (`errno`)[https://docs.zephyrproject.org/latest/doxygen/html/group__system__errno.html] value on failure.
+Return `0` on success or a negative [`errno`](https://docs.zephyrproject.org/latest/doxygen/html/group__system__errno.html) value on failure.
